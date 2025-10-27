@@ -10,13 +10,17 @@ export class ZodValidationPipe implements PipeTransform {
       return parsedValue;
     } catch (error) {
       if (error instanceof ZodError) {
-        const errors = error.issues.map((issue) => issue.message);
+        const errors = error.issues.map((issue) => ({
+          path: issue.path.join('.'),
+          message: issue.message,
+          code: issue.code,
+        }));
         throw new BadRequestException({
           errors,
           message: 'Validation failed',
         });
       }
-      throw new Error("Unknown request error");
+      throw new Error('Unknown request error');
     }
   }
 }
