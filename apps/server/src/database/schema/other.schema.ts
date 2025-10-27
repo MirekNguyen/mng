@@ -196,8 +196,9 @@ export const userSettings = pgTable('user_settings', {
 export const insertUserSchema = createInsertSchema(users);
 export const selectUserSchema = createSelectSchema(users);
 
-export const insertFoodSchema = createInsertSchema(food);
+export const createFoodSchema = createInsertSchema(food);
 export const selectFoodSchema = createSelectSchema(food);
+export const updateFoodSchema = createInsertSchema(food).partial();
 
 export const createFoodEntrySchema = createInsertSchema(foodEntries);
 export const selectFoodEntrySchema = createSelectSchema(foodEntries);
@@ -223,7 +224,7 @@ export type User = z.infer<typeof selectUserSchema>;
 export type NewUser = z.infer<typeof insertUserSchema>;
 
 export type Food = z.infer<typeof selectFoodSchema>;
-export type CreateFood = Omit<z.infer<typeof insertFoodSchema>, 'id'>;
+export type CreateFood = Omit<z.infer<typeof createFoodSchema>, 'id'>;
 export type UpdateFood = Partial<CreateFood>;
 
 export type FoodEntry = z.infer<typeof selectFoodEntrySchema>;
