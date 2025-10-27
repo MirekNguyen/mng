@@ -10,6 +10,6 @@ export default defineConfig({
   dbCredentials: {
     url: env.DATABASE_URL,
   },
-  verbose: true,
+  verbose: false,
   strict: true,
 }) satisfies Config;
