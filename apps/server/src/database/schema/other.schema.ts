@@ -40,7 +40,7 @@ export const users = pgTable('users', {
 });
 
 // Meals table (reusable meal templates)
-export const meals = pgTable('meals', {
+export const food = pgTable('meals', {
   id: serial('id').primaryKey(),
   userId: integer('user_id').references(() => users.id, {
     onDelete: 'cascade',
@@ -76,7 +76,7 @@ export const foodEntries = pgTable('food_entries', {
   userId: integer('user_id').references(() => users.id, {
     onDelete: 'cascade',
   }),
-  mealId: integer('meal_id').references(() => meals.id, {
+  mealId: integer('meal_id').references(() => food.id, {
     onDelete: 'set null',
   }),
   foodName: varchar('food_name', { length: 255 }).notNull(),
@@ -156,7 +156,7 @@ export const mealPlans = pgTable('meal_plans', {
   userId: integer('user_id').references(() => users.id, {
     onDelete: 'cascade',
   }),
-  mealId: integer('meal_id').references(() => meals.id, {
+  mealId: integer('meal_id').references(() => food.id, {
     onDelete: 'cascade',
   }),
   mealType: varchar('meal_type', { length: 50 }).notNull(),
@@ -196,8 +196,8 @@ export const userSettings = pgTable('user_settings', {
 export const insertUserSchema = createInsertSchema(users);
 export const selectUserSchema = createSelectSchema(users);
 
-export const insertMealSchema = createInsertSchema(meals);
-export const selectMealSchema = createSelectSchema(meals);
+export const insertFoodSchema = createInsertSchema(food);
+export const selectFoodSchema = createSelectSchema(food);
 
 export const createFoodEntrySchema = createInsertSchema(foodEntries);
 export const selectFoodEntrySchema = createSelectSchema(foodEntries);
@@ -222,8 +222,9 @@ export const selectUserSettingsSchema = createSelectSchema(userSettings);
 export type User = z.infer<typeof selectUserSchema>;
 export type NewUser = z.infer<typeof insertUserSchema>;
 
-export type Meal = z.infer<typeof selectMealSchema>;
-export type NewMeal = z.infer<typeof insertMealSchema>;
+export type Food = z.infer<typeof selectFoodSchema>;
+export type CreateFood = Omit<z.infer<typeof insertFoodSchema>, 'id'>;
+export type UpdateFood = Partial<CreateFood>;
 
 export type FoodEntry = z.infer<typeof selectFoodEntrySchema>;
 export type CreateFoodEntry = Omit<z.infer<typeof createFoodEntrySchema>, 'id'>;
@@ -257,7 +258,7 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 export const otherSchema = {
   users,
-  meals,
+  food,
   foodEntries,
   nutritionGoals,
   weightEntries,
