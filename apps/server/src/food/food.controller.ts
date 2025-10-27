@@ -44,7 +44,7 @@ export class FoodController {
   }
 
   @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<FoodEntry> {
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<Food> {
     return await this.repository.delete(id);
   }
 }
