@@ -14,7 +14,7 @@ import { ICrudController } from 'src/common/icrud.controller';
 import { ZodValidationPipe } from 'src/common/zod.pipe';
 import {
   type CreateFoodEntry,
-  insertFoodEntrySchema as createFoodEntrySchema,
+  createFoodEntrySchema,
   FoodEntry,
   type UpdateFoodEntry,
   updateFoodEntrySchema,
@@ -29,13 +29,13 @@ export class FoodEntryController implements ICrudController<FoodEntry> {
   @Get()
   @UsePipes(new ZodValidationPipe(z.iso.date()))
   async get(@Query('date') dateString: string): Promise<FoodEntry[]> {
-    return await this.repository.getEntries(new Date(dateString));
+    return await this.repository.get(new Date(dateString));
   }
 
   @Post()
   @UsePipes(new ZodValidationPipe(createFoodEntrySchema))
   async create(@Body() foodEntry: CreateFoodEntry): Promise<FoodEntry> {
-    return await this.repository.createEntry(foodEntry);
+    return await this.repository.create(foodEntry);
   }
 
   @Patch(':id')
@@ -44,11 +44,11 @@ export class FoodEntryController implements ICrudController<FoodEntry> {
     @Body(new ZodValidationPipe(updateFoodEntrySchema))
     foodEntry: UpdateFoodEntry,
   ): Promise<FoodEntry> {
-    return await this.repository.updateEntry(id, foodEntry);
+    return await this.repository.update(id, foodEntry);
   }
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number): Promise<FoodEntry> {
-    return await this.repository.deleteEntry(id);
+    return await this.repository.delete(id);
   }
 }

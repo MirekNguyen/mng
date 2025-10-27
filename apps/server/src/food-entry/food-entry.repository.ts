@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { DateTime } from 'luxon';
+import { ICrudRepository } from 'src/common/icrud.controller';
 import {
   DRIZZLE_PROVIDER,
   type DrizzleDatabase,
@@ -18,16 +19,16 @@ import {
 } from 'src/database/schema/other.schema';
 
 @Injectable()
-export class FoodEntryRepository {
+export class FoodEntryRepository implements ICrudRepository<FoodEntry> {
   constructor(@Inject(DRIZZLE_PROVIDER) private readonly db: DrizzleDatabase) {}
-  async getEntries(date: Date): Promise<FoodEntry[]> {
+  async get(date: Date): Promise<FoodEntry[]> {
     const dateString = DateTime.fromJSDate(date).toFormat('yyyy-M-dd');
     return await this.db.query.foodEntries.findMany({
       where: eq(foodEntries.entryDate, dateString),
     });
   }
 
-  async createEntry(foodEntry: CreateFoodEntry): Promise<FoodEntry> {
+  async create(foodEntry: CreateFoodEntry): Promise<FoodEntry> {
     const created = (
       await this.db.insert(foodEntries).values(foodEntry).returning()
     )[0];
@@ -37,7 +38,7 @@ export class FoodEntryRepository {
     return created;
   }
 
-  async updateEntry(
+  async update(
     id: number,
     foodEntry: UpdateFoodEntry,
   ): Promise<FoodEntry> {
@@ -54,7 +55,7 @@ export class FoodEntryRepository {
     return updated;
   }
 
-  async deleteEntry(id: number): Promise<FoodEntry> {
+  async delete(id: number): Promise<FoodEntry> {
     const deleted = (
       await this.db
         .delete(foodEntries)
