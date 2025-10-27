@@ -1,8 +1,8 @@
 import {
   Inject,
   Injectable,
+  InternalServerErrorException,
   NotFoundException,
-  NotImplementedException,
 } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
 import { DateTime } from 'luxon';
@@ -11,9 +11,9 @@ import {
   type DrizzleDatabase,
 } from 'src/database/drizzle.provider';
 import {
+  CreateFoodEntry,
   FoodEntry,
   foodEntries,
-  CreateFoodEntry,
   UpdateFoodEntry,
 } from 'src/database/schema/other.schema';
 
@@ -32,7 +32,7 @@ export class FoodEntryRepository {
       await this.db.insert(foodEntries).values(foodEntry).returning()
     )[0];
     if (!created) {
-      throw new NotImplementedException();
+      throw new InternalServerErrorException('Failed to create food entry');
     }
     return created;
   }
@@ -42,7 +42,7 @@ export class FoodEntryRepository {
       await this.db.update(foodEntries).set(foodEntry).returning()
     )[0];
     if (!updated) {
-      throw new NotImplementedException();
+      throw new NotFoundException(`Food entry not found for update`);
     }
     return updated;
   }
