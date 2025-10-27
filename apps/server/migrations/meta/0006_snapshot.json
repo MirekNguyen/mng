@@ -1,6 +1,6 @@
 {
-  "id": "bfee2573-93c2-4f0d-9192-5d92795fecd4",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "d3f2dceb-a31a-432a-b880-8ed9944d0219",
+  "prevId": "2e68993d-8542-4105-bf3e-0498b77a6992",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -125,29 +125,35 @@
           "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": false,
-          "default": "'1'"
+          "default": 1
         },
         "calories": {
           "name": "calories",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": true
         },
         "protein": {
           "name": "protein",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "carbs": {
           "name": "carbs",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "fat": {
           "name": "fat",
-          "type": "integer",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "caffeine": {
+          "name": "caffeine",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": false
         },
@@ -320,25 +326,31 @@
         },
         "calories": {
           "name": "calories",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": true
         },
         "protein": {
           "name": "protein",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "carbs": {
           "name": "carbs",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "fat": {
           "name": "fat",
-          "type": "integer",
+          "type": "numeric(10, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "caffeine": {
+          "name": "caffeine",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": false
         },
@@ -631,11 +643,17 @@
           "primaryKey": true,
           "notNull": true
         },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(100)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
         },
         "email": {
           "name": "email",

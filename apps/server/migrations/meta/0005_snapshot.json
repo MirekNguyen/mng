@@ -1,6 +1,6 @@
 {
-  "id": "bfee2573-93c2-4f0d-9192-5d92795fecd4",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "2e68993d-8542-4105-bf3e-0498b77a6992",
+  "prevId": "64c964f3-19a5-4426-a337-8c8fc7dd6c75",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -125,31 +125,31 @@
           "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": false,
-          "default": "'1'"
+          "default": 1
         },
         "calories": {
           "name": "calories",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": true
         },
         "protein": {
           "name": "protein",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "carbs": {
           "name": "carbs",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "fat": {
           "name": "fat",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "entry_date": {
           "name": "entry_date",
@@ -320,27 +320,27 @@
         },
         "calories": {
           "name": "calories",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": true
         },
         "protein": {
           "name": "protein",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "carbs": {
           "name": "carbs",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "fat": {
           "name": "fat",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "tags": {
           "name": "tags",
@@ -631,11 +631,17 @@
           "primaryKey": true,
           "notNull": true
         },
-        "name": {
-          "name": "name",
-          "type": "varchar(255)",
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(100)",
           "primaryKey": false,
-          "notNull": true
+          "notNull": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar(100)",
+          "primaryKey": false,
+          "notNull": false
         },
         "email": {
           "name": "email",

@@ -1,6 +1,6 @@
 {
-  "id": "bfee2573-93c2-4f0d-9192-5d92795fecd4",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "28e3cf95-df0d-4b46-aeaf-659c2eb996c0",
+  "prevId": "1efc56eb-1def-49ba-a254-8565dcabf787",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -129,27 +129,27 @@
         },
         "calories": {
           "name": "calories",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": true
         },
         "protein": {
           "name": "protein",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "carbs": {
           "name": "carbs",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "fat": {
           "name": "fat",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "entry_date": {
           "name": "entry_date",
@@ -320,25 +320,25 @@
         },
         "calories": {
           "name": "calories",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": true
         },
         "protein": {
           "name": "protein",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": false
         },
         "carbs": {
           "name": "carbs",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": false
         },
         "fat": {
           "name": "fat",
-          "type": "integer",
+          "type": "numeric(10, 2)",
           "primaryKey": false,
           "notNull": false
         },
