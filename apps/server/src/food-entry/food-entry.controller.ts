@@ -20,9 +20,10 @@ import {
 } from 'src/database/schema/other.schema';
 import * as z from 'zod';
 import { FoodEntryRepository } from './food-entry.repository';
+import { ICrudController } from 'src/common/icrud.controller';
 
 @Controller('food-entry')
-export class FoodEntryController {
+export class FoodEntryController implements ICrudController<FoodEntry> {
   constructor(private readonly foodEntryService: FoodEntryRepository) {}
 
   @Get()
