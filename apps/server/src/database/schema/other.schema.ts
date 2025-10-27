@@ -219,7 +219,8 @@ export type Meal = z.infer<typeof selectMealSchema>;
 export type NewMeal = z.infer<typeof insertMealSchema>;
 
 export type FoodEntry = z.infer<typeof selectFoodEntrySchema>;
-export type NewFoodEntry = z.infer<typeof insertFoodEntrySchema>;
+export type CreateFoodEntry = Omit<z.infer<typeof insertFoodEntrySchema>, 'id'>;
+export type UpdateFoodEntry = Partial<CreateFoodEntry>;
 
 export type NutritionGoal = z.infer<typeof selectNutritionGoalSchema>;
 export type NewNutritionGoal = z.infer<typeof insertNutritionGoalSchema>;
