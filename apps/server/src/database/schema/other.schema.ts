@@ -199,23 +199,23 @@ export const selectUserSchema = createSelectSchema(users);
 export const insertMealSchema = createInsertSchema(meals);
 export const selectMealSchema = createSelectSchema(meals);
 
-export const insertFoodEntrySchema = createInsertSchema(foodEntries);
+export const createFoodEntrySchema = createInsertSchema(foodEntries);
 export const selectFoodEntrySchema = createSelectSchema(foodEntries);
 export const updateFoodEntrySchema = createInsertSchema(foodEntries).partial();
 
-export const insertNutritionGoalSchema = createInsertSchema(nutritionGoals);
+export const createNutritionGoalSchema = createInsertSchema(nutritionGoals);
 export const selectNutritionGoalSchema = createSelectSchema(nutritionGoals);
 
-export const insertWeightEntrySchema = createInsertSchema(weightEntries);
+export const createWeightEntrySchema = createInsertSchema(weightEntries);
 export const selectWeightEntrySchema = createSelectSchema(weightEntries);
 
-export const insertBodyMeasurementSchema = createInsertSchema(bodyMeasurements);
+export const createBodyMeasurementSchema = createInsertSchema(bodyMeasurements);
 export const selectBodyMeasurementSchema = createSelectSchema(bodyMeasurements);
 
-export const insertMealPlanSchema = createInsertSchema(mealPlans);
+export const createMealPlanSchema = createInsertSchema(mealPlans);
 export const selectMealPlanSchema = createSelectSchema(mealPlans);
 
-export const insertUserSettingsSchema = createInsertSchema(userSettings);
+export const createUserSettingsSchema = createInsertSchema(userSettings);
 export const selectUserSettingsSchema = createSelectSchema(userSettings);
 
 // Custom types
@@ -226,23 +226,23 @@ export type Meal = z.infer<typeof selectMealSchema>;
 export type NewMeal = z.infer<typeof insertMealSchema>;
 
 export type FoodEntry = z.infer<typeof selectFoodEntrySchema>;
-export type CreateFoodEntry = Omit<z.infer<typeof insertFoodEntrySchema>, 'id'>;
+export type CreateFoodEntry = Omit<z.infer<typeof createFoodEntrySchema>, 'id'>;
 export type UpdateFoodEntry = Partial<CreateFoodEntry>;
 
 export type NutritionGoal = z.infer<typeof selectNutritionGoalSchema>;
-export type NewNutritionGoal = z.infer<typeof insertNutritionGoalSchema>;
+export type NewNutritionGoal = z.infer<typeof createNutritionGoalSchema>;
 
 export type WeightEntry = z.infer<typeof selectWeightEntrySchema>;
-export type NewWeightEntry = z.infer<typeof insertWeightEntrySchema>;
+export type NewWeightEntry = z.infer<typeof createWeightEntrySchema>;
 
 export type BodyMeasurement = z.infer<typeof selectBodyMeasurementSchema>;
-export type NewBodyMeasurement = z.infer<typeof insertBodyMeasurementSchema>;
+export type NewBodyMeasurement = z.infer<typeof createBodyMeasurementSchema>;
 
 export type MealPlan = z.infer<typeof selectMealPlanSchema>;
-export type NewMealPlan = z.infer<typeof insertMealPlanSchema>;
+export type NewMealPlan = z.infer<typeof createMealPlanSchema>;
 
 export type UserSettings = z.infer<typeof selectUserSettingsSchema>;
-export type NewUserSettings = z.infer<typeof insertUserSettingsSchema>;
+export type NewUserSettings = z.infer<typeof createUserSettingsSchema>;
 
 export const weightEntriesRelations = relations(weightEntries, ({ one }) => ({
   user: one(users, {

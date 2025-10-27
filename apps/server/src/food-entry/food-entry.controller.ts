@@ -24,18 +24,18 @@ import { FoodEntryRepository } from './food-entry.repository';
 
 @Controller('food-entry')
 export class FoodEntryController implements ICrudController<FoodEntry> {
-  constructor(private readonly foodEntryService: FoodEntryRepository) {}
+  constructor(private readonly repository: FoodEntryRepository) {}
 
   @Get()
   @UsePipes(new ZodValidationPipe(z.iso.date()))
   async get(@Query('date') dateString: string): Promise<FoodEntry[]> {
-    return await this.foodEntryService.getEntries(new Date(dateString));
+    return await this.repository.getEntries(new Date(dateString));
   }
 
   @Post()
   @UsePipes(new ZodValidationPipe(createFoodEntrySchema))
   async create(@Body() foodEntry: CreateFoodEntry): Promise<FoodEntry> {
-    return await this.foodEntryService.createEntry(foodEntry);
+    return await this.repository.createEntry(foodEntry);
   }
 
   @Patch(':id')
@@ -44,11 +44,11 @@ export class FoodEntryController implements ICrudController<FoodEntry> {
     @Body(new ZodValidationPipe(updateFoodEntrySchema))
     foodEntry: UpdateFoodEntry,
   ): Promise<FoodEntry> {
-    return await this.foodEntryService.updateEntry(id, foodEntry);
+    return await this.repository.updateEntry(id, foodEntry);
   }
 
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number): Promise<FoodEntry> {
-    return await this.foodEntryService.deleteEntry(id);
+    return await this.repository.deleteEntry(id);
   }
 }
