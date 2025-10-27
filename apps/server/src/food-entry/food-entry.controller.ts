@@ -10,6 +10,7 @@ import {
   Query,
   UsePipes,
 } from '@nestjs/common';
+import { ICrudController } from 'src/common/icrud.controller';
 import { ZodValidationPipe } from 'src/common/zod.pipe';
 import {
   type CreateFoodEntry,
@@ -20,7 +21,6 @@ import {
 } from 'src/database/schema/other.schema';
 import * as z from 'zod';
 import { FoodEntryRepository } from './food-entry.repository';
-import { ICrudController } from 'src/common/icrud.controller';
 
 @Controller('food-entry')
 export class FoodEntryController implements ICrudController<FoodEntry> {
@@ -41,7 +41,8 @@ export class FoodEntryController implements ICrudController<FoodEntry> {
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body(new ZodValidationPipe(updateFoodEntrySchema)) foodEntry: UpdateFoodEntry,
+    @Body(new ZodValidationPipe(updateFoodEntrySchema))
+    foodEntry: UpdateFoodEntry,
   ): Promise<FoodEntry> {
     return await this.foodEntryService.updateEntry(id, foodEntry);
   }
