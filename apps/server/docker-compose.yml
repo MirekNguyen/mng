@@ -1,0 +1,17 @@
+volumes:
+  grocery-tracker-data:
+    name: grocery-tracker-data
+
+services:
+  grocery-tracker-database:
+    image: postgres:17-alpine
+    container_name: grocery-tracker-database
+    environment:
+      - POSTGRES_USER=${DB_USER:-grocery-tracker}
+      - POSTGRES_DB=${DB_NAME:-grocery-tracker}
+      - POSTGRES_PASSWORD=${DB_PASS:-grocery-tracker}
+    ports:
+      - ${DB_PORT:-5432}:5432
+    volumes:
+      - grocery-tracker-data:/var/lib/postgresql/data
+    restart: unless-stopped
