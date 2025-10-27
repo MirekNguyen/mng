@@ -15,6 +15,8 @@ import {
   type CreateFoodEntry,
   insertFoodEntrySchema as createFoodEntrySchema,
   FoodEntry,
+  type UpdateFoodEntry,
+  updateFoodEntrySchema,
 } from 'src/database/schema/other.schema';
 import * as z from 'zod';
 import { FoodEntryRepository } from './food-entry.repository';
@@ -35,10 +37,12 @@ export class FoodEntryController {
     return await this.foodEntryService.createEntry(foodEntry);
   }
 
-  @Patch()
-  @UsePipes(new ZodValidationPipe(createFoodEntrySchema))
-  async update(@Body() foodEntry: CreateFoodEntry): Promise<FoodEntry> {
-    return await this.foodEntryService.updateEntry(foodEntry);
+  @Patch(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body(new ZodValidationPipe(updateFoodEntrySchema)) foodEntry: UpdateFoodEntry,
+  ): Promise<FoodEntry> {
+    return await this.foodEntryService.updateEntry(id, foodEntry);
   }
 
   @Delete(':id')

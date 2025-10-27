@@ -10,8 +10,14 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core';
-import { createInsertSchema, createSelectSchema } from 'drizzle-zod';
+import { createSchemaFactory, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod';
+
+const { createInsertSchema } = createSchemaFactory({
+  coerce: {
+    date: true
+  }
+});
 
 // Users table
 export const users = pgTable('users', {
@@ -195,6 +201,7 @@ export const selectMealSchema = createSelectSchema(meals);
 
 export const insertFoodEntrySchema = createInsertSchema(foodEntries);
 export const selectFoodEntrySchema = createSelectSchema(foodEntries);
+export const updateFoodEntrySchema = createInsertSchema(foodEntries).partial();
 
 export const insertNutritionGoalSchema = createInsertSchema(nutritionGoals);
 export const selectNutritionGoalSchema = createSelectSchema(nutritionGoals);

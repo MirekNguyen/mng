@@ -37,9 +37,16 @@ export class FoodEntryRepository {
     return created;
   }
 
-  async updateEntry(foodEntry: UpdateFoodEntry): Promise<FoodEntry> {
+  async updateEntry(
+    id: number,
+    foodEntry: UpdateFoodEntry,
+  ): Promise<FoodEntry> {
     const updated = (
-      await this.db.update(foodEntries).set(foodEntry).returning()
+      await this.db
+        .update(foodEntries)
+        .set(foodEntry)
+        .where(eq(foodEntries.id, id))
+        .returning()
     )[0];
     if (!updated) {
       throw new NotFoundException(`Food entry not found for update`);
