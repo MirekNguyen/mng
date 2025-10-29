@@ -9,7 +9,7 @@ const args = parseArgs(Deno.args, {
 const missing = flags.filter((flag) => !args[flag]);
 
 if (missing.length > 0) {
-  console.error(`Missing required flags: ${missing.map((f) => `--${f}`).join(", ")}`);
+  console.error(`[${new Date().toISOString()}] Missing required flags: ${missing.map((f) => `--${f}`).join(", ")}`);
   Deno.exit(1);
 }
 
@@ -35,5 +35,5 @@ rssFeed.addItem({
   description: args.description,
 });
 
-
 Deno.writeTextFileSync("rss/" + args.file, rssFeed.build());
+console.log(`[${new Date().toISOString()}] Created RSS feed \"${args.title}\" in ${args.file}`)
