@@ -3,16 +3,12 @@ volumes:
 
 services:
   rss-generator:
-    build: .
-    working_dir: /app
+    image: denoland/deno:alpine
     volumes:
       - rss-data:/app/rss
-    command: ["sh", "-c", "crond -f -d 8"]
 
   nginx:
     image: nginx:alpine
-    ports:
-      - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - rss-data:/usr/share/nginx/html:ro
