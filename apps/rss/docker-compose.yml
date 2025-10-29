@@ -3,10 +3,10 @@ volumes:
 
 services:
   rss-generator:
-    build: ./apps/rss
+    build: .
     working_dir: /app
     volumes:
-      - rss-data:/app/out
+      - rss-data:/app/rss
     command: ["sh", "-c", "crond -f -d 8"]
 
   nginx:
