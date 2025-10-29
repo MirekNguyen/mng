@@ -1,31 +1,39 @@
 import { Rss } from "@feed/feed";
+import { parseArgs } from "jsr:@std/cli/parse-args";
+
+const flags = ["file", "title", "link", "description"];
+const args = parseArgs(Deno.args, {
+  string: flags,
+});
+
+const missing = flags.filter((flag) => !args[flag]);
+
+if (missing.length > 0) {
+  console.error(`Missing required flags: ${missing.map((f) => `--${f}`).join(", ")}`);
+  Deno.exit(1);
+}
 
 const rssFeed = new Rss({
-  title: "RSS Feed Example",
-  description: "A simple RSS feed example",
-  link: "http://example.com/rss-feed",
-  updated: new Date("2024-10-19T15:12:56Z"),
-  id: "http://example.com/rss-feed",
+  title: "MNG RSS notifications",
+  description: "Notification feed",
+  link: "https://mirekng.com",
+  updated: new Date(),
+  id: "https://mirekng.com",
   authors: [
     {
-      name: "John Doe",
-      email: "test@example.org",
+      name: "Mirek Nguyen",
+      email: "xngum019@seznam.cz",
     },
   ],
 });
 
 rssFeed.addItem({
-  title: "First RSS Item",
-  link: "http://example.com/rss1",
-  id: "http://example.com/rss1",
-  updated: new Date("2024-10-19T15:12:56Z"),
-  description: "Description for RSS item 1",
-  content: {
-    body: "Content for RSS item 1",
-    type: "html",
-  },
+  title: args.title,
+  link: args.link,
+  id: args.link, // using itemLink as id
+  updated: new Date(),
+  description: args.description,
 });
 
 
-Deno.mkdirSync("rss", { recursive: true });
-Deno.writeTextFileSync("rss/example.xml", rssFeed.build());
+Deno.writeTextFileSync("rss/" + args.file, rssFeed.build());
