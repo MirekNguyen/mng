@@ -26,4 +26,5 @@ rssFeed.addItem({
   },
 });
 
-Deno.writeTextFileSync("example.xml", rssFeed.build());
+Deno.mkdirSync("rss", { recursive: true });
+Deno.writeTextFileSync("rss/example.xml", rssFeed.build());
