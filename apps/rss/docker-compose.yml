@@ -4,7 +4,9 @@ volumes:
 services:
   rss-generator:
     image: denoland/deno:alpine
+    working_dir: /app
     volumes:
+      - ./:/app
       - rss-data:/app/rss
 
   nginx:
