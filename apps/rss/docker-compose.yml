@@ -10,7 +10,7 @@ services:
   nginx:
     image: nginx:alpine
     volumes:
-      - ./apps/rss/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - rss-data:/usr/share/nginx/html:ro
     depends_on:
       - rss-generator
