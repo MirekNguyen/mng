@@ -1,0 +1,20 @@
+volumes:
+  rss-data:
+
+services:
+  rss-generator:
+    build: ./apps/rss
+    working_dir: /app
+    volumes:
+      - rss-data:/app/out
+    command: ["sh", "-c", "crond -f -d 8"]
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - rss-data:/usr/share/nginx/html:ro
+    depends_on:
+      - rss-generator
