@@ -11,6 +11,7 @@
 		0EE17284E00D7CD1562D6888 /* EditReceiptItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24D6F4FB48320A6FBDB34577 /* EditReceiptItemView.swift */; };
 		1105C1D12CA15063F747EF6C /* ReceiptItemCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E869F34E438712DB906E267 /* ReceiptItemCategory.swift */; };
 		153A39E565C8705AE3D6DA93 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BFDD3C0CFD7F815AEE6540E /* Binding.swift */; };
+		2D6B39872E06FCC3E77DF927 /* MacroSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21016CC58485B715606105FF /* MacroSummary.swift */; };
 		4706B0DEC5143ED64FB43416 /* ReceiptRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD36FFBE1E94982CC0B4D049 /* ReceiptRepository.swift */; };
 		4A49389D030D0BE4D1D6E48C /* EditReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F12C9E975DCD0CA02C610B7 /* EditReceiptView.swift */; };
 		4B3265EC5220B5774646DF6D /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8715CC40E33012F270C101D5 /* NetworkError.swift */; };
@@ -19,6 +20,7 @@
 		7B0C8AF8F0B26471533C3277 /* NewReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33B2E43023C336EEF4FB10DC /* NewReceiptView.swift */; };
 		99D8669CBD0D792DAB96C59A /* NewReceiptTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88EC486D17291361B5181BA9 /* NewReceiptTabView.swift */; };
 		9D701E58D2C54004C65C5F6E /* ReceiptCardRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68873C47F3F333BBDB7673AC /* ReceiptCardRow.swift */; };
+		A3DA1525B041C40E484F41F9 /* FoodEntriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523142324FD45407194FC022 /* FoodEntriesView.swift */; };
 		A40C0F63DE467E7075C18DBF /* CameraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855316784F6F8BF6C7B25413 /* CameraButton.swift */; };
 		D99A83CEF0B7A0AEA2798235 /* NetworkImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0778E263581D11337F59EF /* NetworkImageExtension.swift */; };
 		EDDF98F097CE3FC6B466D72E /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C1C50ED3BA33D484D527D1A /* TestView.swift */; };
@@ -44,10 +46,12 @@
 /* Begin PBXFileReference section */
 		0C1C50ED3BA33D484D527D1A /* TestView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		16831A85CD2331781103BE87 /* ReceiptDraft.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReceiptDraft.swift; sourceTree = "<group>"; };
+		21016CC58485B715606105FF /* MacroSummary.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MacroSummary.swift; sourceTree = "<group>"; };
 		24D6F4FB48320A6FBDB34577 /* EditReceiptItemView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EditReceiptItemView.swift; sourceTree = "<group>"; };
 		2BFDD3C0CFD7F815AEE6540E /* Binding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		33B2E43023C336EEF4FB10DC /* NewReceiptView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NewReceiptView.swift; sourceTree = "<group>"; };
 		49C3729612BE1096A3DCFC0D /* CameraPicker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
+		523142324FD45407194FC022 /* FoodEntriesView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoodEntriesView.swift; sourceTree = "<group>"; };
 		68873C47F3F333BBDB7673AC /* ReceiptCardRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReceiptCardRow.swift; sourceTree = "<group>"; };
 		6FCC803852CD10BA379F0AA8 /* NetworkManager2.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NetworkManager2.swift; sourceTree = "<group>"; };
 		7C2287DC2EA30052009BA42D /* grocery-tracker-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "grocery-tracker-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,22 +69,16 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7C2287DE2EA30052009BA42D /* grocery-tracker-ios */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = "grocery-tracker-ios";
 			sourceTree = "<group>";
 		};
 		7C2287EC2EA30053009BA42D /* grocery-tracker-iosTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = "grocery-tracker-iosTests";
 			sourceTree = "<group>";
 		};
 		7C2287F62EA30053009BA42D /* grocery-tracker-iosUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = "grocery-tracker-iosUITests";
 			sourceTree = "<group>";
 		};
@@ -131,7 +129,6 @@
 				CD36FFBE1E94982CC0B4D049 /* ReceiptRepository.swift */,
 				AE0778E263581D11337F59EF /* NetworkImageExtension.swift */,
 			);
-			name = Network;
 			path = Network;
 			sourceTree = "<group>";
 		};
@@ -141,7 +138,6 @@
 				855316784F6F8BF6C7B25413 /* CameraButton.swift */,
 				49C3729612BE1096A3DCFC0D /* CameraPicker.swift */,
 			);
-			name = Components;
 			path = Components;
 			sourceTree = "<group>";
 		};
@@ -175,6 +171,14 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		BA26C2F283750F04450950CB /* FoodEntry */ = {
+			isa = PBXGroup;
+			children = (
+				21016CC58485B715606105FF /* MacroSummary.swift */,
+			);
+			path = FoodEntry;
+			sourceTree = "<group>";
+		};
 		BDF186ECF830D3CD08AE3AEE /* Overview */ = {
 			isa = PBXGroup;
 			children = (
@@ -200,6 +204,8 @@
 				33B2E43023C336EEF4FB10DC /* NewReceiptView.swift */,
 				88EC486D17291361B5181BA9 /* NewReceiptTabView.swift */,
 				0C1C50ED3BA33D484D527D1A /* TestView.swift */,
+				523142324FD45407194FC022 /* FoodEntriesView.swift */,
+				BA26C2F283750F04450950CB /* FoodEntry */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -357,6 +363,8 @@
 				1105C1D12CA15063F747EF6C /* ReceiptItemCategory.swift in Sources */,
 				4706B0DEC5143ED64FB43416 /* ReceiptRepository.swift in Sources */,
 				D99A83CEF0B7A0AEA2798235 /* NetworkImageExtension.swift in Sources */,
+				A3DA1525B041C40E484F41F9 /* FoodEntriesView.swift in Sources */,
+				2D6B39872E06FCC3E77DF927 /* MacroSummary.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

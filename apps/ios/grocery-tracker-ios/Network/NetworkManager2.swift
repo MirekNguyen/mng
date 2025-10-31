@@ -51,8 +51,10 @@ final class NetworkManager2 {
         }
         var request = URLRequest(url: url)
         request.httpMethod = method
-        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
-        request.httpBody = body
+        if let body = body {
+            request.setValue(contentType, forHTTPHeaderField: "Content-Type")
+            request.httpBody = body
+        }
         return request
     }
 

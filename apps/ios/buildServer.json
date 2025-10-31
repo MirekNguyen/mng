@@ -12,8 +12,8 @@
 	"argv": [
 		"/opt/homebrew/bin/xcode-build-server"
 	],
-	"workspace": "/Users/mireknguyen/.local/projects/personal/grocery-tracker/apps/ios/grocery-tracker-ios.xcodeproj/project.xcworkspace",
-	"build_root": "/Users/mireknguyen/Library/Developer/Xcode/DerivedData/grocery-tracker-ios-dskspqljaluzlofyftstqunrokuo",
+	"workspace": "/Users/mireknguyen/.local/projects/personal/mng/apps/ios/grocery-tracker-ios.xcodeproj/project.xcworkspace",
+	"build_root": "/Users/mireknguyen/Library/Developer/Xcode/DerivedData/grocery-tracker-ios-fmjdpsfklzsfysdeaymrzwwefuig",
 	"scheme": "grocery-tracker-ios",
 	"kind": "xcode"
 }
