@@ -8,7 +8,13 @@ import { FoodModule } from './food/food.module';
 import { FoodEntryModule } from './food-entry/food-entry.module';
 
 @Module({
-  imports: [DatabaseModule, ConfigModule.forRoot(), ReceiptModule, FoodModule, FoodEntryModule],
+  imports: [
+    DatabaseModule,
+    ConfigModule.forRoot(),
+    ReceiptModule,
+    FoodModule,
+    FoodEntryModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
