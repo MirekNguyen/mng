@@ -5,7 +5,7 @@ struct FoodItemRow: View {
     let foodName: String
     let protein: String
     let calories: String
-//    let onDelete: () -> Void
+    //    let onDelete: () -> Void
 
     var body: some View {
         HStack(spacing: 16) {
@@ -44,7 +44,7 @@ struct FoodItemRow: View {
                 .font(.system(size: 16, weight: .medium))
                 .foregroundColor(.gray)
         }
-        .padding(.horizontal, 20)
+        // .padding(.horizontal, 20)
         .padding(.vertical, 16)
         // .background(
         //     RoundedRectangle(cornerRadius: 16)

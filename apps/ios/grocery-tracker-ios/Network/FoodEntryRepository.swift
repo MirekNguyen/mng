@@ -29,7 +29,7 @@ final class FoodEntryRepository: ObservableObject {
 
     func deleteEntry(id: Int) async {
         do {
-            let deleted = try await networkManager.delete(endpoint: "/food-entry/\(id)")
+            try await networkManager.delete(endpoint: "/food-entry/\(id)")
             await MainActor.run {
                 self.foodEntries?.removeAll { $0.id == id }
             }
@@ -41,22 +41,22 @@ final class FoodEntryRepository: ObservableObject {
     }
 
     func addEntry(_ entry: FoodEntry) async throws {
-    do {
-        let created: FoodEntry = try await networkManager.post(
-            endpoint: "/food-entry",
-            body: entry
-        )
-        await MainActor.run {
-            if self.foodEntries != nil {
-                self.foodEntries?.append(created)
-            } else {
-                self.foodEntries = [created]
+        do {
+            let created: FoodEntry = try await networkManager.post(
+                endpoint: "/food-entry",
+                body: entry
+            )
+            await MainActor.run {
+                if self.foodEntries != nil {
+                    self.foodEntries?.append(created)
+                } else {
+                    self.foodEntries = [created]
+                }
+            }
+        } catch {
+            await MainActor.run {
+                self.errorMessage = error.localizedDescription
             }
         }
-    } catch {
-        await MainActor.run {
-            self.errorMessage = error.localizedDescription
-        }
     }
-}
 }

@@ -17,14 +17,15 @@
 		6A9CEB212D83D259AC6EF828 /* NetworkManager2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FCC803852CD10BA379F0AA8 /* NetworkManager2.swift */; };
 		73A58A35B073C74F74D18A9E /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C3729612BE1096A3DCFC0D /* CameraPicker.swift */; };
 		789467355A75582E05A494D2 /* NewReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA6AAD0C221CE8E296ABF37 /* NewReceiptView.swift */; };
+		7C32951437B04AE3995C3349 /* GrandientBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D3E6FD4E511377E4677339 /* GrandientBackgroundView.swift */; };
 		82B0AA4E7F44696D592019C9 /* NewReceiptTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6F672636C19761AEB1D266 /* NewReceiptTabView.swift */; };
 		9D701E58D2C54004C65C5F6E /* ReceiptCardRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68873C47F3F333BBDB7673AC /* ReceiptCardRow.swift */; };
 		A40C0F63DE467E7075C18DBF /* CameraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855316784F6F8BF6C7B25413 /* CameraButton.swift */; };
+		B10674716952B76AFCE852C7 /* FoodSummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5BE8C3B04AE60B692A10E6 /* FoodSummaryCard.swift */; };
 		BADE1A544167F93E4A84046A /* FoodEntriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D16ED6A65516F5B27368DB /* FoodEntriesView.swift */; };
 		C69D76B1FF18DE9B8F254B6E /* FoodItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708FBDE030B767A5CAF54145 /* FoodItemRow.swift */; };
 		D5B71705896B560551FFE7D9 /* EditReceiptItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A039E38C609B11711AF9749 /* EditReceiptItemView.swift */; };
 		D99A83CEF0B7A0AEA2798235 /* NetworkImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0778E263581D11337F59EF /* NetworkImageExtension.swift */; };
-		E1856AEAF9206EBA3C89C44D /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C783B340AC7884111441F319 /* TestView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +55,7 @@
 		68873C47F3F333BBDB7673AC /* ReceiptCardRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReceiptCardRow.swift; sourceTree = "<group>"; };
 		6FCC803852CD10BA379F0AA8 /* NetworkManager2.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NetworkManager2.swift; sourceTree = "<group>"; };
 		708FBDE030B767A5CAF54145 /* FoodItemRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoodItemRow.swift; sourceTree = "<group>"; };
+		74D3E6FD4E511377E4677339 /* GrandientBackgroundView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GrandientBackgroundView.swift; sourceTree = "<group>"; };
 		7C2287DC2EA30052009BA42D /* grocery-tracker-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "grocery-tracker-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C2287E92EA30053009BA42D /* grocery-tracker-iosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "grocery-tracker-iosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C2287F32EA30053009BA42D /* grocery-tracker-iosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "grocery-tracker-iosUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -63,7 +65,7 @@
 		9BA6AAD0C221CE8E296ABF37 /* NewReceiptView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NewReceiptView.swift; sourceTree = "<group>"; };
 		9E869F34E438712DB906E267 /* ReceiptItemCategory.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReceiptItemCategory.swift; sourceTree = "<group>"; };
 		AE0778E263581D11337F59EF /* NetworkImageExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NetworkImageExtension.swift; sourceTree = "<group>"; };
-		C783B340AC7884111441F319 /* TestView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
+		BA5BE8C3B04AE60B692A10E6 /* FoodSummaryCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoodSummaryCard.swift; sourceTree = "<group>"; };
 		CD36FFBE1E94982CC0B4D049 /* ReceiptRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReceiptRepository.swift; sourceTree = "<group>"; };
 		FCEEB953EF2F19D8B0B89F9D /* MacroSummary.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MacroSummary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -209,6 +211,7 @@
 			children = (
 				FCEEB953EF2F19D8B0B89F9D /* MacroSummary.swift */,
 				708FBDE030B767A5CAF54145 /* FoodItemRow.swift */,
+				BA5BE8C3B04AE60B692A10E6 /* FoodSummaryCard.swift */,
 			);
 			name = Components;
 			path = Components;
@@ -217,18 +220,10 @@
 		DAFC51DC69F44D1787B660C3 /* Main */ = {
 			isa = PBXGroup;
 			children = (
+				74D3E6FD4E511377E4677339 /* GrandientBackgroundView.swift */,
 			);
 			name = Main;
 			path = Main;
-			sourceTree = "<group>";
-		};
-		E87FFDD38CEF1D51FE57EE8A /* Test */ = {
-			isa = PBXGroup;
-			children = (
-				C783B340AC7884111441F319 /* TestView.swift */,
-			);
-			name = Test;
-			path = Test;
 			sourceTree = "<group>";
 		};
 		F0524D322F0E211400C1E943 /* Helper */ = {
@@ -259,7 +254,6 @@
 				F296DEA36BF52198C0C8330F /* Receipt */,
 				5D38632FE1F28565887C7C3B /* Stats */,
 				DAFC51DC69F44D1787B660C3 /* Main */,
-				E87FFDD38CEF1D51FE57EE8A /* Test */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -417,9 +411,10 @@
 				82B0AA4E7F44696D592019C9 /* NewReceiptTabView.swift in Sources */,
 				789467355A75582E05A494D2 /* NewReceiptView.swift in Sources */,
 				BADE1A544167F93E4A84046A /* FoodEntriesView.swift in Sources */,
-				E1856AEAF9206EBA3C89C44D /* TestView.swift in Sources */,
 				0C7EFD881ACD6256704EEAC9 /* MacroSummary.swift in Sources */,
 				C69D76B1FF18DE9B8F254B6E /* FoodItemRow.swift in Sources */,
+				7C32951437B04AE3995C3349 /* GrandientBackgroundView.swift in Sources */,
+				B10674716952B76AFCE852C7 /* FoodSummaryCard.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

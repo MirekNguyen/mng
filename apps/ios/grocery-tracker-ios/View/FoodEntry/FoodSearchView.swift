@@ -3,34 +3,48 @@ import SwiftUI
 struct FoodSearchView: View {
     var foods: [Food]
     @Binding var selectedFood: Food?
-    @Environment(\.dismiss) var dismiss
-
     @State private var searchText = ""
-    @State private var isPresented = true
+    @State private var isPresented = false
+    var maxItems = 8
 
     var filteredFoods: [Food] {
         if searchText.isEmpty {
-            return foods
+            return Array(foods.sorted { $0.name < $1.name }.prefix(maxItems))
         }
-        return foods.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+        return Array(
+            foods.filter { $0.name.localizedCaseInsensitiveContains(searchText) }.prefix(maxItems))
     }
 
     var body: some View {
-        List(filteredFoods) { food in
-            Button {
-                selectedFood = food
-                dismiss()
-            } label: {
-                HStack {
-                    Text(food.name)
-                    Spacer()
-                    if selectedFood?.id == food.id {
-                        Image(systemName: "checkmark")
+        List {
+            ForEach(filteredFoods) { food in
+                Button {
+                    selectedFood = food
+                } label: {
+                    HStack {
+                        Text(food.name)
+                        Spacer()
+                        if selectedFood?.id == food.id {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(.blue)
+                        }
                     }
+                    .contentShape(Rectangle())
                 }
+                .buttonStyle(PlainButtonStyle())
+            }
+
+            // Footer message
+            if foods.count > maxItems {
+                Text("Type to search through \(foods.count) foods")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .listRowSeparator(.hidden)
             }
         }
-        .searchable(text: $searchText, isPresented: $isPresented, placement: .automatic, prompt: "Search foods")
-        .navigationTitle("Select Food")
+        .searchable(
+            text: $searchText, isPresented: $isPresented, placement: .automatic,
+            prompt: "Search foods")
     }
 }

@@ -2,13 +2,11 @@ import Charts
 import SwiftUI
 
 struct CalorieGaugeView: View {
+    @Binding var selectedDate: Date
+    @State private var calendarId: Int = 0
+
     let currentCalories: Double
     let targetCalories: Double
-
-    init(currentCalories: Double = 1721, targetCalories: Double = 2213) {
-        self.currentCalories = currentCalories
-        self.targetCalories = targetCalories
-    }
 
     var progress: Double {
         min(currentCalories / targetCalories, 1.0)
@@ -24,7 +22,7 @@ struct CalorieGaugeView: View {
                     outerRadius: .ratio(0.9),
                     angularInset: 2
                 )
-                .foregroundStyle(Color.gray.opacity(0.2))
+                .foregroundStyle(Color.gray.opacity(0.3))
 
                 // Progress arc
                 SectorMark(
@@ -59,9 +57,22 @@ struct CalorieGaugeView: View {
                     .font(.system(size: 30))
 
                 // Current calories
-                Text("\(Int(currentCalories)) Kcal")
+                Text("\(Int(currentCalories)) kcal")
                     .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundColor(.primary)
+                DatePicker("", selection: $selectedDate, displayedComponents: .date)
+                    .labelsHidden()
+                    .glassEffect()
+                    .id(calendarId)
+                    .onChange(of: selectedDate) { oldValue, newValue in
+                        let components = Calendar.current.dateComponents(
+                            [.year, .month], from: oldValue, to: newValue)
+                        guard components.year == 0 && components.month == 0 else {
+                            return
+                        }
+                        calendarId += 1
+                    }
+
             }
         }
         .frame(maxWidth: 250, maxHeight: 250)
