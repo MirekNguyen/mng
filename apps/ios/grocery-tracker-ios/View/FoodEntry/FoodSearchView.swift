@@ -6,6 +6,7 @@ struct FoodSearchView: View {
     @Environment(\.dismiss) var dismiss
 
     @State private var searchText = ""
+    @State private var isPresented = true
 
     var filteredFoods: [Food] {
         if searchText.isEmpty {
@@ -29,7 +30,7 @@ struct FoodSearchView: View {
                 }
             }
         }
-        .searchable(text: $searchText, prompt: "Search foods")
+        .searchable(text: $searchText, isPresented: $isPresented, placement: .automatic, prompt: "Search foods")
         .navigationTitle("Select Food")
     }
 }

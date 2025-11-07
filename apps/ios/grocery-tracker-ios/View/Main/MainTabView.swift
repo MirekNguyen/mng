@@ -6,7 +6,7 @@ struct MainTabView: View {
     @StateObject private var foodEntryRepository = FoodEntryRepository(networkManager: NetworkManager2(baseURL: "https://ysgw44w44gckoocg0o0ggss4.mirekng.com"))
     @StateObject private var foodRepository = FoodRepository(networkManager: NetworkManager2(baseURL: "https://ysgw44w44gckoocg0o0ggss4.mirekng.com"))
 
-    @State private var selectedTab: Int = 0
+    @State private var selectedTab: Int = 5
     var body: some View {
         TabView(selection: $selectedTab) {
             NavigationStack {

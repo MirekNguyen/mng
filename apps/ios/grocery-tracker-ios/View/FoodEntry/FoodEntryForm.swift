@@ -4,18 +4,18 @@ struct FoodEntryForm: View {
     @EnvironmentObject var foodRepo: FoodRepository
     @EnvironmentObject var foodEntryRepo: FoodEntryRepository
     @Environment(\.dismiss) private var dismiss
+    @Binding var selectedDate: Date
 
     @State private var selectedFood: Food?
     @State private var amount: Double = 1
     @State private var mealType: String = "breakfast"
-    @State private var date = Date()
     @State private var time = Date()
     @State private var isSubmitting = false
     @State private var showConfirmation = false
     @State private var errorMessage: String?
     @State private var showingFoodSearch = false
 
-    let mealTypes = ["breakfast", "lunch", "dinner", "snack", "other"]
+    let mealTypes = ["breakfast", "lunch", "dinner", "snack"]
 
     var body: some View {
         NavigationView {
@@ -43,20 +43,33 @@ struct FoodEntryForm: View {
                 if let food = selectedFood {
                     Section(header: Text("Details")) {
                         HStack {
-                            Text("Per \(food.unit ?? "")")
+                            Text("Amount:")
                             Spacer()
-                            Text("\(food.calories, specifier: "%.1f") kcal")
-                        }
-                        Stepper(value: $amount, in: 0.1...100, step: 1) {
-                            Text("Amount: \(amount, specifier: "%.1f") \(food.unit ?? "")")
+                            HStack {
+                                TextField(
+                                    "0", value: $amount,
+                                    format: .number.precision(.fractionLength(2))
+                                )
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.trailing)
+                                Text("grams")
+                                    .foregroundColor(.secondary)
+                            }
                         }
                         Picker("Meal type", selection: $mealType) {
                             ForEach(mealTypes, id: \.self) { mt in
                                 Text(mt.capitalized).tag(mt)
                             }
                         }
-                        DatePicker("Date", selection: $date, displayedComponents: .date)
-                        DatePicker("Time", selection: $time, displayedComponents: .hourAndMinute)
+                        // DatePicker("Date", selection: $date, displayedComponents: .date)
+                        // DatePicker("Time", selection: $time, displayedComponents: .hourAndMinute)
+                    }
+                    Section(header: Text("Overview")) {
+                        HStack {
+                            Text("Calories:")
+                            Spacer()
+                            Text("\(food.calories * amount, specifier: "%.1f") kcal")
+                        }
                     }
                 }
 
@@ -93,7 +106,7 @@ struct FoodEntryForm: View {
         errorMessage = nil
 
         // Prepare entry date/time as strings:
-        let dateString = isoDateString(from: date)
+        let dateString = isoDateString(from: selectedDate)
         let timeString = timeString24(from: time)
 
         // Prepare FoodEntry, using 0 for the id (let server fill it in), calories, protein, etc. are multiplied by the amount.
