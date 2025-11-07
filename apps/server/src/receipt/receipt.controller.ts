@@ -7,9 +7,8 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { ReceiptService } from './receipt.service';
+import { ReceiptService, ReceiptType } from './receipt.service';
 import { FileInterceptor } from '@nest-lab/fastify-multer';
-import { ReceiptType } from 'src/app.service';
 import { receipt } from 'src/database/schema/receipt.schema';
 import { receiptItem } from 'src/database/schema/receipt-item.schema';
 import { eq } from 'drizzle-orm';
