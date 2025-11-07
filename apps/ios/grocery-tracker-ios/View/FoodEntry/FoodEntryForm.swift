@@ -65,7 +65,7 @@ struct FoodEntryForm: View {
                     HStack {
                         TextField(
                             "0", value: $amount,
-                            format: .number.precision(.fractionLength(2))
+                            format: .number.precision(.fractionLength(0...2))
                         )
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.trailing)
@@ -86,7 +86,7 @@ struct FoodEntryForm: View {
                     HStack {
                         Text("Calories:")
                         Spacer()
-                        Text("\(food.calories * amount, specifier: "%.1f") kcal")
+                        Text("\(food.calories * amount, specifier: "%.0f") kcal")
                     }
                 }
             }

@@ -45,10 +45,11 @@ struct FoodEntriesView: View {
                         let foodEntry = entries[index]
 
                         FoodItemRow(
-                            weight: "\(Int(foodEntry.amount ?? 0)) g",
+                            weight:
+                                "\(foodEntry.amount?.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", foodEntry.amount ?? 0) : String(format: "%.1f", foodEntry.amount ?? 0)) g",
                             foodName: foodEntry.foodName,
-                            protein: "\(foodEntry.protein)g protein",
-                            calories: "\(foodEntry.calories) kcal"
+                            protein: "\(String(format: "%.0f", foodEntry.protein))g protein",
+                            calories: "\(String(format: "%.0f", foodEntry.calories)) kcal"
                         )
                         .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                         .listRowBackground(Color.clear)
