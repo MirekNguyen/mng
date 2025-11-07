@@ -1,0 +1,1 @@
+ALTER TABLE "food_entries" ADD COLUMN "unit" varchar(50) DEFAULT 'serving';

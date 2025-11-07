@@ -103,6 +103,7 @@ export const foodEntries = pgTable('food_entries', {
   }).notNull(),
   fat: numeric('fat', { precision: 10, scale: 2, mode: 'number' }).notNull(),
   caffeine: numeric('caffeine', { precision: 10, scale: 2, mode: 'number' }),
+  unit: varchar('unit', { length: 50 }).default('serving'), // "serving" | "g" | "ml" | "oz" | "cup" | "tbsp" | "tsp" | "piece"
   entryDate: varchar('entry_date', { length: 10 }).notNull(), // Store as YYYY-MM-DD string
   entryTime: varchar('entry_time', { length: 8 }).notNull(), // Store as HH:MM:SS string
   createdAt: timestamp('created_at').defaultNow(),
