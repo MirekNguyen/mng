@@ -131,7 +131,7 @@ struct FoodEntryForm: View {
             carbs: food.carbs * amount,
             fat: food.fat * amount,
             caffeine: food.caffeine != nil ? food.caffeine! * amount : nil,
-            unit: food.unit ?? "serving",
+            unit: food.unit ?? "pcs",
             entryDate: dateString,
             entryTime: timeString,
             createdAt: nil
