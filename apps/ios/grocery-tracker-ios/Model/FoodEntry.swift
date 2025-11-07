@@ -12,7 +12,8 @@ struct FoodEntry: Identifiable, Codable, Equatable {
     let carbs: Double
     let fat: Double
     let caffeine: Double?
-    let entryDate: String // ISO string "YYYY-MM-DD"
-    let entryTime: String // "HH:mm:ss"
+    let unit: String
+    let entryDate: String  // ISO string "YYYY-MM-DD"
+    let entryTime: String  // "HH:mm:ss"
     let createdAt: Date?
 }
