@@ -59,7 +59,7 @@ struct CalorieGaugeView: View {
                 // Current calories
                 Text("\(Int(currentCalories)) kcal")
                     .font(.system(size: 28, weight: .bold, design: .rounded))
-                    .foregroundColor(.primary)
+                    .foregroundColor(Styles.Colors.primaryText)
                 DatePicker("", selection: $selectedDate, displayedComponents: .date)
                     .labelsHidden()
                     .glassEffect()
