@@ -36,10 +36,17 @@ struct MainTabView: View {
 
             NavigationStack {
                 ZStack {
-                    GradientBackgroundView()
+                    // GradientBackgroundView()
                     FoodEntriesView()
-                        .navigationTitle("Food Entries")
+                        // .navigationTitle("Food Entries")
+                        .foregroundColor(Styles.Colors.primaryText)
                 }
+                .background(
+                    Image("Wallpaper")
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .edgesIgnoringSafeArea(.all)
+                )
             }
             .tabItem { Label("Entries", systemImage: "chart.bar.xaxis") }
             .tag(4)

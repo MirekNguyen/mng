@@ -11,6 +11,10 @@ struct FoodEntriesView: View {
     var totalCarbs: Double { entries.reduce(0) { $0 + $1.carbs } }
     var totalFat: Double { entries.reduce(0) { $0 + $1.fat } }
 
+    func loadData() async {
+        await foodEntryRepository.getEntries(date: selectedDate)
+    }
+
     var body: some View {
         ScrollView {
             VStack {
@@ -22,74 +26,32 @@ struct FoodEntriesView: View {
                     FoodSummaryCard(name: "Carbs", amount: totalCarbs, color: .green, unit: "g")
                     FoodSummaryCard(name: "Fat", amount: totalFat, color: .red, unit: "g")
                 }
-                HStack(spacing: 12) {
-                    VStack {
-                        Button(
-                            action: {
-                                showAddSheet = true
-                            },
-                            label: {
-                                Image(systemName: "plus")
-                                    .font(.title2)
-                                    .frame(width: 40, height: 40)
-                                    .clipShape(Circle())
-
-                            }
-                        )
-                        .buttonStyle(.glass)
-                        Text("Add entry")
-                    }
-                }
-                List {
-                    ForEach(entries.indices, id: \.self) { index in
-                        let foodEntry = entries[index]
-
-                        FoodItemRow(
-                            weight:
-                                "\(foodEntry.amount?.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", foodEntry.amount ?? 0) : String(format: "%.1f", foodEntry.amount ?? 0)) \(foodEntry.unit)",
-                            foodName: foodEntry.foodName,
-                            protein: "\(String(format: "%.0f", foodEntry.protein))g protein",
-                            calories: "\(String(format: "%.0f", foodEntry.calories)) kcal"
-                        )
-                        .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(index == entries.count - 1 ? .hidden : .visible)
-                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                            Button(role: .destructive) {
-                                Task {
-                                    await foodEntryRepository.deleteEntry(id: foodEntry.id ?? 0)
-                                }
-                            } label: {
-                                Label("Delete", systemImage: "trash")
-                            }
-                        }
-                    }
-                }
-                .scrollDisabled(true)
-                .frame(height: CGFloat(entries.count * 85))
-                .listStyle(PlainListStyle())
-                .glassEffect(.regular, in: .rect(cornerRadius: 16))
-                .padding(.horizontal, 10)  // Side padding
-                .padding(.vertical, 12)
+                ActionButton(text: "Add entry", icon: "plus", action: { showAddSheet = true })
+                FoodEntryList(entries: entries)
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("Welcome, Mirek!")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Profile", systemImage: "person.fill", action: {})
             }
         }
         .sheet(
             isPresented: $showAddSheet,
-            onDismiss: {
-                Task { await foodEntryRepository.getEntries(date: selectedDate) }
-            },
+            onDismiss: { Task { await loadData() } },
             content: {
                 FoodEntryForm(selectedDate: $selectedDate)
             }
 
         )
-        .task {
-            await foodEntryRepository.getEntries(date: selectedDate)
-        }
+        .task { await loadData() }
+        .refreshable { await loadData() }
         .onChange(of: selectedDate) {
-            Task {
-                await foodEntryRepository.getEntries(date: selectedDate)
-            }
+            Task { await loadData() }
         }
     }
 }

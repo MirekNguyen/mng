@@ -23,6 +23,7 @@ struct FoodSearchView: View {
                 } label: {
                     HStack {
                         Text(food.name)
+                            .foregroundColor(Color.black)
                         Spacer()
                         if selectedFood?.id == food.id {
                             Image(systemName: "checkmark")

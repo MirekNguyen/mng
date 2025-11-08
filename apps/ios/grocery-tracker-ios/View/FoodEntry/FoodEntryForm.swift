@@ -13,6 +13,7 @@ struct FoodEntryForm: View {
     @State private var showConfirmation = false
     @State private var errorMessage: String?
     @State private var showingFoodSearch = false
+    @FocusState private var isAmountFieldFocused: Bool
 
     let mealTypes = ["breakfast", "lunch", "dinner", "snack"]
 
@@ -20,7 +21,6 @@ struct FoodEntryForm: View {
         NavigationView {
             Group {
                 if selectedFood == nil {
-                    // Show food search first
                     FoodSearchView(
                         foods: foodRepo.foods ?? [],
                         selectedFood: $selectedFood
@@ -34,14 +34,21 @@ struct FoodEntryForm: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
+                    Button("Cancel", systemImage: "xmark", action: { dismiss() })
                 }
             }
         }
         .onAppear {
+            mealType = getMealTypeFromTime(Date())
             Task { await foodRepo.fetchFoods() }
+        }
+        .onChange(of: selectedFood) { _, newValue in
+            if newValue != nil {
+                // Small delay to ensure the form is rendered before focusing
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    isAmountFieldFocused = true
+                }
+            }
         }
     }
 
@@ -69,16 +76,19 @@ struct FoodEntryForm: View {
                         )
                         .keyboardType(.decimalPad)
                         .multilineTextAlignment(.trailing)
-                        Text("grams")
+                        .focused($isAmountFieldFocused)
+
+                        Text(selectedFood?.unit ?? "pcs")
                             .foregroundColor(.secondary)
                     }
                 }
 
                 Picker("Meal type", selection: $mealType) {
-                    ForEach(mealTypes, id: \.self) { mt in
-                        Text(mt.capitalized).tag(mt)
+                    ForEach(mealTypes, id: \.self) { mealType in
+                        Text(mealType.capitalized).tag(mealType)
                     }
                 }
+                DatePicker("Time", selection: $time, displayedComponents: .hourAndMinute)
             }
 
             if let food = selectedFood {
@@ -109,22 +119,28 @@ struct FoodEntryForm: View {
                 }
             }
         }
+        .onAppear {
+            isAmountFieldFocused = true
+        }
     }
 
-    func submit() {
+    private func submit() {
         guard let food = selectedFood else { return }
         isSubmitting = true
         errorMessage = nil
 
-        let dateString = isoDateString(from: selectedDate)
-        let timeString = timeString24(from: time)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        let dateString = formatter.string(from: selectedDate)
+        formatter.dateFormat = "HH:mm:ss"
+        let timeString = formatter.string(from: time)
 
         let entry = FoodEntry(
             id: nil,
-            userId: nil,
+            userId: 1,
             mealId: food.id,
             foodName: food.name,
-            mealType: mealType,
+            mealType: mealType,  // Use the selected mealType
             amount: amount,
             calories: food.calories * amount,
             protein: food.protein * amount,
@@ -153,16 +169,19 @@ struct FoodEntryForm: View {
         }
     }
 
-    // Helpers:
-    func isoDateString(from date: Date) -> String {
-        let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd"
-        return f.string(from: date)
-    }
+    private func getMealTypeFromTime(_ date: Date) -> String {
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: date)
 
-    func timeString24(from date: Date) -> String {
-        let f = DateFormatter()
-        f.dateFormat = "HH:mm:ss"
-        return f.string(from: date)
+        switch hour {
+        case 5..<11:
+            return "breakfast"
+        case 11..<15:
+            return "lunch"
+        case 15..<20:
+            return "dinner"
+        default:
+            return "snack"
+        }
     }
 }
