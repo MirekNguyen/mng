@@ -8,6 +8,8 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFiles,
+  UseInterceptors,
   UsePipes,
 } from '@nestjs/common';
 import { ICrudController } from 'src/common/icrud.controller';
@@ -21,10 +23,15 @@ import {
 } from 'src/database/schema/other.schema';
 import * as z from 'zod';
 import { FoodEntryRepository } from './food-entry.repository';
+import { FilesInterceptor } from '@nest-lab/fastify-multer';
+import { FoodEntryAnalyzer } from './food-entry.analyzer';
 
 @Controller('food-entry')
 export class FoodEntryController implements ICrudController<FoodEntry> {
-  constructor(private readonly repository: FoodEntryRepository) {}
+  constructor(
+    private readonly repository: FoodEntryRepository,
+    private readonly foodEntryAnalyzer: FoodEntryAnalyzer,
+  ) {}
 
   @Get()
   @UsePipes(new ZodValidationPipe(z.iso.date()))
@@ -50,5 +57,12 @@ export class FoodEntryController implements ICrudController<FoodEntry> {
   @Delete(':id')
   async delete(@Param('id', ParseIntPipe) id: number): Promise<FoodEntry> {
     return await this.repository.delete(id);
+  }
+
+  @Post('analyze')
+  @UseInterceptors(FilesInterceptor('images', 5))
+  async analyze(@UploadedFiles() files: Express.Multer.File[]) {
+    const result = await this.foodEntryAnalyzer.analyze(files);
+    return result;
   }
 }
