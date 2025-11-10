@@ -39,7 +39,7 @@ export class FoodEntryAnalyzer {
       };
     });
     const response = await this.openAi.responses.parse({
-      model: 'gpt-4.1-nano',
+      model: 'gpt-4.1',
       input: [
         {
           role: 'system',

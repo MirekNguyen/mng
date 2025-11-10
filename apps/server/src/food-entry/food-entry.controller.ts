@@ -62,7 +62,6 @@ export class FoodEntryController implements ICrudController<FoodEntry> {
   @Post('analyze')
   @UseInterceptors(FilesInterceptor('images', 5))
   async analyze(@UploadedFiles() files: Express.Multer.File[]) {
-    const result = await this.foodEntryAnalyzer.analyze(files);
-    return result;
+    return await this.foodEntryAnalyzer.analyze(files);
   }
 }
