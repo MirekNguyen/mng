@@ -29,6 +29,7 @@
 		C69D76B1FF18DE9B8F254B6E /* FoodItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708FBDE030B767A5CAF54145 /* FoodItemRow.swift */; };
 		D5B71705896B560551FFE7D9 /* EditReceiptItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A039E38C609B11711AF9749 /* EditReceiptItemView.swift */; };
 		D99A83CEF0B7A0AEA2798235 /* NetworkImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0778E263581D11337F59EF /* NetworkImageExtension.swift */; };
+		EA938D4DC8D8355B823FF428 /* PhotosPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4510F1C28765A2DBB3C1226 /* PhotosPreview.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		AE0778E263581D11337F59EF /* NetworkImageExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NetworkImageExtension.swift; sourceTree = "<group>"; };
 		BA5BE8C3B04AE60B692A10E6 /* FoodSummaryCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoodSummaryCard.swift; sourceTree = "<group>"; };
 		CD36FFBE1E94982CC0B4D049 /* ReceiptRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReceiptRepository.swift; sourceTree = "<group>"; };
+		D4510F1C28765A2DBB3C1226 /* PhotosPreview.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = PhotosPreview.swift; path = PhotosPreview.swift; sourceTree = "<group>"; };
 		E3DF4FA281ED767EA564FB77 /* Styles.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
 		FCEEB953EF2F19D8B0B89F9D /* MacroSummary.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MacroSummary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -193,6 +195,7 @@
 			children = (
 				19D16ED6A65516F5B27368DB /* FoodEntriesView.swift */,
 				D02E08BD0E6E49F994FDABDE /* Components */,
+				D4510F1C28765A2DBB3C1226 /* PhotosPreview.swift */,
 			);
 			path = FoodEntry;
 			sourceTree = "<group>";
@@ -417,6 +420,7 @@
 				6C66A8364D798BC9F73141BF /* FoodEntryList.swift in Sources */,
 				7C465E7E7D69A1A0122916CD /* ActionButton.swift in Sources */,
 				67B4F64509AE9E01C94C1F37 /* Styles.swift in Sources */,
+				EA938D4DC8D8355B823FF428 /* PhotosPreview.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
