@@ -1,12 +1,17 @@
 import Foundation
 
+struct ImageUploadData {
+    let data: Data
+    let fileName: String
+    let mimeType: String
+    let formName: String = "images"
+}
+
 extension NetworkManager2 {
     private func createMultipartBody(
         parameters: [String: String]?,
-        imageData: Data,
+        images: [ImageUploadData],
         boundary: String,
-        fileName: String,
-        mimeType: String
     ) -> Data {
         var body = Data()
         if let parameters = parameters {
@@ -17,27 +22,29 @@ extension NetworkManager2 {
             }
         }
         body.append(Data("--\(boundary)\r\n".utf8))
-        body.append(
-            Data("Content-Disposition: form-data; name=\"file\"; filename=\"\(fileName)\"\r\n".utf8)
-        )
-        body.append(Data("Content-Type: \(mimeType)\r\n\r\n".utf8))
-        body.append(imageData)
-        body.append(Data("\r\n".utf8))
+        for image in images {
+            body.append(
+                Data("Content-Disposition: form-data; name=\"\(image.formName)\"; filename=\"\(image.fileName)\"\r\n".utf8)
+            )
+            body.append(Data("Content-Type: \(image.mimeType)\r\n\r\n".utf8))
+            body.append(image.data)
+            body.append(Data("\r\n".utf8))
+        }
         body.append(Data("--\(boundary)--\r\n".utf8))
         return body
     }
 
-    func postImage<U: Decodable>(
+    func postImages<U: Decodable>(
         endpoint: String,
         parameters: [String: String]? = nil,
-        imageData: Data,
-        fileName: String = "image.jpg",
-        mimeType: String = "image/jpeg"
+        images: [ImageUploadData],
     ) async throws -> U {
         let boundary = UUID().uuidString
         let body = createMultipartBody(
-            parameters: parameters, imageData: imageData, boundary: boundary, fileName: fileName,
-            mimeType: mimeType)
+            parameters: parameters,
+            images: images,
+            boundary: boundary,
+        )
         let request = try createRequest(
             endpoint,
             method: "POST",
