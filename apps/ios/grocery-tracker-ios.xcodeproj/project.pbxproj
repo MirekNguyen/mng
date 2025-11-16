@@ -7,29 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		03397881374478C38E839903 /* ReceiptDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16831A85CD2331781103BE87 /* ReceiptDraft.swift */; };
-		0C7EFD881ACD6256704EEAC9 /* MacroSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = FCEEB953EF2F19D8B0B89F9D /* MacroSummary.swift */; };
-		1105C1D12CA15063F747EF6C /* ReceiptItemCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E869F34E438712DB906E267 /* ReceiptItemCategory.swift */; };
-		153A39E565C8705AE3D6DA93 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BFDD3C0CFD7F815AEE6540E /* Binding.swift */; };
-		41DF16B22B8A781EBD3508B0 /* EditReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9283466ACCC64FCE0F6212A6 /* EditReceiptView.swift */; };
-		4706B0DEC5143ED64FB43416 /* ReceiptRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD36FFBE1E94982CC0B4D049 /* ReceiptRepository.swift */; };
-		4B3265EC5220B5774646DF6D /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8715CC40E33012F270C101D5 /* NetworkError.swift */; };
-		67B4F64509AE9E01C94C1F37 /* Styles.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3DF4FA281ED767EA564FB77 /* Styles.swift */; };
-		6A9CEB212D83D259AC6EF828 /* NetworkManager2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FCC803852CD10BA379F0AA8 /* NetworkManager2.swift */; };
-		6C66A8364D798BC9F73141BF /* FoodEntryList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6112EB3F86AB504FFC85FF31 /* FoodEntryList.swift */; };
-		73A58A35B073C74F74D18A9E /* CameraPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49C3729612BE1096A3DCFC0D /* CameraPicker.swift */; };
-		789467355A75582E05A494D2 /* NewReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BA6AAD0C221CE8E296ABF37 /* NewReceiptView.swift */; };
-		7C32951437B04AE3995C3349 /* GrandientBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D3E6FD4E511377E4677339 /* GrandientBackgroundView.swift */; };
-		7C465E7E7D69A1A0122916CD /* ActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1482B518EA9BE59AF4EE67B5 /* ActionButton.swift */; };
-		82B0AA4E7F44696D592019C9 /* NewReceiptTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D6F672636C19761AEB1D266 /* NewReceiptTabView.swift */; };
 		9D701E58D2C54004C65C5F6E /* ReceiptCardRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68873C47F3F333BBDB7673AC /* ReceiptCardRow.swift */; };
-		A40C0F63DE467E7075C18DBF /* CameraButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 855316784F6F8BF6C7B25413 /* CameraButton.swift */; };
-		B10674716952B76AFCE852C7 /* FoodSummaryCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA5BE8C3B04AE60B692A10E6 /* FoodSummaryCard.swift */; };
-		BADE1A544167F93E4A84046A /* FoodEntriesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D16ED6A65516F5B27368DB /* FoodEntriesView.swift */; };
-		C69D76B1FF18DE9B8F254B6E /* FoodItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 708FBDE030B767A5CAF54145 /* FoodItemRow.swift */; };
-		D5B71705896B560551FFE7D9 /* EditReceiptItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A039E38C609B11711AF9749 /* EditReceiptItemView.swift */; };
-		D99A83CEF0B7A0AEA2798235 /* NetworkImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE0778E263581D11337F59EF /* NetworkImageExtension.swift */; };
-		EA938D4DC8D8355B823FF428 /* PhotosPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4510F1C28765A2DBB3C1226 /* PhotosPreview.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,7 +32,6 @@
 		16831A85CD2331781103BE87 /* ReceiptDraft.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReceiptDraft.swift; sourceTree = "<group>"; };
 		19D16ED6A65516F5B27368DB /* FoodEntriesView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoodEntriesView.swift; sourceTree = "<group>"; };
 		1A039E38C609B11711AF9749 /* EditReceiptItemView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EditReceiptItemView.swift; sourceTree = "<group>"; };
-		2BFDD3C0CFD7F815AEE6540E /* Binding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
 		49C3729612BE1096A3DCFC0D /* CameraPicker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
 		5D6F672636C19761AEB1D266 /* NewReceiptTabView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NewReceiptTabView.swift; sourceTree = "<group>"; };
 		6112EB3F86AB504FFC85FF31 /* FoodEntryList.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoodEntryList.swift; sourceTree = "<group>"; };
@@ -73,14 +50,27 @@
 		AE0778E263581D11337F59EF /* NetworkImageExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NetworkImageExtension.swift; sourceTree = "<group>"; };
 		BA5BE8C3B04AE60B692A10E6 /* FoodSummaryCard.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoodSummaryCard.swift; sourceTree = "<group>"; };
 		CD36FFBE1E94982CC0B4D049 /* ReceiptRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReceiptRepository.swift; sourceTree = "<group>"; };
-		D4510F1C28765A2DBB3C1226 /* PhotosPreview.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; name = PhotosPreview.swift; path = PhotosPreview.swift; sourceTree = "<group>"; };
+		D4510F1C28765A2DBB3C1226 /* PhotosPreview.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = PhotosPreview.swift; sourceTree = "<group>"; };
 		E3DF4FA281ED767EA564FB77 /* Styles.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Styles.swift; sourceTree = "<group>"; };
 		FCEEB953EF2F19D8B0B89F9D /* MacroSummary.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MacroSummary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7C1F64162EC7A30600BE2343 /* Exceptions for "grocery-tracker-ios" folder in "Calorik" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				View/Overview/ReceiptCardRow.swift,
+			);
+			target = 7C2287DB2EA30052009BA42D /* Calorik */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		7C2287DE2EA30052009BA42D /* grocery-tracker-ios */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7C1F64162EC7A30600BE2343 /* Exceptions for "grocery-tracker-ios" folder in "Calorik" target */,
+			);
 			path = "grocery-tracker-ios";
 			sourceTree = "<group>";
 		};
@@ -126,7 +116,6 @@
 			children = (
 				FB0476E2C9CEB8DC6B5EC2E8 /* View */,
 				963847E3D81A4FFEC3128781 /* Model */,
-				F0524D322F0E211400C1E943 /* Helper */,
 				52418218FED0BF87596E695B /* Components */,
 				278C28C158610EE2FE95DB63 /* Network */,
 			);
@@ -229,14 +218,6 @@
 			path = Main;
 			sourceTree = "<group>";
 		};
-		F0524D322F0E211400C1E943 /* Helper */ = {
-			isa = PBXGroup;
-			children = (
-				2BFDD3C0CFD7F815AEE6540E /* Binding.swift */,
-			);
-			path = Helper;
-			sourceTree = "<group>";
-		};
 		F296DEA36BF52198C0C8330F /* Receipt */ = {
 			isa = PBXGroup;
 			children = (
@@ -333,7 +314,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2600;
-				LastUpgradeCheck = 2600;
+				LastUpgradeCheck = 2610;
 				TargetAttributes = {
 					7C2287DB2EA30052009BA42D = {
 						CreatedOnToolsVersion = 26.0.1;
@@ -399,28 +380,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9D701E58D2C54004C65C5F6E /* ReceiptCardRow.swift in Sources */,
-				03397881374478C38E839903 /* ReceiptDraft.swift in Sources */,
-				153A39E565C8705AE3D6DA93 /* Binding.swift in Sources */,
-				A40C0F63DE467E7075C18DBF /* CameraButton.swift in Sources */,
-				73A58A35B073C74F74D18A9E /* CameraPicker.swift in Sources */,
-				6A9CEB212D83D259AC6EF828 /* NetworkManager2.swift in Sources */,
-				4B3265EC5220B5774646DF6D /* NetworkError.swift in Sources */,
-				1105C1D12CA15063F747EF6C /* ReceiptItemCategory.swift in Sources */,
-				4706B0DEC5143ED64FB43416 /* ReceiptRepository.swift in Sources */,
-				D99A83CEF0B7A0AEA2798235 /* NetworkImageExtension.swift in Sources */,
-				D5B71705896B560551FFE7D9 /* EditReceiptItemView.swift in Sources */,
-				41DF16B22B8A781EBD3508B0 /* EditReceiptView.swift in Sources */,
-				82B0AA4E7F44696D592019C9 /* NewReceiptTabView.swift in Sources */,
-				789467355A75582E05A494D2 /* NewReceiptView.swift in Sources */,
-				BADE1A544167F93E4A84046A /* FoodEntriesView.swift in Sources */,
-				0C7EFD881ACD6256704EEAC9 /* MacroSummary.swift in Sources */,
-				C69D76B1FF18DE9B8F254B6E /* FoodItemRow.swift in Sources */,
-				7C32951437B04AE3995C3349 /* GrandientBackgroundView.swift in Sources */,
-				B10674716952B76AFCE852C7 /* FoodSummaryCard.swift in Sources */,
-				6C66A8364D798BC9F73141BF /* FoodEntryList.swift in Sources */,
-				7C465E7E7D69A1A0122916CD /* ActionButton.swift in Sources */,
-				67B4F64509AE9E01C94C1F37 /* Styles.swift in Sources */,
-				EA938D4DC8D8355B823FF428 /* PhotosPreview.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -516,6 +475,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -576,6 +536,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -592,17 +553,19 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_RESOURCE_ACCESS_CAMERA = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to function properly";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mirekng.grocery-tracker-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mirekng.calorik;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -625,17 +588,19 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_RESOURCE_ACCESS_CAMERA = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to function properly";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mirekng.grocery-tracker-ios";
+				PRODUCT_BUNDLE_IDENTIFIER = com.mirekng.calorik;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -655,9 +620,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SB6SN6TWCG;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to function properly";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mirekng.grocery-tracker-iosTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mirekng.calorik-iosTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -677,9 +644,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SB6SN6TWCG;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to function properly";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mirekng.grocery-tracker-iosTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mirekng.calorik-iosTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -698,8 +667,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SB6SN6TWCG;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to function properly";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mirekng.grocery-tracker-iosUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mirekng.calorik-iosUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -718,8 +689,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = SB6SN6TWCG;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to function properly";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Dark;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.mirekng.grocery-tracker-iosUITests";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.mirekng.calorik-iosUITests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
