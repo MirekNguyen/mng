@@ -7,6 +7,12 @@
   ],
   "categories": {},
   "rules": {
+    "typescript/no-explicit-any": "warn",
+    "typescript/explicit-function-return-type": "warn",
+    "max-lines": [
+      "warn",
+      100
+    ],
     "for-direction": "warn",
     "no-async-promise-executor": "warn",
     "no-caller": "warn",
