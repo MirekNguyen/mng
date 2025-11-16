@@ -2,8 +2,10 @@ import SwiftUI
 
 struct FoodEntriesView: View {
     @EnvironmentObject var foodEntryRepository: FoodEntryRepository
+    @Environment(\.scenePhase) var scenePhase: ScenePhase
     @State var selectedDate = Date()
     @State private var showAddSheet = false
+    @State private var showPhotosSheet = false
 
     var entries: [FoodEntry] { foodEntryRepository.foodEntries ?? [] }
     var totalCalories: Double { entries.reduce(0) { $0 + $1.calories } }
@@ -26,7 +28,11 @@ struct FoodEntriesView: View {
                     FoodSummaryCard(name: "Carbs", amount: totalCarbs, color: .green, unit: "g")
                     FoodSummaryCard(name: "Fat", amount: totalFat, color: .red, unit: "g")
                 }
-                ActionButton(text: "Add entry", icon: "plus", action: { showAddSheet = true })
+                HStack(spacing: 36) {
+                    ActionButton(text: "Add entry", icon: "plus", action: { showAddSheet = true })
+                    ActionButton(
+                        text: "Analyze", icon: "camera.fill", action: { showPhotosSheet = true })
+                }
                 FoodEntryList(entries: entries)
             }
         }
@@ -40,18 +46,36 @@ struct FoodEntriesView: View {
                 Button("Profile", systemImage: "person.fill", action: {})
             }
         }
-        .sheet(
+        .fullScreenCover(
             isPresented: $showAddSheet,
             onDismiss: { Task { await loadData() } },
             content: {
                 FoodEntryForm(selectedDate: $selectedDate)
+                    .presentationBackground(.clear)
             }
 
+        )
+        .fullScreenCover(
+            isPresented: $showPhotosSheet,
+            onDismiss: { Task { await loadData() } },
+            content: {
+                ImageUploadView()
+                    .scrollContentBackground(.hidden)
+                    .background(.ultraThinMaterial)
+                    .presentationBackground(.clear)
+            }
         )
         .task { await loadData() }
         .refreshable { await loadData() }
         .onChange(of: selectedDate) {
             Task { await loadData() }
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                if !Calendar.current.isDateInToday(selectedDate) {
+                    selectedDate = Date()
+                }
+            }
         }
     }
 }
