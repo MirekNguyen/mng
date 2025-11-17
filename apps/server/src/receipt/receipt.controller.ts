@@ -9,13 +9,10 @@ import {
 } from '@nestjs/common';
 import { ReceiptService, ReceiptType } from './receipt.service';
 import { FileInterceptor } from '@nest-lab/fastify-multer';
-import { receipt } from 'src/database/schema/receipt.schema';
-import { receiptItem } from 'src/database/schema/receipt-item.schema';
 import { eq } from 'drizzle-orm';
-import {
-  DRIZZLE_PROVIDER,
-  type DrizzleDatabase,
-} from 'src/database/drizzle.provider';
+import { receipt } from '@/database/schema/receipt.schema';
+import { receiptItem } from '@/database/schema/receipt-item.schema';
+import { DRIZZLE_PROVIDER, type DrizzleDatabase } from '@/database/drizzle.provider';
 
 @Controller('receipts')
 export class ReceiptController {
