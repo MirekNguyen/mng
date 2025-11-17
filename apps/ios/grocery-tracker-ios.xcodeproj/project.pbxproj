@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		446909901542FC5E10E9F0E7 /* EditEntryForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B196CFEC0864245568B0E7F /* EditEntryForm.swift */; };
 		9D701E58D2C54004C65C5F6E /* ReceiptCardRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68873C47F3F333BBDB7673AC /* ReceiptCardRow.swift */; };
 /* End PBXBuildFile section */
 
@@ -30,7 +31,7 @@
 /* Begin PBXFileReference section */
 		1482B518EA9BE59AF4EE67B5 /* ActionButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ActionButton.swift; sourceTree = "<group>"; };
 		16831A85CD2331781103BE87 /* ReceiptDraft.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReceiptDraft.swift; sourceTree = "<group>"; };
-		19D16ED6A65516F5B27368DB /* FoodEntriesView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoodEntriesView.swift; sourceTree = "<group>"; };
+		19D16ED6A65516F5B27368DB /* FoodEntryView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoodEntryView.swift; sourceTree = "<group>"; };
 		1A039E38C609B11711AF9749 /* EditReceiptItemView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EditReceiptItemView.swift; sourceTree = "<group>"; };
 		49C3729612BE1096A3DCFC0D /* CameraPicker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
 		5D6F672636C19761AEB1D266 /* NewReceiptTabView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NewReceiptTabView.swift; sourceTree = "<group>"; };
@@ -45,6 +46,7 @@
 		855316784F6F8BF6C7B25413 /* CameraButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CameraButton.swift; sourceTree = "<group>"; };
 		8715CC40E33012F270C101D5 /* NetworkError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		9283466ACCC64FCE0F6212A6 /* EditReceiptView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EditReceiptView.swift; sourceTree = "<group>"; };
+		9B196CFEC0864245568B0E7F /* EditEntryForm.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; path = EditEntryForm.swift; sourceTree = "<group>"; };
 		9BA6AAD0C221CE8E296ABF37 /* NewReceiptView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NewReceiptView.swift; sourceTree = "<group>"; };
 		9E869F34E438712DB906E267 /* ReceiptItemCategory.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReceiptItemCategory.swift; sourceTree = "<group>"; };
 		AE0778E263581D11337F59EF /* NetworkImageExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NetworkImageExtension.swift; sourceTree = "<group>"; };
@@ -56,7 +58,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		7C1F64162EC7A30600BE2343 /* Exceptions for "grocery-tracker-ios" folder in "Calorik" target */ = {
+		7C1F64162EC7A30600BE2343 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				View/Overview/ReceiptCardRow.swift,
@@ -69,7 +71,7 @@
 		7C2287DE2EA30052009BA42D /* grocery-tracker-ios */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				7C1F64162EC7A30600BE2343 /* Exceptions for "grocery-tracker-ios" folder in "Calorik" target */,
+				7C1F64162EC7A30600BE2343 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
 			);
 			path = "grocery-tracker-ios";
 			sourceTree = "<group>";
@@ -149,6 +151,33 @@
 			path = Stats;
 			sourceTree = "<group>";
 		};
+		661CAE7C71B20EE269DD6544 /* grocery-tracker-ios */ = {
+			isa = PBXGroup;
+			children = (
+				87692A62BAFB63FCCD2A180B /* View */,
+			);
+			name = "grocery-tracker-ios";
+			path = "grocery-tracker-ios";
+			sourceTree = "<group>";
+		};
+		68B9B5F70455CD9F73632155 /* FoodEntry */ = {
+			isa = PBXGroup;
+			children = (
+				755AF5F28B8C767522AB0FF0 /* Form */,
+			);
+			name = FoodEntry;
+			path = FoodEntry;
+			sourceTree = "<group>";
+		};
+		755AF5F28B8C767522AB0FF0 /* Form */ = {
+			isa = PBXGroup;
+			children = (
+				9B196CFEC0864245568B0E7F /* EditEntryForm.swift */,
+			);
+			name = Form;
+			path = Form;
+			sourceTree = "<group>";
+		};
 		7C2287D32EA30052009BA42D = {
 			isa = PBXGroup;
 			children = (
@@ -156,6 +185,7 @@
 				7C2287EC2EA30053009BA42D /* grocery-tracker-iosTests */,
 				7C2287F62EA30053009BA42D /* grocery-tracker-iosUITests */,
 				7C2287DD2EA30052009BA42D /* Products */,
+				661CAE7C71B20EE269DD6544 /* grocery-tracker-ios */,
 			);
 			sourceTree = "<group>";
 		};
@@ -170,6 +200,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		87692A62BAFB63FCCD2A180B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				68B9B5F70455CD9F73632155 /* FoodEntry */,
+			);
+			name = View;
+			path = View;
+			sourceTree = "<group>";
+		};
 		963847E3D81A4FFEC3128781 /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -182,7 +221,7 @@
 		BA26C2F283750F04450950CB /* FoodEntry */ = {
 			isa = PBXGroup;
 			children = (
-				19D16ED6A65516F5B27368DB /* FoodEntriesView.swift */,
+				19D16ED6A65516F5B27368DB /* FoodEntryView.swift */,
 				D02E08BD0E6E49F994FDABDE /* Components */,
 				D4510F1C28765A2DBB3C1226 /* PhotosPreview.swift */,
 			);
@@ -380,6 +419,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9D701E58D2C54004C65C5F6E /* ReceiptCardRow.swift in Sources */,
+				446909901542FC5E10E9F0E7 /* EditEntryForm.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
