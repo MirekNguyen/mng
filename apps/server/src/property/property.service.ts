@@ -154,6 +154,8 @@ export class PropertyScraperService {
             updatedAt: d.params.since,
             usableArea: d.params.usableArea,
             refundableDeposit: d.params.refundableDeposit,
+            latitude: d.locality.latitude,
+            longitude: d.locality.longitude,
             priceNote: d.params.priceNote,
             costOfLiving: d.params.costOfLiving,
           };
@@ -205,6 +207,8 @@ export class PropertyScraperService {
           usableArea: isNaN(areaVal) ? 0 : areaVal,
           imageUrls: data.imageUrls,
           // Store miscellaneous extra fields in the JSONB column
+          longitude: data.longitude,
+          latitude: data.latitude,
           metaData: {
             refundableDeposit: data.refundableDeposit,
             priceNote: data.priceNote,

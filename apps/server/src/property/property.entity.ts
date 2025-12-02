@@ -12,6 +12,9 @@ export type ExtractedData = {
   refundableDeposit: number | null;
   costOfLiving: string;
   priceNote: string;
+  latitude: number;
+  longitude: number;
+
 
 
           // "readyDate": "2025-12-01",

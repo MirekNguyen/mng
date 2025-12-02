@@ -5,6 +5,7 @@ import {
   integer,
   json,
   timestamp,
+  doublePrecision,
 } from 'drizzle-orm/pg-core';
 import { createSchemaFactory, createSelectSchema } from 'drizzle-zod';
 import type { z } from 'zod';
@@ -24,6 +25,8 @@ export const properties = pgTable('properties', {
   price: integer('price'),
   currency: text('currency').default('CZK'),
   usableArea: integer('usable_area'),
+  latitude: doublePrecision('latitude'),
+  longitude: doublePrecision('longitude'),
   imageUrls: json('image_urls').$type<string[]>(),
   metaData: json('meta_data'),
   createdAt: timestamp('created_at').defaultNow(),
