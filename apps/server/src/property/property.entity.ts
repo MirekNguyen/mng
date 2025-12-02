@@ -9,7 +9,7 @@ export type ExtractedData = {
   updatedAt: string;
 
   usableArea: number;
-  refundableDeposit: number;
+  refundableDeposit: number | null;
   costOfLiving: string;
   priceNote: string;
 
