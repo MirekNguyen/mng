@@ -4,6 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as https from 'https';
 import { IncomingMessage } from 'http';
+import { ExtractedData } from './property.entity';
 
 @Injectable()
 export class PropertyScraperService {
