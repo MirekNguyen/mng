@@ -1,27 +1,38 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import puppeteer, { Browser, Page } from 'puppeteer';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as https from 'https';
 import { IncomingMessage } from 'http';
 import { ExtractedData } from './property.entity';
-import { RealityProperty, RealityPropertyImage } from './reality-property.entity';
+import {
+  RealityProperty,
+  RealityPropertyImage,
+} from './reality-property.entity';
+import {
+  DRIZZLE_PROVIDER,
+  type DrizzleDatabase,
+} from '@/database/drizzle.provider';
 
 @Injectable()
 export class PropertyScraperService {
   private readonly logger = new Logger(PropertyScraperService.name);
-  
+
   // Configuration
   private readonly BASE_DOWNLOAD_DIR = path.resolve('./downloads');
-  private readonly USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36';
-  private readonly MAGIC_IMG_SUFFIX = '?fl=res,1800,1800,1|wrm,/watermark/sreality.png,10|shr,,20|webp,80';
+  private readonly USER_AGENT =
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36';
+  private readonly MAGIC_IMG_SUFFIX =
+    '?fl=res,1800,1800,1|wrm,/watermark/sreality.png,10|shr,,20|webp,80';
+
+  constructor(@Inject(DRIZZLE_PROVIDER) private readonly db: DrizzleDatabase) {}
 
   /**
    * Main Entry Point: Scrape a list of URLs
    */
   async scrapeListings(urls: string[]): Promise<void> {
     this.logger.log(`🚀 Starting Scraper for ${urls.length} URLs...`);
-    
+
     const browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -40,26 +51,28 @@ export class PropertyScraperService {
   /**
    * Orchestrates the scraping process for a single URL
    */
-  private async processSingleListing(browser: Browser, url: string): Promise<void> {
+  private async processSingleListing(
+    browser: Browser,
+    url: string,
+  ): Promise<void> {
     const listingId = this.getListingId(url);
     this.logger.log(`🔎 Processing ID: ${listingId} | URL: ${url}`);
 
     const page = await browser.newPage();
-    
+
     try {
       await this.configurePage(page);
       await page.goto(url, { waitUntil: 'domcontentloaded' });
 
       await this.handleConsentWall(page);
-      
+
       const data = await this.extractPageData(page, listingId);
-      
+
       if (data) {
         await this.saveListingAssets(data, listingId);
       } else {
         this.logger.error(`❌ Failed to extract data for ${listingId}`);
       }
-
     } catch (error) {
       this.logger.error(`🚨 Error processing ${url}: ${error.message}`);
     } finally {
@@ -77,12 +90,17 @@ export class PropertyScraperService {
   private async handleConsentWall(page: Page): Promise<void> {
     try {
       // Wait briefly for the consent button
-      const consentButton = await page.waitForSelector('aria/Souhlasím', { timeout: 3000 });
-      
+      const consentButton = await page.waitForSelector('aria/Souhlasím', {
+        timeout: 3000,
+      });
+
       if (consentButton) {
         this.logger.log('🍪 Consent wall detected. Bypass initiated.');
         await Promise.all([
-          page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 15000 }),
+          page.waitForNavigation({
+            waitUntil: 'domcontentloaded',
+            timeout: 15000,
+          }),
           consentButton.click(),
         ]);
         // Safety buffer for hydration
@@ -93,7 +111,10 @@ export class PropertyScraperService {
     }
   }
 
-  private async extractPageData(page: Page, listingId: string): Promise<ExtractedData | null> {
+  private async extractPageData(
+    page: Page,
+    listingId: string,
+  ): Promise<ExtractedData | null> {
     this.logger.log('⏳ Waiting for data...');
     try {
       await page.waitForSelector('#__NEXT_DATA__', { timeout: 10000 });
@@ -105,14 +126,16 @@ export class PropertyScraperService {
 
           const json = JSON.parse((script as HTMLElement).innerText);
           const queries = json.props.pageProps.dehydratedState.queries;
-          
+
           // Find the query containing image and price data
-          const propertyQuery = queries.find((q: any) => q.state?.data?.images && q.state?.data?.price);
-          
+          const propertyQuery = queries.find(
+            (q: any) => q.state?.data?.images && q.state?.data?.price,
+          );
+
           if (!propertyQuery) return null;
-          
+
           const d: RealityProperty = propertyQuery.state.data;
-          
+
           const images = d.images.map((img: RealityPropertyImage) => {
             let link = img.url;
             if (link.startsWith('//')) link = 'https:' + link;
@@ -123,7 +146,8 @@ export class PropertyScraperService {
             id: id,
             title: d.name,
             price: d.price,
-            address: d.locality || `${d.locality.street}, ${d.locality.district}`,
+            address:
+              d.locality || `${d.locality.street}, ${d.locality.district}`,
             description: d.description,
             imageUrls: images,
             createdAt: d.params.readyDate,
@@ -145,9 +169,12 @@ export class PropertyScraperService {
 
   // --- PHASE 2: FILE SYSTEM & DOWNLOADING ---
 
-  private async saveListingAssets(data: ExtractedData, listingId: string): Promise<void> {
+  private async saveListingAssets(
+    data: ExtractedData,
+    listingId: string,
+  ): Promise<void> {
     const listingDir = path.join(this.BASE_DOWNLOAD_DIR, listingId);
-    
+
     // Ensure directory exists
     if (!fs.existsSync(listingDir)) {
       fs.mkdirSync(listingDir, { recursive: true });
@@ -160,7 +187,7 @@ export class PropertyScraperService {
 
     // Download Images
     this.logger.log(`⬇️ Downloading ${data.imageUrls.length} images...`);
-    
+
     for (let i = 0; i < data.imageUrls.length; i++) {
       const fullUrl = data.imageUrls[i] + this.MAGIC_IMG_SUFFIX;
       const fileName = `img_${String(i + 1).padStart(2, '0')}.webp`;
@@ -191,7 +218,7 @@ export class PropertyScraperService {
       });
 
       request.on('error', (err) => {
-        fs.unlink(destination, () => {}); 
+        fs.unlink(destination, () => {});
         reject(err);
       });
     });
