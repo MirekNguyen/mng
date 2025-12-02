@@ -34,6 +34,7 @@
     "luxon": "^3.7.2",
     "openai": "^6.5.0",
     "postgres": "^3.4.7",
+    "puppeteer": "^24.31.0",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "zod": "^4.1.12"

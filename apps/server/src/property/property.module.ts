@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { PropertyService } from './property.service';
 import { PropertyController } from './property.controller';
+import { PropertyScraperService } from './property.service';
 
 @Module({
-  providers: [PropertyService],
+  providers: [PropertyScraperService],
   controllers: [PropertyController]
 })
 export class PropertyModule {}
