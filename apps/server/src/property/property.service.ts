@@ -147,8 +147,7 @@ export class PropertyScraperService {
             id: id,
             title: d.name,
             price: d.price,
-            address:
-              d.locality || `${d.locality.street}, ${d.locality.district}`,
+            address: d.locality.street,
             description: d.description,
             imageUrls: images,
             createdAt: d.params.readyDate,

@@ -8,7 +8,7 @@ export type ExtractedData = {
   createdAt: string;
   updatedAt: string;
 
-  usableArea: string;
+  usableArea: number;
   refundableDeposit: number;
   costOfLiving: string;
   priceNote: string;

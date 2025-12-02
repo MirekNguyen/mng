@@ -1,6 +1,5 @@
 import { Controller, Get, Inject } from '@nestjs/common';
 import { PropertyScraperService } from './property.service';
-import { properties, Property } from '@/database/schema/property.schema';
 import { DRIZZLE_PROVIDER, type DrizzleDatabase } from '@/database/drizzle.provider';
 
 @Controller('property')
@@ -20,7 +19,7 @@ export class PropertyController {
   }
 
   @Get()
-  async getProperties(): Promise<Property[]> {
+  async getProperties() {
     return await this.db.query.properties.findMany();
   }
 }
