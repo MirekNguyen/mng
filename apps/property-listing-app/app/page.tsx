@@ -13,7 +13,7 @@ import { PropertyList } from "@/components/property-list";
 import { PropertyFilters } from "@/components/property-filters";
 import { Button } from "@/components/ui/button";
 import { List, Map } from "lucide-react";
-import { useProperties } from "@/hooks/use-properties";
+import { useProperties } from "@/hooks/use-property";
 
 export default function HomePage() {
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(
