@@ -1,14 +1,7 @@
-// --- Helper Types ---
-
-/**
- * Common structure for dropdown/selection values in the API
- */
 interface CodebookValue {
   name: string;
   value: number;
 }
-
-// --- Sub-Entities ---
 
 interface PropertyImage {
   alt: string;
@@ -142,8 +135,6 @@ interface PointOfInterest {
   photoUrl: string;
   rating: number;
   reviewCount: number;
-  walkDistance?: number; // Optional as not all POIs have it
-  time?: number; // Optional
 }
 
 interface ExtendedPoiCategory {
@@ -159,8 +150,6 @@ interface ExtendedPois {
   schools: ExtendedPoiCategory;
   restaurants: ExtendedPoiCategory;
 }
-
-// --- Property Parameters ---
 
 interface PropertyParams {
   advertCode: string;
@@ -240,8 +229,6 @@ interface PropertyParams {
   priceFlagNegotiationCb: boolean;
   priceNote: string;
 }
-
-// --- Main Interface ---
 
 export type RealityProperty = {
   categoryMainCb: CodebookValue;
