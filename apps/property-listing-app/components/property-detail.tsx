@@ -1,36 +1,49 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import type { Property } from "@/lib/properties"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { X, ChevronLeft, ChevronRight, MapPin, Home, Zap, Calendar, Banknote, Percent } from "lucide-react"
+import { useState } from "react";
+import type { Property } from "@/lib/properties";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  MapPin,
+  Home,
+  Zap,
+  Calendar,
+  Banknote,
+  Percent,
+} from "lucide-react";
 
 interface PropertyDetailProps {
-  property: Property
-  onClose: () => void
+  property: Property;
+  onClose: () => void;
 }
 
 export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % property.imageUrls.length)
-  }
+    setCurrentImageIndex((prev) => (prev + 1) % property.imageUrls.length);
+  };
 
   const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + property.imageUrls.length) % property.imageUrls.length)
-  }
+    setCurrentImageIndex(
+      (prev) =>
+        (prev - 1 + property.imageUrls.length) % property.imageUrls.length,
+    );
+  };
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("cs-CZ", {
       day: "numeric",
       month: "long",
       year: "numeric",
-    })
-  }
+    });
+  };
 
   return (
     <Card className="h-full flex flex-col overflow-hidden">
@@ -89,7 +102,9 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
 
       <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
         <div>
-          <h2 className="text-xl font-bold text-foreground">{property.title}</h2>
+          <h2 className="text-xl font-bold text-foreground">
+            {property.title}
+          </h2>
           <div className="flex items-center gap-2 text-muted-foreground mt-1">
             <MapPin className="h-4 w-4" />
             <span className="text-sm">{property.address}</span>
@@ -100,7 +115,11 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
           <Badge variant="secondary" className="text-lg font-bold px-3 py-1">
             {property.price.toLocaleString("cs-CZ")} Kč/měsíc
           </Badge>
-          {property.priceNote && <span className="text-sm text-muted-foreground">({property.priceNote})</span>}
+          {property.priceNote && (
+            <span className="text-sm text-muted-foreground">
+              ({property.priceNote})
+            </span>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-3 text-sm">
@@ -114,11 +133,18 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
           </div>
           <div className="flex items-center gap-2">
             <Banknote className="h-4 w-4 text-muted-foreground" />
-            <span>Kauce: {property.refundableDeposit.toLocaleString("cs-CZ")} Kč</span>
+            <span>
+              Kauce:{" "}
+              {property.refundableDeposit
+                ? `${property.refundableDeposit.toLocaleString("cs-CZ")} Kč`
+                : "není uvedena"}
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <Percent className="h-4 w-4 text-muted-foreground" />
-            <span>Provize: {property.commission.toLocaleString("cs-CZ")} Kč</span>
+            <span>
+              Provize: {property.commission.toLocaleString("cs-CZ")} Kč
+            </span>
           </div>
         </div>
 
@@ -133,7 +159,9 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
 
         <div className="border-t pt-4">
           <h3 className="font-semibold mb-2 text-foreground">Popis</h3>
-          <p className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">{property.description}</p>
+          <p className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
+            {property.description}
+          </p>
         </div>
 
         <div className="pt-4">
@@ -141,6 +169,5 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }
-

@@ -10,7 +10,7 @@ export interface Property {
   createdAt: string
   updatedAt: string
   usableArea: number
-  refundableDeposit: number
+  refundableDeposit: number | null
   costOfLiving: string
   priceNote: string
   commission: number
