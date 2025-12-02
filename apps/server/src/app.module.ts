@@ -4,6 +4,7 @@ import { DatabaseModule } from './database/database.module';
 import { ReceiptModule } from './receipt/receipt.module';
 import { FoodModule } from './food/food.module';
 import { FoodEntryModule } from './food-entry/food-entry.module';
+import { PropertyModule } from './property/property.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { FoodEntryModule } from './food-entry/food-entry.module';
     ReceiptModule,
     FoodModule,
     FoodEntryModule,
+    PropertyModule,
   ],
 })
 export class AppModule {}
