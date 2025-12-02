@@ -9,7 +9,7 @@ export interface Property {
   imageUrls: string[]
   createdAt: string
   updatedAt: string
-  usableArea: string
+  usableArea: number
   refundableDeposit: number
   costOfLiving: string
   priceNote: string
@@ -59,7 +59,7 @@ export const properties: Property[] = [
     ],
     createdAt: "2024-01-15T10:30:00Z",
     updatedAt: "2024-01-20T14:45:00Z",
-    usableArea: "51 m²",
+    usableArea: 51,
     refundableDeposit: 32000,
     costOfLiving: "2100-2500 Kč/měsíc",
     priceNote: "bez energií",
@@ -80,7 +80,7 @@ export const properties: Property[] = [
     ],
     createdAt: "2024-01-10T08:00:00Z",
     updatedAt: "2024-01-18T12:00:00Z",
-    usableArea: "75 m²",
+    usableArea: 75,
     refundableDeposit: 49000,
     costOfLiving: "3000-3500 Kč/měsíc",
     priceNote: "včetně služeb",
@@ -101,7 +101,7 @@ export const properties: Property[] = [
     ],
     createdAt: "2024-01-12T14:20:00Z",
     updatedAt: "2024-01-19T09:30:00Z",
-    usableArea: "28 m²",
+    usableArea: 28,
     refundableDeposit: 24000,
     costOfLiving: "1500-1800 Kč/měsíc",
     priceNote: "bez energií",
@@ -116,7 +116,7 @@ export function parseArea(usableArea: string): number {
 
 export function filterProperties(properties: Property[], filters: FilterOptions): Property[] {
   return properties.filter((property) => {
-    const area = parseArea(property.usableArea)
+    const area = property.usableArea;
 
     const matchesPrice = property.price >= filters.minPrice && property.price <= filters.maxPrice
     const matchesArea = area >= filters.minArea && area <= filters.maxArea

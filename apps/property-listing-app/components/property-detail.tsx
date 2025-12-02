@@ -106,7 +106,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
         <div className="grid grid-cols-2 gap-3 text-sm">
           <div className="flex items-center gap-2">
             <Home className="h-4 w-4 text-muted-foreground" />
-            <span>{property.usableArea}</span>
+            <span>{property.usableArea} m2</span>
           </div>
           <div className="flex items-center gap-2">
             <Zap className="h-4 w-4 text-muted-foreground" />
