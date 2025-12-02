@@ -1,11 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Inject } from '@nestjs/common';
 import { PropertyScraperService } from './property.service';
+import { properties, Property } from '@/database/schema/property.schema';
+import { DRIZZLE_PROVIDER, type DrizzleDatabase } from '@/database/drizzle.provider';
 
 @Controller('property')
 export class PropertyController {
-  constructor(private readonly scraperService: PropertyScraperService) {}
+  constructor(
+    @Inject(DRIZZLE_PROVIDER) private readonly db: DrizzleDatabase,
+    private readonly scraperService: PropertyScraperService) {}
 
-  @Get()
+  @Get('scrape')
   async startScraping(): Promise<{ message: string }> {
     const urls = [
       'https://www.sreality.cz/detail/pronajem/byt/2+1/praha-zizkov-husitska/1462969164',
@@ -13,5 +17,10 @@ export class PropertyController {
     ];
     await this.scraperService.scrapeListings(urls);
     return { message: 'Scraping job completed' };
+  }
+
+  @Get()
+  async getProperties(): Promise<Property[]> {
+    return await this.db.query.properties.findMany();
   }
 }
