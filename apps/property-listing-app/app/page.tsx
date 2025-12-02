@@ -1,16 +1,26 @@
 "use client"
 
-import { useState } from "react"
-import { properties, type Property } from "@/lib/properties"
+import { useState, useMemo } from "react"
+import { properties, filterProperties, defaultFilters, type Property, type FilterOptions } from "@/lib/properties"
 import { PropertyMap } from "@/components/property-map"
 import { PropertyDetail } from "@/components/property-detail"
 import { PropertyList } from "@/components/property-list"
+import { PropertyFilters } from "@/components/property-filters"
 import { Button } from "@/components/ui/button"
 import { List, Map } from "lucide-react"
 
 export default function HomePage() {
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)
   const [showList, setShowList] = useState(false)
+  const [filters, setFilters] = useState<FilterOptions>(defaultFilters)
+
+  const filteredProperties = useMemo(() => {
+    return filterProperties(properties, filters)
+  }, [filters])
+
+  const handleResetFilters = () => {
+    setFilters(defaultFilters)
+  }
 
   return (
     <div className="h-screen flex flex-col">
@@ -31,22 +41,26 @@ export default function HomePage() {
             showList ? "block" : "hidden md:block"
           }`}
         >
-          <div className="mb-4">
-            <p className="text-sm text-muted-foreground">
-              {properties.length} nemovitost{properties.length !== 1 ? "í" : ""}
-            </p>
-          </div>
-          <PropertyList
-            properties={properties}
-            selectedProperty={selectedProperty}
-            onSelectProperty={setSelectedProperty}
+          <PropertyFilters
+            filters={filters}
+            onFiltersChange={setFilters}
+            onReset={handleResetFilters}
+            resultCount={filteredProperties.length}
           />
+
+          <div className="mt-4">
+            <PropertyList
+              properties={filteredProperties}
+              selectedProperty={selectedProperty}
+              onSelectProperty={setSelectedProperty}
+            />
+          </div>
         </aside>
 
         {/* Map */}
         <main className={`flex-1 relative ${showList ? "hidden md:block" : "block"}`}>
           <PropertyMap
-            properties={properties}
+            properties={filteredProperties}
             selectedProperty={selectedProperty}
             onSelectProperty={setSelectedProperty}
           />
@@ -62,3 +76,4 @@ export default function HomePage() {
     </div>
   )
 }
+

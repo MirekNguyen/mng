@@ -5,7 +5,8 @@ import type { Property } from "@/lib/properties"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { X, ChevronLeft, ChevronRight, MapPin, Home, Zap } from "lucide-react"
+import { Separator } from "@/components/ui/separator"
+import { X, ChevronLeft, ChevronRight, MapPin, Home, Zap, Calendar, Banknote, Percent } from "lucide-react"
 
 interface PropertyDetailProps {
   property: Property
@@ -21,6 +22,14 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
 
   const prevImage = () => {
     setCurrentImageIndex((prev) => (prev - 1 + property.imageUrls.length) % property.imageUrls.length)
+  }
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("cs-CZ", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    })
   }
 
   return (
@@ -39,7 +48,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
         <div className="relative aspect-video bg-muted">
           <img
             src={property.imageUrls[currentImageIndex] || "/placeholder.svg"}
-            alt={`${property.name} - Image ${currentImageIndex + 1}`}
+            alt={`${property.title} - Image ${currentImageIndex + 1}`}
             className="w-full h-full object-cover"
           />
 
@@ -80,28 +89,46 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
 
       <CardContent className="flex-1 overflow-y-auto p-4 space-y-4">
         <div>
-          <h2 className="text-xl font-bold text-foreground">{property.name}</h2>
+          <h2 className="text-xl font-bold text-foreground">{property.title}</h2>
           <div className="flex items-center gap-2 text-muted-foreground mt-1">
             <MapPin className="h-4 w-4" />
-            <span className="text-sm">Praha 3, Roháčova</span>
+            <span className="text-sm">{property.address}</span>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
           <Badge variant="secondary" className="text-lg font-bold px-3 py-1">
             {property.price.toLocaleString("cs-CZ")} Kč/měsíc
           </Badge>
+          {property.priceNote && <span className="text-sm text-muted-foreground">({property.priceNote})</span>}
         </div>
 
-        <div className="flex gap-4 text-sm">
+        <div className="grid grid-cols-2 gap-3 text-sm">
           <div className="flex items-center gap-2">
             <Home className="h-4 w-4 text-muted-foreground" />
-            <span>51 m²</span>
+            <span>{property.usableArea}</span>
           </div>
           <div className="flex items-center gap-2">
             <Zap className="h-4 w-4 text-muted-foreground" />
-            <span>+ energie ~2 300 Kč</span>
+            <span>{property.costOfLiving}</span>
           </div>
+          <div className="flex items-center gap-2">
+            <Banknote className="h-4 w-4 text-muted-foreground" />
+            <span>Kauce: {property.refundableDeposit.toLocaleString("cs-CZ")} Kč</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Percent className="h-4 w-4 text-muted-foreground" />
+            <span>Provize: {property.commission.toLocaleString("cs-CZ")} Kč</span>
+          </div>
+        </div>
+
+        <Separator />
+
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Calendar className="h-3 w-3" />
+          <span>Přidáno: {formatDate(property.createdAt)}</span>
+          <span className="mx-1">•</span>
+          <span>Aktualizováno: {formatDate(property.updatedAt)}</span>
         </div>
 
         <div className="border-t pt-4">
@@ -116,3 +143,4 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
     </Card>
   )
 }
+
