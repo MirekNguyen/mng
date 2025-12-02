@@ -140,7 +140,7 @@ export class PropertyScraperService {
           const images = d.images.map((img: RealityPropertyImage) => {
             let link = img.url;
             if (link.startsWith('//')) link = 'https:' + link;
-            return link;
+            return link + "?fl=res,1800,1800,1|wrm,/watermark/sreality.png,10|shr,,20|webp,80";
           });
 
           return {

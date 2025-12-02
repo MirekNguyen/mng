@@ -143,7 +143,7 @@ export function PropertyDetail({ property, onClose }: PropertyDetailProps) {
           <div className="flex items-center gap-2">
             <Percent className="h-4 w-4 text-muted-foreground" />
             <span>
-              Provize: {property.commission.toLocaleString("cs-CZ")} Kč
+              Provize: {property.commission ? property.commission.toLocaleString("cs-CZ") + " Kč" : "není uvedena"}
             </span>
           </div>
         </div>
