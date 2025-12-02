@@ -5,6 +5,7 @@ import * as path from 'path';
 import * as https from 'https';
 import { IncomingMessage } from 'http';
 import { ExtractedData } from './property.entity';
+import { RealityProperty, RealityPropertyImage } from './reality-property.entity';
 
 @Injectable()
 export class PropertyScraperService {
@@ -110,9 +111,9 @@ export class PropertyScraperService {
           
           if (!propertyQuery) return null;
           
-          const d = propertyQuery.state.data;
+          const d: RealityProperty = propertyQuery.state.data;
           
-          const images = d.images.map((img: any) => {
+          const images = d.images.map((img: RealityPropertyImage) => {
             let link = img.url;
             if (link.startsWith('//')) link = 'https:' + link;
             return link;
@@ -120,11 +121,17 @@ export class PropertyScraperService {
 
           return {
             id: id,
-            title: d.name.value,
+            title: d.name,
             price: d.price,
-            address: d.locality.value || `${d.locality.street}, ${d.locality.district}`,
+            address: d.locality || `${d.locality.street}, ${d.locality.district}`,
             description: d.description,
             imageUrls: images,
+            createdAt: d.params.readyDate,
+            updatedAt: d.params.since,
+            usableArea: d.params.usableArea,
+            refundableDeposit: d.params.refundableDeposit,
+            priceNote: d.params.priceNote,
+            costOfLiving: d.params.costOfLiving,
           };
         } catch (e) {
           return null;

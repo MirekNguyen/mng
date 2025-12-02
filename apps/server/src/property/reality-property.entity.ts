@@ -3,7 +3,7 @@ interface CodebookValue {
   value: number;
 }
 
-interface PropertyImage {
+export type RealityPropertyImage = {
   alt: string;
   kind: number;
   order: number;
@@ -18,7 +18,7 @@ interface PanoramaData {
   yaw: number;
 }
 
-interface Locality {
+export type RealityPropertyLocality = {
   latitude: number;
   longitude: number;
   city: string;
@@ -151,7 +151,7 @@ interface ExtendedPois {
   restaurants: ExtendedPoiCategory;
 }
 
-interface PropertyParams {
+export type RealityPropertyParams = {
   advertCode: string;
   costOfLiving: string;
   project: string | null;
@@ -235,13 +235,13 @@ export type RealityProperty = {
   categorySubCb: CodebookValue;
   categoryTypeCb: CodebookValue;
   description: string;
-  images: PropertyImage[];
+  images: RealityPropertyImage[];
   matterportUrl: string;
   panorama: boolean;
   panoramaData: PanoramaData;
   name: string;
   note: string | null;
-  locality: Locality;
+  locality: RealityPropertyLocality;
   price: number;
   priceSummaryCzk: number;
   priceSummaryOldCzk: number | null;
@@ -255,5 +255,5 @@ export type RealityProperty = {
   nearest: PointOfInterest[];
   extendedPois: ExtendedPois;
   isExclusively: boolean;
-  params: PropertyParams;
+  params: RealityPropertyParams;
 }
