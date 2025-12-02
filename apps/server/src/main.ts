@@ -12,6 +12,11 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
   EnvSchema.parse(process.env);
   await app.register(multipart, { limits: { fileSize: 1024 * 1024 * 25 } });
   await app.listen(process.env.port ?? 3000, '0.0.0.0');
