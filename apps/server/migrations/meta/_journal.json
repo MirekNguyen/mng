@@ -71,6 +71,13 @@
       "when": 1762537971367,
       "tag": "0009_fast_hellfire_club",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1764688731585,
+      "tag": "0010_absurd_magus",
+      "breakpoints": true
     }
   ]
 }

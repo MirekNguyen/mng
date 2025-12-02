@@ -13,6 +13,7 @@ import {
   DRIZZLE_PROVIDER,
   type DrizzleDatabase,
 } from '@/database/drizzle.provider';
+import { properties } from '@/database/schema/property.schema';
 
 @Injectable()
 export class PropertyScraperService {
@@ -167,7 +168,7 @@ export class PropertyScraperService {
     }
   }
 
-  // --- PHASE 2: FILE SYSTEM & DOWNLOADING ---
+  // --- PHASE 2: DATABASE & DOWNLOADING ---
 
   private async saveListingAssets(
     data: ExtractedData,
@@ -175,17 +176,61 @@ export class PropertyScraperService {
   ): Promise<void> {
     const listingDir = path.join(this.BASE_DOWNLOAD_DIR, listingId);
 
-    // Ensure directory exists
+    // Ensure directory exists (still needed for images)
     if (!fs.existsSync(listingDir)) {
       fs.mkdirSync(listingDir, { recursive: true });
     }
 
-    // Save JSON Metadata
-    const metadataPath = path.join(listingDir, 'info.json');
-    fs.writeFileSync(metadataPath, JSON.stringify(data, null, 4));
-    this.logger.log(`💾 Metadata saved to ${metadataPath}`);
+    // 1. DB SAVE OPERATION (Replaces info.json creation)
+    this.logger.log(`💾 Saving metadata to Database...`);
 
-    // Download Images
+    try {
+      // Parse numbers safely
+      const priceVal =
+        typeof data.price === 'number'
+          ? data.price
+          : parseInt(String(data.price || 0), 10);
+      const areaVal =
+        typeof data.usableArea === 'number'
+          ? data.usableArea
+          : parseInt(String(data.usableArea || 0), 10);
+
+      await this.db
+        .insert(properties)
+        .values({
+          externalId: listingId,
+          title: data.title,
+          address: data.address,
+          description: data.description,
+          price: isNaN(priceVal) ? 0 : priceVal,
+          usableArea: isNaN(areaVal) ? 0 : areaVal,
+          imageUrls: data.imageUrls,
+          // Store miscellaneous extra fields in the JSONB column
+          metaData: {
+            refundableDeposit: data.refundableDeposit,
+            priceNote: data.priceNote,
+            costOfLiving: data.costOfLiving,
+            rawCreatedAt: data.createdAt,
+          },
+          updatedAt: new Date(),
+        })
+        .onConflictDoUpdate({
+          target: properties.externalId,
+          set: {
+            title: data.title,
+            price: isNaN(priceVal) ? 0 : priceVal,
+            updatedAt: new Date(),
+            // Update other fields if you want them refreshed on re-scrape
+          },
+        });
+
+      this.logger.log(`✅ Database entry created/updated for ${listingId}`);
+    } catch (dbError) {
+      this.logger.error(`🔥 Database save failed: ${dbError.message}`);
+      // Depending on requirements, you might want to return here or continue to download images
+    }
+
+    // 2. Download Images (Kept as requested)
     this.logger.log(`⬇️ Downloading ${data.imageUrls.length} images...`);
 
     for (let i = 0; i < data.imageUrls.length; i++) {
@@ -199,7 +244,7 @@ export class PropertyScraperService {
         this.logger.error(`Failed to download image ${i + 1}: ${err.message}`);
       }
     }
-    this.logger.log(`✅ Assets saved for ${listingId}`);
+    this.logger.log(`✅ Assets processed for ${listingId}`);
   }
 
   private downloadFile(url: string, destination: string): Promise<void> {
