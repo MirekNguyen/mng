@@ -8,19 +8,26 @@ import { PropertyList } from "@/components/property-list"
 import { PropertyFilters } from "@/components/property-filters"
 import { Button } from "@/components/ui/button"
 import { List, Map } from "lucide-react"
+import { useProperties } from "@/hooks/use-properties"
 
 export default function HomePage() {
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null)
   const [showList, setShowList] = useState(false)
   const [filters, setFilters] = useState<FilterOptions>(defaultFilters)
-
-  const filteredProperties = useMemo(() => {
-    return filterProperties(properties, filters)
-  }, [filters])
+  const { data: properties = [], isLoading, isError } = useProperties();
 
   const handleResetFilters = () => {
     setFilters(defaultFilters)
   }
+
+  const filteredProperties = useMemo(() => {
+    if (!properties) return [];
+    
+    return filterProperties(properties, filters);
+  }, [properties, filters]);
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Failed to load properties.</p>;
 
   return (
     <div className="h-screen flex flex-col">
