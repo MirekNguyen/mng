@@ -12,10 +12,7 @@ import { FileInterceptor } from "@nest-lab/fastify-multer";
 import { eq } from "drizzle-orm";
 import { receipt } from "@/database/schema/receipt.schema";
 import { receiptItem } from "@/database/schema/receipt-item.schema";
-import {
-  DRIZZLE_PROVIDER,
-  type DrizzleDatabase,
-} from "@/database/drizzle.provider";
+import { DRIZZLE_PROVIDER, type DrizzleDatabase } from "@/database/drizzle.provider";
 
 @Controller("receipts")
 export class ReceiptController {
@@ -27,9 +24,7 @@ export class ReceiptController {
 
   @Post("analyze")
   @UseInterceptors(FileInterceptor("file"))
-  async uploadImage(
-    @UploadedFile() file: Express.Multer.File,
-  ): Promise<ReceiptType | null> {
+  async uploadImage(@UploadedFile() file: Express.Multer.File): Promise<ReceiptType | null> {
     const scannedReceipt = await this.receiptService.analyze(file);
     if (!scannedReceipt) return null;
     const insertedReceipt = (
@@ -46,10 +41,7 @@ export class ReceiptController {
       ...item,
       receiptId: insertedReceipt.id,
     }));
-    const insertedReceiptItems = await this.db
-      .insert(receiptItem)
-      .values(receiptItems)
-      .returning();
+    const insertedReceiptItems = await this.db.insert(receiptItem).values(receiptItems).returning();
     console.log(insertedReceiptItems);
     return scannedReceipt;
   }

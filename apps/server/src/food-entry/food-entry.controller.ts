@@ -54,17 +54,13 @@ export class FoodEntryController implements ICrudController<FoodEntry> {
     return await this.repository.update(id, foodEntry);
   }
 
-  @Delete(":id") async delete(
-    @Param("id", ParseIntPipe) id: number,
-  ): Promise<FoodEntry> {
+  @Delete(":id") async delete(@Param("id", ParseIntPipe) id: number): Promise<FoodEntry> {
     return await this.repository.delete(id);
   }
 
   @Post("analyze")
   @UseInterceptors(FilesInterceptor("images", 5))
-  async analyze(
-    @UploadedFiles() files: Express.Multer.File[],
-  ): Promise<FoodEntryType | null> {
+  async analyze(@UploadedFiles() files: Express.Multer.File[]): Promise<FoodEntryType | null> {
     return await this.foodEntryAnalyzer.analyze(files);
   }
 }

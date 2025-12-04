@@ -1,11 +1,5 @@
 import { relations } from "drizzle-orm";
-import {
-  doublePrecision,
-  pgTable,
-  serial,
-  timestamp,
-  varchar,
-} from "drizzle-orm/pg-core";
+import { doublePrecision, pgTable, serial, timestamp, varchar } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
 import { receiptItem } from "./receipt-item.schema";
 

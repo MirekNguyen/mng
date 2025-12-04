@@ -7,10 +7,7 @@ import {
 import { eq } from "drizzle-orm";
 import { DateTime } from "luxon";
 import { ICrudRepository } from "src/common/icrud.controller";
-import {
-  DRIZZLE_PROVIDER,
-  type DrizzleDatabase,
-} from "src/database/drizzle.provider";
+import { DRIZZLE_PROVIDER, type DrizzleDatabase } from "src/database/drizzle.provider";
 import {
   CreateFoodEntry,
   FoodEntry,
@@ -29,9 +26,7 @@ export class FoodEntryRepository implements ICrudRepository<FoodEntry> {
   }
 
   async create(foodEntry: CreateFoodEntry): Promise<FoodEntry> {
-    const created = (
-      await this.db.insert(foodEntries).values(foodEntry).returning()
-    )[0];
+    const created = (await this.db.insert(foodEntries).values(foodEntry).returning())[0];
     if (!created) {
       throw new InternalServerErrorException("Failed to create food entry");
     }
@@ -40,11 +35,7 @@ export class FoodEntryRepository implements ICrudRepository<FoodEntry> {
 
   async update(id: number, foodEntry: UpdateFoodEntry): Promise<FoodEntry> {
     const updated = (
-      await this.db
-        .update(foodEntries)
-        .set(foodEntry)
-        .where(eq(foodEntries.id, id))
-        .returning()
+      await this.db.update(foodEntries).set(foodEntry).where(eq(foodEntries.id, id)).returning()
     )[0];
     if (!updated) {
       throw new NotFoundException(`Food entry not found for update`);
@@ -54,10 +45,7 @@ export class FoodEntryRepository implements ICrudRepository<FoodEntry> {
 
   async delete(id: number): Promise<FoodEntry> {
     const deleted = (
-      await this.db
-        .delete(foodEntries)
-        .where(eq(foodEntries.id, id))
-        .returning()
+      await this.db.delete(foodEntries).where(eq(foodEntries.id, id)).returning()
     )[0];
     if (!deleted) {
       throw new NotFoundException(`Food entry with id ${id} not found`);

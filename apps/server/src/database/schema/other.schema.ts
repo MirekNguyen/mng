@@ -31,9 +31,7 @@ export const users = pgTable("users", {
   targetWeight: integer("target_weight"),
   activityLevel: varchar("activity_level", { length: 50 }),
   weeklyGoal: varchar("weekly_goal", { length: 50 }),
-  measurementUnit: varchar("measurement_unit", { length: 20 }).default(
-    "imperial",
-  ),
+  measurementUnit: varchar("measurement_unit", { length: 20 }).default("imperial"),
   theme: varchar("theme", { length: 20 }).default("light"),
   language: varchar("language", { length: 10 }).default("en"),
   createdAt: timestamp("created_at").defaultNow(),
@@ -179,12 +177,8 @@ export const userSettings = pgTable("user_settings", {
   breakfastReminderTime: varchar("breakfast_reminder_time", {
     length: 5,
   }).default("08:00"),
-  lunchReminderTime: varchar("lunch_reminder_time", { length: 5 }).default(
-    "12:30",
-  ),
-  dinnerReminderTime: varchar("dinner_reminder_time", { length: 5 }).default(
-    "18:30",
-  ),
+  lunchReminderTime: varchar("lunch_reminder_time", { length: 5 }).default("12:30"),
+  dinnerReminderTime: varchar("dinner_reminder_time", { length: 5 }).default("18:30"),
   dataStorage: boolean("data_storage").default(true),
   cloudBackup: boolean("cloud_backup").default(true),
   analytics: boolean("analytics").default(true),

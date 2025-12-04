@@ -5,14 +5,8 @@ import * as path from "path";
 import * as https from "https";
 import { IncomingMessage } from "http";
 import { ExtractedData } from "./property.entity";
-import {
-  RealityProperty,
-  RealityPropertyImage,
-} from "./reality-property.entity";
-import {
-  DRIZZLE_PROVIDER,
-  type DrizzleDatabase,
-} from "@/database/drizzle.provider";
+import { RealityProperty, RealityPropertyImage } from "./reality-property.entity";
+import { DRIZZLE_PROVIDER, type DrizzleDatabase } from "@/database/drizzle.provider";
 import { properties } from "@/database/schema/property.schema";
 
 @Injectable()
@@ -52,10 +46,7 @@ export class PropertyScraperService {
   /**
    * Orchestrates the scraping process for a single URL
    */
-  private async processSingleListing(
-    browser: Browser,
-    url: string,
-  ): Promise<void> {
+  private async processSingleListing(browser: Browser, url: string): Promise<void> {
     const listingId = this.getListingId(url);
     this.logger.log(`🔎 Processing ID: ${listingId} | URL: ${url}`);
 
@@ -112,10 +103,7 @@ export class PropertyScraperService {
     }
   }
 
-  private async extractPageData(
-    page: Page,
-    listingId: string,
-  ): Promise<ExtractedData | null> {
+  private async extractPageData(page: Page, listingId: string): Promise<ExtractedData | null> {
     this.logger.log("⏳ Waiting for data...");
     try {
       await page.waitForSelector("#__NEXT_DATA__", { timeout: 10000 });
@@ -140,10 +128,7 @@ export class PropertyScraperService {
           const images = d.images.map((img: RealityPropertyImage) => {
             let link = img.url;
             if (link.startsWith("//")) link = "https:" + link;
-            return (
-              link +
-              "?fl=res,1800,1800,1|wrm,/watermark/sreality.png,10|shr,,20|webp,80"
-            );
+            return link + "?fl=res,1800,1800,1|wrm,/watermark/sreality.png,10|shr,,20|webp,80";
           });
 
           return {
@@ -174,10 +159,7 @@ export class PropertyScraperService {
 
   // --- PHASE 2: DATABASE & DOWNLOADING ---
 
-  private async saveListingAssets(
-    data: ExtractedData,
-    listingId: string,
-  ): Promise<void> {
+  private async saveListingAssets(data: ExtractedData, listingId: string): Promise<void> {
     const listingDir = path.join(this.BASE_DOWNLOAD_DIR, listingId);
 
     // Ensure directory exists (still needed for images)
@@ -191,9 +173,7 @@ export class PropertyScraperService {
     try {
       // Parse numbers safely
       const priceVal =
-        typeof data.price === "number"
-          ? data.price
-          : parseInt(String(data.price || 0), 10);
+        typeof data.price === "number" ? data.price : parseInt(String(data.price || 0), 10);
       const areaVal =
         typeof data.usableArea === "number"
           ? data.usableArea

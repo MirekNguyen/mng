@@ -1,9 +1,6 @@
 import { Controller, Get, Inject } from "@nestjs/common";
 import { PropertyScraperService } from "./property.service";
-import {
-  DRIZZLE_PROVIDER,
-  type DrizzleDatabase,
-} from "@/database/drizzle.provider";
+import { DRIZZLE_PROVIDER, type DrizzleDatabase } from "@/database/drizzle.provider";
 
 @Controller("property")
 export class PropertyController {
