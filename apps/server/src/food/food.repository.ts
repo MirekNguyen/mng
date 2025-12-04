@@ -6,7 +6,12 @@ import {
 } from "@nestjs/common";
 import { eq } from "drizzle-orm";
 import { ICrudRepository } from "@/common/icrud.controller";
-import { CreateFood, food, Food, UpdateFood } from "@/database/schema/other.schema";
+import {
+  CreateFood,
+  food,
+  Food,
+  UpdateFood,
+} from "@/database/schema/other.schema";
 import { DRIZZLE_PROVIDER, DrizzleDatabase } from "@/database/drizzle.provider";
 
 @Injectable()
@@ -18,7 +23,11 @@ export class FoodRepository implements ICrudRepository<Food> {
   }
   async update(id: number, updateEntity: UpdateFood): Promise<Food> {
     const updated = (
-      await this.db.update(food).set(updateEntity).where(eq(food.id, id)).returning()
+      await this.db
+        .update(food)
+        .set(updateEntity)
+        .where(eq(food.id, id))
+        .returning()
     )[0];
     if (!updated) {
       throw new NotFoundException(`Food not found for update`);
@@ -26,7 +35,9 @@ export class FoodRepository implements ICrudRepository<Food> {
     return updated;
   }
   async create(createEntity: CreateFood): Promise<Food> {
-    const created = (await this.db.insert(food).values(createEntity).returning())[0];
+    const created = (
+      await this.db.insert(food).values(createEntity).returning()
+    )[0];
     if (!created) {
       throw new InternalServerErrorException("Failed to create food");
     }
@@ -34,7 +45,9 @@ export class FoodRepository implements ICrudRepository<Food> {
   }
 
   async delete(id: number): Promise<Food> {
-    const deleted = (await this.db.delete(food).where(eq(food.id, id)).returning())[0];
+    const deleted = (
+      await this.db.delete(food).where(eq(food.id, id)).returning()
+    )[0];
     if (!deleted) {
       throw new NotFoundException(`Food not found for delete`);
     }

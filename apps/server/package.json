@@ -7,8 +7,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "format": "oxfmt ./src ./test",
-    "format:fix": "oxfmt --write ./src ./test",
+    "format": "oxfmt --check ./src ./test",
+    "format:fix": "oxfmt ./src ./test",
     "start": "nest start",
     "dev": "nest start --watch",
     "start:dev": "nest start --watch",
