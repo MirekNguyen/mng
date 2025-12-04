@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		446909901542FC5E10E9F0E7 /* EditEntryForm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B196CFEC0864245568B0E7F /* EditEntryForm.swift */; };
 		9D701E58D2C54004C65C5F6E /* ReceiptCardRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68873C47F3F333BBDB7673AC /* ReceiptCardRow.swift */; };
 /* End PBXBuildFile section */
 
@@ -41,12 +40,12 @@
 		708FBDE030B767A5CAF54145 /* FoodItemRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FoodItemRow.swift; sourceTree = "<group>"; };
 		74D3E6FD4E511377E4677339 /* GrandientBackgroundView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GrandientBackgroundView.swift; sourceTree = "<group>"; };
 		7C2287DC2EA30052009BA42D /* Calorik.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Calorik.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		7C2287E92EA30053009BA42D /* grocery-tracker-iosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "grocery-tracker-iosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7C2287F32EA30053009BA42D /* grocery-tracker-iosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "grocery-tracker-iosUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C2287E92EA30053009BA42D /* Calorik-iosTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Calorik-iosTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C2287F32EA30053009BA42D /* Calorik-iosUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Calorik-iosUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		855316784F6F8BF6C7B25413 /* CameraButton.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CameraButton.swift; sourceTree = "<group>"; };
 		8715CC40E33012F270C101D5 /* NetworkError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		9283466ACCC64FCE0F6212A6 /* EditReceiptView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EditReceiptView.swift; sourceTree = "<group>"; };
-		9B196CFEC0864245568B0E7F /* EditEntryForm.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; lastKnownFileType = sourcecode.swift; path = EditEntryForm.swift; sourceTree = "<group>"; };
+		9B196CFEC0864245568B0E7F /* EditEntryForm.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; path = EditEntryForm.swift; sourceTree = "<group>"; };
 		9BA6AAD0C221CE8E296ABF37 /* NewReceiptView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NewReceiptView.swift; sourceTree = "<group>"; };
 		9E869F34E438712DB906E267 /* ReceiptItemCategory.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReceiptItemCategory.swift; sourceTree = "<group>"; };
 		AE0778E263581D11337F59EF /* NetworkImageExtension.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NetworkImageExtension.swift; sourceTree = "<group>"; };
@@ -58,7 +57,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		7C1F64162EC7A30600BE2343 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+		7C1F64162EC7A30600BE2343 /* Exceptions for "grocery-tracker-ios" folder in "Calorik" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				View/Overview/ReceiptCardRow.swift,
@@ -71,7 +70,7 @@
 		7C2287DE2EA30052009BA42D /* grocery-tracker-ios */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				7C1F64162EC7A30600BE2343 /* PBXFileSystemSynchronizedBuildFileExceptionSet */,
+				7C1F64162EC7A30600BE2343 /* Exceptions for "grocery-tracker-ios" folder in "Calorik" target */,
 			);
 			path = "grocery-tracker-ios";
 			sourceTree = "<group>";
@@ -156,7 +155,6 @@
 			children = (
 				87692A62BAFB63FCCD2A180B /* View */,
 			);
-			name = "grocery-tracker-ios";
 			path = "grocery-tracker-ios";
 			sourceTree = "<group>";
 		};
@@ -165,7 +163,6 @@
 			children = (
 				755AF5F28B8C767522AB0FF0 /* Form */,
 			);
-			name = FoodEntry;
 			path = FoodEntry;
 			sourceTree = "<group>";
 		};
@@ -174,7 +171,6 @@
 			children = (
 				9B196CFEC0864245568B0E7F /* EditEntryForm.swift */,
 			);
-			name = Form;
 			path = Form;
 			sourceTree = "<group>";
 		};
@@ -193,8 +189,8 @@
 			isa = PBXGroup;
 			children = (
 				7C2287DC2EA30052009BA42D /* Calorik.app */,
-				7C2287E92EA30053009BA42D /* grocery-tracker-iosTests.xctest */,
-				7C2287F32EA30053009BA42D /* grocery-tracker-iosUITests.xctest */,
+				7C2287E92EA30053009BA42D /* Calorik-iosTests.xctest */,
+				7C2287F32EA30053009BA42D /* Calorik-iosUITests.xctest */,
 				1F9B9A730E68DB3FE7885026 /* grocery-tracker-ios */,
 			);
 			name = Products;
@@ -205,7 +201,6 @@
 			children = (
 				68B9B5F70455CD9F73632155 /* FoodEntry */,
 			);
-			name = View;
 			path = View;
 			sourceTree = "<group>";
 		};
@@ -303,9 +298,9 @@
 			productReference = 7C2287DC2EA30052009BA42D /* Calorik.app */;
 			productType = "com.apple.product-type.application";
 		};
-		7C2287E82EA30053009BA42D /* grocery-tracker-iosTests */ = {
+		7C2287E82EA30053009BA42D /* Calorik-iosTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7C2288002EA30053009BA42D /* Build configuration list for PBXNativeTarget "grocery-tracker-iosTests" */;
+			buildConfigurationList = 7C2288002EA30053009BA42D /* Build configuration list for PBXNativeTarget "Calorik-iosTests" */;
 			buildPhases = (
 				7C2287E52EA30053009BA42D /* Sources */,
 				7C2287E62EA30053009BA42D /* Frameworks */,
@@ -319,14 +314,14 @@
 			fileSystemSynchronizedGroups = (
 				7C2287EC2EA30053009BA42D /* grocery-tracker-iosTests */,
 			);
-			name = "grocery-tracker-iosTests";
+			name = "Calorik-iosTests";
 			productName = "grocery-tracker-iosTests";
-			productReference = 7C2287E92EA30053009BA42D /* grocery-tracker-iosTests.xctest */;
+			productReference = 7C2287E92EA30053009BA42D /* Calorik-iosTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		7C2287F22EA30053009BA42D /* grocery-tracker-iosUITests */ = {
+		7C2287F22EA30053009BA42D /* Calorik-iosUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7C2288032EA30053009BA42D /* Build configuration list for PBXNativeTarget "grocery-tracker-iosUITests" */;
+			buildConfigurationList = 7C2288032EA30053009BA42D /* Build configuration list for PBXNativeTarget "Calorik-iosUITests" */;
 			buildPhases = (
 				7C2287EF2EA30053009BA42D /* Sources */,
 				7C2287F02EA30053009BA42D /* Frameworks */,
@@ -340,9 +335,9 @@
 			fileSystemSynchronizedGroups = (
 				7C2287F62EA30053009BA42D /* grocery-tracker-iosUITests */,
 			);
-			name = "grocery-tracker-iosUITests";
+			name = "Calorik-iosUITests";
 			productName = "grocery-tracker-iosUITests";
-			productReference = 7C2287F32EA30053009BA42D /* grocery-tracker-iosUITests.xctest */;
+			productReference = 7C2287F32EA30053009BA42D /* Calorik-iosUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -383,8 +378,8 @@
 			projectRoot = "";
 			targets = (
 				7C2287DB2EA30052009BA42D /* Calorik */,
-				7C2287E82EA30053009BA42D /* grocery-tracker-iosTests */,
-				7C2287F22EA30053009BA42D /* grocery-tracker-iosUITests */,
+				7C2287E82EA30053009BA42D /* Calorik-iosTests */,
+				7C2287F22EA30053009BA42D /* Calorik-iosUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -419,7 +414,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9D701E58D2C54004C65C5F6E /* ReceiptCardRow.swift in Sources */,
-				446909901542FC5E10E9F0E7 /* EditEntryForm.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,6 +587,8 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_RESOURCE_ACCESS_CAMERA = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Calorik;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to function properly";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -628,6 +624,8 @@
 				ENABLE_PREVIEWS = YES;
 				ENABLE_RESOURCE_ACCESS_CAMERA = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Calorik;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app requires camera access to function properly";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -672,7 +670,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/grocery-tracker-ios.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/grocery-tracker-ios";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Calorik.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Calorik";
 			};
 			name = Debug;
 		};
@@ -696,7 +694,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/grocery-tracker-ios.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/grocery-tracker-ios";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Calorik.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Calorik";
 			};
 			name = Release;
 		};
@@ -765,7 +763,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7C2288002EA30053009BA42D /* Build configuration list for PBXNativeTarget "grocery-tracker-iosTests" */ = {
+		7C2288002EA30053009BA42D /* Build configuration list for PBXNativeTarget "Calorik-iosTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7C2288012EA30053009BA42D /* Debug */,
@@ -774,7 +772,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7C2288032EA30053009BA42D /* Build configuration list for PBXNativeTarget "grocery-tracker-iosUITests" */ = {
+		7C2288032EA30053009BA42D /* Build configuration list for PBXNativeTarget "Calorik-iosUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7C2288042EA30053009BA42D /* Debug */,

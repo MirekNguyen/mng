@@ -11,4 +11,7 @@ struct Styles {
         static let secondarySize = 36
         static let smallSize = 30
     }
+    struct Input {
+        static let inputRowHeight: CGFloat = 34
+    }
 }

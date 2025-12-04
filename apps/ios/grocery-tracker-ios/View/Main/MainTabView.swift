@@ -3,11 +3,11 @@ import SwiftUI
 struct MainTabView: View {
     @StateObject private var networkManager = NetworkManager.shared
     @StateObject private var groceryRepository = ReceiptRepository(
-        networkManager: NetworkManager2(baseURL: "https://ysgw44w44gckoocg0o0ggss4.mirekng.com"))
+        networkManager: NetworkManager2(baseURL: "https://mng.dokploy.mirekng.com/"))
     @StateObject private var foodEntryRepository = FoodEntryRepository(
-        networkManager: NetworkManager2(baseURL: "https://ysgw44w44gckoocg0o0ggss4.mirekng.com"))
+        networkManager: NetworkManager2(baseURL: "https://mng.dokploy.mirekng.com/"))
     @StateObject private var foodRepository = FoodRepository(
-        networkManager: NetworkManager2(baseURL: "https://ysgw44w44gckoocg0o0ggss4.mirekng.com"))
+        networkManager: NetworkManager2(baseURL: "https://mng.dokploy.mirekng.com/"))
 
     @State private var selectedTab: Int = 4
     var body: some View {
@@ -37,7 +37,7 @@ struct MainTabView: View {
             NavigationStack {
                 ZStack {
                     // GradientBackgroundView()
-                    FoodEntriesView()
+                    FoodEntryView()
                         // .navigationTitle("Food Entries")
                         .foregroundColor(Styles.Colors.primaryText)
                 }
@@ -50,7 +50,15 @@ struct MainTabView: View {
             }
             .tabItem { Label("Entries", systemImage: "chart.bar.xaxis") }
             .tag(4)
+            NavigationStack {
+                CreateEventView()
+                    .navigationTitle("Stats")
+            }
+            .tabItem { Label("Stats", systemImage: "chart.bar.xaxis") }
+            .tag(5)
         }
+        .tint(.white)
+        .toolbarBackground(Color.red, for: .tabBar)
         .environmentObject(networkManager)
         .environmentObject(groceryRepository)
         .environmentObject(foodEntryRepository)

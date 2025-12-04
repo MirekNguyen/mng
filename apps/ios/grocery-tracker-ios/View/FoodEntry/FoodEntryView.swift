@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct FoodEntriesView: View {
+struct FoodEntryView: View {
     @EnvironmentObject var foodEntryRepository: FoodEntryRepository
     @Environment(\.scenePhase) var scenePhase: ScenePhase
     @State var selectedDate = Date()

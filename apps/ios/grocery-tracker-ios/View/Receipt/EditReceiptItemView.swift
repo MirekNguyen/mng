@@ -11,13 +11,13 @@ struct EditReceiptItemView: View {
                         Text($0.rawValue.capitalized).tag($0)
                     }
                 }
-                TextField("Description", text: $item.description.orEmpty())
+                // TextField("Description", text: $item.description)
             }
 
             Section("Quantity & Unit") {
                 TextField("Quantity", value: $item.quantity, format: .number)
                     .keyboardType(.decimalPad)
-                TextField("Unit", text: $item.unit.orEmpty())
+                // TextField("Unit", text: $item.unit)
             }
 
             Section("Pricing") {
@@ -28,12 +28,11 @@ struct EditReceiptItemView: View {
             }
 
             Section("Meta") {
-                // FIX: unwrap Date? -> Date using the helper
-                DatePicker(
-                    "Item date",
-                    selection: Binding(unwrapping: $item.date, default: Date()),
-                    displayedComponents: .date
-                )
+                // DatePicker(
+                //     "Item date",
+                //     selection: Binding(unwrapping: $item.date, default: Date()),
+                //     displayedComponents: .date
+                // )
             }
         }
         .navigationTitle("Edit Item")

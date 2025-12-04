@@ -31,9 +31,12 @@ final class ReceiptRepository: ObservableObject {
                 }
                 return
             }
-            let fetched: [Receipt] = try await networkManager.postImage(
+            let image = ImageUploadData(
+                data: imageData, fileName: "image.jpg", mimeType: "image/jpeg"
+            )
+            let fetched: [Receipt] = try await networkManager.postImages(
                 endpoint: "/receipts/analyze",
-                imageData: imageData
+                images: [image]
             )
             await MainActor.run {
                 self.receipts = fetched

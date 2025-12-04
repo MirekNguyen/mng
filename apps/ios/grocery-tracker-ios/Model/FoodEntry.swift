@@ -53,6 +53,7 @@ protocol BaseFoodEntry {
 }
 
 struct EditFoodEntry: Codable {
+    var foodName: String
     var entryDate: Date
     var entryTime: Date
 
@@ -62,12 +63,14 @@ struct EditFoodEntry: Codable {
         let timeFormatter = DateFormatter()
         timeFormatter.dateFormat = "HH:mm:ss"
 
+        self.foodName = foodEntry.foodName
         self.entryDate = dateFormatter.date(from: foodEntry.entryDate) ?? Date()
         self.entryTime = timeFormatter.date(from: foodEntry.entryTime) ?? Date()
     }
 
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(foodName, forKey: .foodName)
         try container.encode(entryDateString, forKey: .entryDate)
         try container.encode(entryTimeString, forKey: .entryTime)
     }

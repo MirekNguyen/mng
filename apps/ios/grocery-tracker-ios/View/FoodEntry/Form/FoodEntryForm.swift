@@ -25,9 +25,14 @@ struct FoodEntryForm: View {
                         foods: foodRepo.foods ?? [],
                         selectedFood: $selectedFood
                     )
+                    .scrollContentBackground(.hidden)
+                    .background(.ultraThinMaterial)
+                    .foregroundColor(Styles.Colors.primaryText)
                 } else {
                     // Show form after food is selected
                     foodEntryFormView
+                    .scrollContentBackground(.hidden)
+                    .background(.ultraThinMaterial)
                 }
             }
             .navigationTitle(selectedFood == nil ? "Select Food" : "Add Food Entry")
@@ -135,8 +140,7 @@ struct FoodEntryForm: View {
         formatter.dateFormat = "HH:mm:ss"
         let timeString = formatter.string(from: time)
 
-        let entry = FoodEntry(
-            id: nil,
+        let entry = CreateFoodEntry(
             userId: 1,
             mealId: food.id,
             foodName: food.name,

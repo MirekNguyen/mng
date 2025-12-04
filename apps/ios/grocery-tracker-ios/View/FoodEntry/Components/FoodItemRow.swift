@@ -5,6 +5,7 @@ struct FoodItemRow: View {
     let foodName: String
     let protein: String
     let calories: String
+    let time: String
     //    let onDelete: () -> Void
 
     var body: some View {
@@ -24,7 +25,6 @@ struct FoodItemRow: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(foodName)
                     .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(.black)
 
                 HStack(spacing: 4) {
                     Circle()
@@ -32,6 +32,9 @@ struct FoodItemRow: View {
                         .frame(width: 8, height: 8)
 
                     Text(protein)
+                        .font(.system(size: 12))
+                        .foregroundColor(.gray)
+                    Text(time.prefix(5))
                         .font(.system(size: 12))
                         .foregroundColor(.gray)
                 }

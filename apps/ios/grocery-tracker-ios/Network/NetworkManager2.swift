@@ -38,6 +38,7 @@ final class NetworkManager2 {
         } catch {
             throw NetworkError.encodingError(error)
         }
+
     }
 
     internal func createRequest(
@@ -64,7 +65,9 @@ final class NetworkManager2 {
             (200...299).contains(httpResponse.statusCode)
         else {
             throw NetworkError.serverError(
-                statusCode: (response as? HTTPURLResponse)?.statusCode ?? 0)
+                statusCode: (response as? HTTPURLResponse)?.statusCode ?? 0,
+                data: data
+            )
         }
         do {
             let decoder = JSONDecoder()
@@ -76,12 +79,14 @@ final class NetworkManager2 {
     }
 
     internal func sendRequestWithoutBody(_ request: URLRequest) async throws {
-        let (_, response) = try await session.data(for: request)
+        let (data, response) = try await session.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse,
             (200...299).contains(httpResponse.statusCode)
         else {
             throw NetworkError.serverError(
-                statusCode: (response as? HTTPURLResponse)?.statusCode ?? 0)
+                statusCode: (response as? HTTPURLResponse)?.statusCode ?? 0,
+                data: data
+            )
         }
     }
 
