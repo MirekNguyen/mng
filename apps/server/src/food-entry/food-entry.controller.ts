@@ -11,22 +11,22 @@ import {
   UploadedFiles,
   UseInterceptors,
   UsePipes,
-} from '@nestjs/common';
-import { ICrudController } from 'src/common/icrud.controller';
-import { ZodValidationPipe } from 'src/common/zod.pipe';
+} from "@nestjs/common";
+import * as z from "zod";
+import { FoodEntryRepository } from "./food-entry.repository";
+import { FilesInterceptor } from "@nest-lab/fastify-multer";
+import { FoodEntryAnalyzer, FoodEntryType } from "./food-entry.analyzer";
+import { ZodValidationPipe } from "@/common/zod.pipe";
+import { ICrudController } from "@/common/icrud.controller";
 import {
-  type CreateFoodEntry,
+  CreateFoodEntry,
   createFoodEntrySchema,
   FoodEntry,
-  type UpdateFoodEntry,
+  UpdateFoodEntry,
   updateFoodEntrySchema,
-} from 'src/database/schema/other.schema';
-import * as z from 'zod';
-import { FoodEntryRepository } from './food-entry.repository';
-import { FilesInterceptor } from '@nest-lab/fastify-multer';
-import { FoodEntryAnalyzer } from './food-entry.analyzer';
+} from "@/database/schema/other.schema";
 
-@Controller('food-entry')
+@Controller("food-entry")
 export class FoodEntryController implements ICrudController<FoodEntry> {
   constructor(
     private readonly repository: FoodEntryRepository,
@@ -35,7 +35,7 @@ export class FoodEntryController implements ICrudController<FoodEntry> {
 
   @Get()
   @UsePipes(new ZodValidationPipe(z.iso.date()))
-  async get(@Query('date') dateString: string): Promise<FoodEntry[]> {
+  async get(@Query("date") dateString: string): Promise<FoodEntry[]> {
     return await this.repository.get(new Date(dateString));
   }
 
@@ -45,23 +45,26 @@ export class FoodEntryController implements ICrudController<FoodEntry> {
     return await this.repository.create(foodEntry);
   }
 
-  @Patch(':id')
+  @Patch(":id")
   async update(
-    @Param('id', ParseIntPipe) id: number,
+    @Param("id", ParseIntPipe) id: number,
     @Body(new ZodValidationPipe(updateFoodEntrySchema))
     foodEntry: UpdateFoodEntry,
   ): Promise<FoodEntry> {
     return await this.repository.update(id, foodEntry);
   }
 
-  @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number): Promise<FoodEntry> {
+  @Delete(":id") async delete(
+    @Param("id", ParseIntPipe) id: number,
+  ): Promise<FoodEntry> {
     return await this.repository.delete(id);
   }
 
-  @Post('analyze')
-  @UseInterceptors(FilesInterceptor('images', 5))
-  async analyze(@UploadedFiles() files: Express.Multer.File[]) {
+  @Post("analyze")
+  @UseInterceptors(FilesInterceptor("images", 5))
+  async analyze(
+    @UploadedFiles() files: Express.Multer.File[],
+  ): Promise<FoodEntryType | null> {
     return await this.foodEntryAnalyzer.analyze(files);
   }
 }

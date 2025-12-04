@@ -15,22 +15,14 @@ export type ExtractedData = {
   latitude: number;
   longitude: number;
 
-
-
-          // "readyDate": "2025-12-01",
+  // "readyDate": "2025-12-01",
   //         "since": "2025-11-15",
   //                 "usableArea": 51,
-          // "refundableDeposit": 32000,
+  // "refundableDeposit": 32000,
   //         "priceNote": ""
   //                 "leaseType": {
-        //     "name": "Nájem",
-        //     "value": 1
-        // },
+  //     "name": "Nájem",
+  //     "value": 1
+  // },
   //         "costOfLiving": "Zálohy za služby pro 1 osobu: 2242 Kč/měsíc, v tom topení 1500 Kč/měsíc/byt, elektřina a plyn se převádí na nájemce.",
-
-
-
-
-
-
 };

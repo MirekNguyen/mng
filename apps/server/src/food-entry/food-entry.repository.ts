@@ -3,26 +3,26 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-} from '@nestjs/common';
-import { eq } from 'drizzle-orm';
-import { DateTime } from 'luxon';
-import { ICrudRepository } from 'src/common/icrud.controller';
+} from "@nestjs/common";
+import { eq } from "drizzle-orm";
+import { DateTime } from "luxon";
+import { ICrudRepository } from "src/common/icrud.controller";
 import {
   DRIZZLE_PROVIDER,
   type DrizzleDatabase,
-} from 'src/database/drizzle.provider';
+} from "src/database/drizzle.provider";
 import {
   CreateFoodEntry,
   FoodEntry,
   foodEntries,
   UpdateFoodEntry,
-} from 'src/database/schema/other.schema';
+} from "src/database/schema/other.schema";
 
 @Injectable()
 export class FoodEntryRepository implements ICrudRepository<FoodEntry> {
   constructor(@Inject(DRIZZLE_PROVIDER) private readonly db: DrizzleDatabase) {}
   async get(date: Date): Promise<FoodEntry[]> {
-    const dateString = DateTime.fromJSDate(date).toFormat('yyyy-M-dd');
+    const dateString = DateTime.fromJSDate(date).toFormat("yyyy-M-dd");
     return await this.db.query.foodEntries.findMany({
       where: eq(foodEntries.entryDate, dateString),
     });
@@ -33,15 +33,12 @@ export class FoodEntryRepository implements ICrudRepository<FoodEntry> {
       await this.db.insert(foodEntries).values(foodEntry).returning()
     )[0];
     if (!created) {
-      throw new InternalServerErrorException('Failed to create food entry');
+      throw new InternalServerErrorException("Failed to create food entry");
     }
     return created;
   }
 
-  async update(
-    id: number,
-    foodEntry: UpdateFoodEntry,
-  ): Promise<FoodEntry> {
+  async update(id: number, foodEntry: UpdateFoodEntry): Promise<FoodEntry> {
     const updated = (
       await this.db
         .update(foodEntries)

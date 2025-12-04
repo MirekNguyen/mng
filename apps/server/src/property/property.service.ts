@@ -1,30 +1,30 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import puppeteer, { Browser, Page } from 'puppeteer';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as https from 'https';
-import { IncomingMessage } from 'http';
-import { ExtractedData } from './property.entity';
+import { Inject, Injectable, Logger } from "@nestjs/common";
+import puppeteer, { Browser, Page } from "puppeteer";
+import * as fs from "fs";
+import * as path from "path";
+import * as https from "https";
+import { IncomingMessage } from "http";
+import { ExtractedData } from "./property.entity";
 import {
   RealityProperty,
   RealityPropertyImage,
-} from './reality-property.entity';
+} from "./reality-property.entity";
 import {
   DRIZZLE_PROVIDER,
   type DrizzleDatabase,
-} from '@/database/drizzle.provider';
-import { properties } from '@/database/schema/property.schema';
+} from "@/database/drizzle.provider";
+import { properties } from "@/database/schema/property.schema";
 
 @Injectable()
 export class PropertyScraperService {
   private readonly logger = new Logger(PropertyScraperService.name);
 
   // Configuration
-  private readonly BASE_DOWNLOAD_DIR = path.resolve('./downloads');
+  private readonly BASE_DOWNLOAD_DIR = path.resolve("./downloads");
   private readonly USER_AGENT =
-    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36';
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36";
   private readonly MAGIC_IMG_SUFFIX =
-    '?fl=res,1800,1800,1|wrm,/watermark/sreality.png,10|shr,,20|webp,80';
+    "?fl=res,1800,1800,1|wrm,/watermark/sreality.png,10|shr,,20|webp,80";
 
   constructor(@Inject(DRIZZLE_PROVIDER) private readonly db: DrizzleDatabase) {}
 
@@ -36,7 +36,7 @@ export class PropertyScraperService {
 
     const browser = await puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
 
     try {
@@ -45,7 +45,7 @@ export class PropertyScraperService {
       }
     } finally {
       await browser.close();
-      this.logger.log('🎉 Batch processing complete. Browser closed.');
+      this.logger.log("🎉 Batch processing complete. Browser closed.");
     }
   }
 
@@ -63,7 +63,7 @@ export class PropertyScraperService {
 
     try {
       await this.configurePage(page);
-      await page.goto(url, { waitUntil: 'domcontentloaded' });
+      await page.goto(url, { waitUntil: "domcontentloaded" });
 
       await this.handleConsentWall(page);
 
@@ -91,15 +91,15 @@ export class PropertyScraperService {
   private async handleConsentWall(page: Page): Promise<void> {
     try {
       // Wait briefly for the consent button
-      const consentButton = await page.waitForSelector('aria/Souhlasím', {
+      const consentButton = await page.waitForSelector("aria/Souhlasím", {
         timeout: 3000,
       });
 
       if (consentButton) {
-        this.logger.log('🍪 Consent wall detected. Bypass initiated.');
+        this.logger.log("🍪 Consent wall detected. Bypass initiated.");
         await Promise.all([
           page.waitForNavigation({
-            waitUntil: 'domcontentloaded',
+            waitUntil: "domcontentloaded",
             timeout: 15000,
           }),
           consentButton.click(),
@@ -116,13 +116,13 @@ export class PropertyScraperService {
     page: Page,
     listingId: string,
   ): Promise<ExtractedData | null> {
-    this.logger.log('⏳ Waiting for data...');
+    this.logger.log("⏳ Waiting for data...");
     try {
-      await page.waitForSelector('#__NEXT_DATA__', { timeout: 10000 });
+      await page.waitForSelector("#__NEXT_DATA__", { timeout: 10000 });
 
       return await page.evaluate((id) => {
         try {
-          const script = document.querySelector('#__NEXT_DATA__');
+          const script = document.querySelector("#__NEXT_DATA__");
           if (!script) return null;
 
           const json = JSON.parse((script as HTMLElement).innerText);
@@ -139,8 +139,11 @@ export class PropertyScraperService {
 
           const images = d.images.map((img: RealityPropertyImage) => {
             let link = img.url;
-            if (link.startsWith('//')) link = 'https:' + link;
-            return link + "?fl=res,1800,1800,1|wrm,/watermark/sreality.png,10|shr,,20|webp,80";
+            if (link.startsWith("//")) link = "https:" + link;
+            return (
+              link +
+              "?fl=res,1800,1800,1|wrm,/watermark/sreality.png,10|shr,,20|webp,80"
+            );
           });
 
           return {
@@ -188,11 +191,11 @@ export class PropertyScraperService {
     try {
       // Parse numbers safely
       const priceVal =
-        typeof data.price === 'number'
+        typeof data.price === "number"
           ? data.price
           : parseInt(String(data.price || 0), 10);
       const areaVal =
-        typeof data.usableArea === 'number'
+        typeof data.usableArea === "number"
           ? data.usableArea
           : parseInt(String(data.usableArea || 0), 10);
 
@@ -238,7 +241,7 @@ export class PropertyScraperService {
 
     for (let i = 0; i < data.imageUrls.length; i++) {
       const fullUrl = data.imageUrls[i] + this.MAGIC_IMG_SUFFIX;
-      const fileName = `img_${String(i + 1).padStart(2, '0')}.webp`;
+      const fileName = `img_${String(i + 1).padStart(2, "0")}.webp`;
       const filePath = path.join(listingDir, fileName);
 
       try {
@@ -259,13 +262,13 @@ export class PropertyScraperService {
           return;
         }
         response.pipe(file);
-        file.on('finish', () => {
+        file.on("finish", () => {
           file.close();
           resolve();
         });
       });
 
-      request.on('error', (err) => {
+      request.on("error", (err) => {
         fs.unlink(destination, () => {});
         reject(err);
       });
@@ -275,10 +278,10 @@ export class PropertyScraperService {
   // --- PHASE 3: UTILITIES ---
 
   private getListingId(url: string): string {
-    const cleanUrl = url.split('?')[0];
-    if (!cleanUrl) return 'unknown';
-    const parts = cleanUrl.split('/');
+    const cleanUrl = url.split("?")[0];
+    if (!cleanUrl) return "unknown";
+    const parts = cleanUrl.split("/");
     const lastPart = parts.filter((p) => p.length > 0).pop();
-    return lastPart || 'unknown';
+    return lastPart || "unknown";
   }
 }

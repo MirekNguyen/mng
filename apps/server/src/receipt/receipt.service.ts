@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import OpenAI from 'openai';
-import { zodTextFormat } from 'openai/helpers/zod';
-import z from 'zod/v3';
+import { Injectable } from "@nestjs/common";
+import OpenAI from "openai";
+import { zodTextFormat } from "openai/helpers/zod";
+import z from "zod/v3";
 
 const ReceiptItem = z.object({
   name: z.string(),
@@ -11,14 +11,14 @@ const ReceiptItem = z.object({
   priceTotal: z.number(),
   description: z.string(),
   category: z.enum([
-    'bakery',
-    'dairy',
-    'beverage',
-    'meat',
-    'produce',
-    'snack',
-    'household',
-    'other',
+    "bakery",
+    "dairy",
+    "beverage",
+    "meat",
+    "produce",
+    "snack",
+    "household",
+    "other",
   ]),
 });
 
@@ -44,35 +44,34 @@ export class ReceiptService {
   }
   async analyze(file: Express.Multer.File): Promise<ReceiptType | null> {
     const mimeType = file.mimetype;
-    const base64Image = file.buffer.toString('base64');
+    const base64Image = file.buffer.toString("base64");
     const response = await this.openAi.responses.parse({
-      model: 'gpt-4.1-nano',
+      model: "gpt-4.1-nano",
       input: [
         {
-          role: 'system',
+          role: "system",
           content:
-            'You are a receipt analyzer for Czech supermarket receipts. Return only valid JSON that matches the schema.',
+            "You are a receipt analyzer for Czech supermarket receipts. Return only valid JSON that matches the schema.",
         },
         {
-          role: 'user',
+          role: "user",
           content: [
             {
-              type: 'input_text',
-              text: 'Analyze this receipt and extract as much data as possible, using all fields in the schema.',
+              type: "input_text",
+              text: "Analyze this receipt and extract as much data as possible, using all fields in the schema.",
             },
             {
-              type: 'input_image',
+              type: "input_image",
               image_url: `data:${mimeType};base64,${base64Image}`,
-              detail: 'auto',
+              detail: "auto",
             },
           ],
         },
       ],
       text: {
-        format: zodTextFormat(Receipt, 'receipt_analysis'),
+        format: zodTextFormat(Receipt, "receipt_analysis"),
       },
     });
     return response.output_parsed;
   }
 }
-

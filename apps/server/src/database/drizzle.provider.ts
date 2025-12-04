@@ -1,10 +1,10 @@
-import { ConfigService } from '@nestjs/config';
-import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import { schema } from './drizzle.schema';
-import { EnvSchema } from './env.resolver';
+import { ConfigService } from "@nestjs/config";
+import { drizzle, type PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+import { schema } from "./drizzle.schema";
+import { EnvSchema } from "./env.resolver";
 
-export const DRIZZLE_PROVIDER = Symbol('DRIZZLE_PROVIDER');
+export const DRIZZLE_PROVIDER = Symbol("DRIZZLE_PROVIDER");
 export type DrizzleDatabase = PostgresJsDatabase<typeof schema>;
 export const DrizzleProvider = [
   {

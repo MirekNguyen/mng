@@ -3,19 +3,19 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
-} from '@nestjs/common';
-import { eq } from 'drizzle-orm';
-import { ICrudRepository } from 'src/common/icrud.controller';
+} from "@nestjs/common";
+import { eq } from "drizzle-orm";
+import { ICrudRepository } from "src/common/icrud.controller";
 import {
   DRIZZLE_PROVIDER,
   type DrizzleDatabase,
-} from 'src/database/drizzle.provider';
+} from "src/database/drizzle.provider";
 import {
   CreateFood,
   Food,
   food,
   UpdateFood,
-} from 'src/database/schema/other.schema';
+} from "src/database/schema/other.schema";
 
 @Injectable()
 export class FoodRepository implements ICrudRepository<Food> {
@@ -42,7 +42,7 @@ export class FoodRepository implements ICrudRepository<Food> {
       await this.db.insert(food).values(createEntity).returning()
     )[0];
     if (!created) {
-      throw new InternalServerErrorException('Failed to create food');
+      throw new InternalServerErrorException("Failed to create food");
     }
     return created;
   }

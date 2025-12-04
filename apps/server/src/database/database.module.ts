@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { DrizzleProvider } from './drizzle.provider';
+import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
+import { DrizzleProvider } from "./drizzle.provider";
 
 @Module({
   imports: [ConfigModule.forRoot()],

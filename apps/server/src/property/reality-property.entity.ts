@@ -10,7 +10,7 @@ export type RealityPropertyImage = {
   url: string;
   width: number;
   height: number;
-}
+};
 
 interface PanoramaData {
   hasPanorama: boolean;
@@ -49,7 +49,7 @@ export type RealityPropertyLocality = {
   wardId: number | null;
   wardSeoName: string | null;
   zip: number;
-}
+};
 
 interface PremiseLocality {
   latitude: number;
@@ -228,7 +228,7 @@ export type RealityPropertyParams = {
   refundableDeposit: number | null;
   priceFlagNegotiationCb: boolean;
   priceNote: string;
-}
+};
 
 export type RealityProperty = {
   categoryMainCb: CodebookValue;
@@ -256,4 +256,4 @@ export type RealityProperty = {
   extendedPois: ExtendedPois;
   isExclusively: boolean;
   params: RealityPropertyParams;
-}
+};
