@@ -1,8 +1,8 @@
 {
-  "name": "grocery-tracker-server",
+  "name": "mng-server",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Server for MNG organization",
+  "author": "Mirek Nguyen",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
