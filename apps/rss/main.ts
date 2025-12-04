@@ -30,7 +30,7 @@ const rssFeed = new Rss({
 rssFeed.addItem({
   title: args.title,
   link: args.link,
-  id: args.link, // using itemLink as id
+  id: crypto.randomUUID(),
   updated: new Date(),
   description: args.description,
 });
