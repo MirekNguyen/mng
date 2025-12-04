@@ -6,14 +6,13 @@ import {
 } from "@nestjs/common";
 import { eq } from "drizzle-orm";
 import { DateTime } from "luxon";
-import { ICrudRepository } from "src/common/icrud.controller";
-import { DRIZZLE_PROVIDER, type DrizzleDatabase } from "src/database/drizzle.provider";
-import {
-  CreateFoodEntry,
-  FoodEntry,
-  foodEntries,
-  UpdateFoodEntry,
-} from "src/database/schema/other.schema";
+import { ICrudRepository } from "@/common/icrud.controller";
+import { CreateFoodEntry,
+foodEntries,
+FoodEntry, 
+UpdateFoodEntry} from "@/database/schema/other.schema";
+import { DRIZZLE_PROVIDER,
+DrizzleDatabase } from "@/database/drizzle.provider";
 
 @Injectable()
 export class FoodEntryRepository implements ICrudRepository<FoodEntry> {

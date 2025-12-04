@@ -12,7 +12,6 @@ import { DRIZZLE_PROVIDER, DrizzleDatabase } from "@/database/drizzle.provider";
 @Injectable()
 export class FoodRepository implements ICrudRepository<Food> {
   constructor(@Inject(DRIZZLE_PROVIDER) private readonly db: DrizzleDatabase) {}
-
   async getAll(): Promise<Food[]> {
     return await this.db.query.food.findMany();
   }

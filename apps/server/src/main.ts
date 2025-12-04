@@ -4,7 +4,7 @@ import { AppModule } from "./app.module";
 import { EnvSchema } from "./database/env.resolver";
 import multipart from "@fastify/multipart";
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestFastifyApplication>(AppModule, new FastifyAdapter());
   app.enableCors({
     origin: true,

@@ -33,9 +33,9 @@ export class FoodEntryController implements ICrudController<FoodEntry> {
     private readonly foodEntryAnalyzer: FoodEntryAnalyzer,
   ) {}
 
-  @Get()
-  @UsePipes(new ZodValidationPipe(z.iso.date()))
-  async get(@Query("date") dateString: string): Promise<FoodEntry[]> {
+  @Get() @UsePipes(new ZodValidationPipe(z.iso.date())) async get(
+    @Query("date") dateString: string,
+  ): Promise<FoodEntry[]> {
     return await this.repository.get(new Date(dateString));
   }
 

@@ -47,7 +47,7 @@ export class ReceiptController {
   }
 
   @Delete(":id")
-  async deleteReceipt(@Param("id") id: string) {
+  async deleteReceipt(@Param("id") id: string): Promise<{ message: string }> {
     await this.db.delete(receipt).where(eq(receipt.id, Number(id)));
     return { message: `Receipt with id ${id} deleted successfully` };
   }
