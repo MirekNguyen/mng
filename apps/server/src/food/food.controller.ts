@@ -10,11 +10,13 @@ import {
   UsePipes,
 } from "@nestjs/common";
 import { FoodRepository } from "./food.repository";
-import { CreateFood,
-createFoodSchema,
-Food, 
-UpdateFood, 
-updateFoodSchema} from "@/database/schema/other.schema";
+import {
+  CreateFood,
+  createFoodSchema,
+  Food,
+  UpdateFood,
+  updateFoodSchema,
+} from "@/database/schema/other.schema";
 import { ZodValidationPipe } from "@/common/zod.pipe";
 
 @Controller("food")
@@ -35,8 +37,7 @@ export class FoodController {
   @Patch(":id")
   async update(
     @Param("id", ParseIntPipe) id: number,
-    @Body(new ZodValidationPipe(updateFoodSchema))
-    foodEntry: UpdateFood,
+    @Body(new ZodValidationPipe(updateFoodSchema)) foodEntry: UpdateFood,
   ): Promise<Food> {
     return await this.repository.update(id, foodEntry);
   }

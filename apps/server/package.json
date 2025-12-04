@@ -7,8 +7,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "format": "biome format ./src ./test",
-    "format:fix": "biome format --write ./src ./test",
+    "format": "oxfmt ./src ./test",
+    "format:fix": "oxfmt --write ./src ./test",
     "start": "nest start",
     "dev": "nest start --watch",
     "start:dev": "nest start --watch",
