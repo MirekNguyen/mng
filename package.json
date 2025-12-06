@@ -1,4 +1,5 @@
 {
+  "name": "mng",
   "dependencies": {},
   "devDependencies": {
     "turbo": "^2.6.3"
