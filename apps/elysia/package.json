@@ -6,6 +6,7 @@
     "dev": "bun run --watch src/index.ts"
   },
   "dependencies": {
+    "@mng/database": "*",
     "elysia": "latest"
   },
   "devDependencies": {
