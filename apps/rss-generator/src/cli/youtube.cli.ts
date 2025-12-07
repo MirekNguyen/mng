@@ -39,7 +39,12 @@ const feed = new Feed({
   copyright: "",
 });
 
+const isShort = (duration: number) => {
+  return (duration / 1000) <= 60;
+}
+
 videos.forEach((video) => {
+  if (isShort(video.duration)) return;
   feed.addItem({
     title: `${video.title}`,
     id: video.url,
