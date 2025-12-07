@@ -9,7 +9,8 @@
   },
   "dependencies": {
     "@mng/database": "*",
-    "elysia": "latest"
+    "elysia": "latest",
+    "zod": "^4.1.13"
   },
   "devDependencies": {
     "bun-types": "latest"

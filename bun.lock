@@ -13,6 +13,7 @@
       "dependencies": {
         "@mng/database": "*",
         "elysia": "latest",
+        "zod": "^4.1.13",
       },
       "devDependencies": {
         "bun-types": "latest",
@@ -144,6 +145,10 @@
         "tsconfig-paths": "^4.2.0",
         "typescript": "^5.7.3",
       },
+    },
+    "packages/config": {
+      "name": "@mng/config",
+      "version": "0.0.0",
     },
     "packages/database": {
       "name": "@mng/database",
@@ -381,6 +386,8 @@
     "@lukeed/csprng": ["@lukeed/csprng@1.1.0", "", {}, "sha512-Z7C/xXCiGWsg0KuKsHTKJxbWhpI3Vs5GwLfOean7MGyVFGqdRgBbAjOCh6u4bbjPc/8MJ2pZmK/0DLdCbivLDA=="],
 
     "@mng/api": ["@mng/api@workspace:apps/elysia"],
+
+    "@mng/config": ["@mng/config@workspace:packages/config"],
 
     "@mng/database": ["@mng/database@workspace:packages/database"],
 
