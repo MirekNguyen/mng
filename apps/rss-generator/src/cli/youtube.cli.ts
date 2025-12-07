@@ -32,7 +32,7 @@ const feed = new Feed({
     : "Youtube Search Feed",
   description: "Youtube subscriptions feed",
   id: `https://mirekng.com/rss/${options.output}`,
-  link: "https://mirekng.com",
+  link: "https://www.youtube.com/",
   language: "en",
   updated: new Date(),
   generator: "Bun RSS Generator",
