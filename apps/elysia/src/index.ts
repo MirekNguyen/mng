@@ -7,6 +7,10 @@ app.get("properties", async () => {
   return await db.query.properties.findMany();
 });
 
+app.get("food", async () => {
+  return await db.query.food.findMany();
+});
+
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
 );
