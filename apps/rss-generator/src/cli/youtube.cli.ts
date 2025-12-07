@@ -40,8 +40,8 @@ const feed = new Feed({
 });
 
 const isShort = (duration: number) => {
-  return (duration / 1000) <= 60;
-}
+  return duration / 1000 <= 60;
+};
 
 videos.forEach((video) => {
   if (isShort(video.duration)) return;
