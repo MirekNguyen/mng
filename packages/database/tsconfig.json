@@ -1,9 +1,12 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
     "target": "esnext",
     "module": "nodenext",
     "moduleResolution": "bundler",
-    "types": ["bun-types"],
+    "types": [
+      "bun-types"
+    ],
     "strict": true,
     "skipLibCheck": true
   }
