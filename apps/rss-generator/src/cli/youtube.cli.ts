@@ -31,7 +31,7 @@ const feed = new Feed({
     ? `Channel Uploads: ${options.query}`
     : "Youtube Search Feed",
   description: "Youtube subscriptions feed",
-  id: `https://mirekng.com/rss/${options.output}`,
+  id: `https://youtube.com/${options.output}`,
   link: "https://www.youtube.com/",
   language: "en",
   updated: new Date(),
