@@ -4,7 +4,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "bun run --watch src/index.ts",
-    "build": "echo 'No build step required for Bun'"
+    "build": "echo 'No build step required for Bun'",
+    "start": "bun run src/index.ts"
   },
   "dependencies": {
     "@mng/database": "*",
