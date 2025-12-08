@@ -7,6 +7,8 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import z from "zod";
 
 export const properties = pgTable("properties", {
   id: serial("id").primaryKey(),
@@ -24,3 +26,9 @@ export const properties = pgTable("properties", {
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
+
+export const propertyZodSchema = createSelectSchema(properties);
+export const createPropertyZodSchema = createInsertSchema(properties);
+
+export type Property = z.infer<typeof propertyZodSchema>;
+export type CreateProperty = z.infer<typeof createPropertyZodSchema>;

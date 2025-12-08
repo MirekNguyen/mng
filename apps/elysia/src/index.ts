@@ -1,12 +1,13 @@
 import { db, eq } from "@mng/database/db";
 import { foodEntries } from "@mng/database/schema/other.schema";
+import { Property } from "@mng/database/schema/properties.schema";
 import Elysia from "elysia";
 import z from "zod";
 
 const app = new Elysia().get("/", () => "Hello Elysia").listen(3000);
 
-app.get("properties", async () => {
-  return await db.query.properties.findMany();
+app.get("properties", async (): Promise<Property[]> => {
+  const properties: Property[] = await db.query.properties.findMany();
 });
 
 app.get("food", async () => {
