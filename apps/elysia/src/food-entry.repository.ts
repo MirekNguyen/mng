@@ -5,6 +5,7 @@ import {
   FoodEntry,
   UpdateFoodEntry,
 } from "@mng/database/schema/other.schema";
+import { DateTime } from "luxon";
 
 export const FoodEntryRepository = {
   async get(date: Date): Promise<FoodEntry[]> {
@@ -33,7 +34,7 @@ export const FoodEntryRepository = {
         .returning()
     )[0];
     if (!updated) {
-      throw new NotFoundException(`Food entry not found for update`);
+      throw new Error(`Food entry not found for update`);
     }
     return updated;
   },

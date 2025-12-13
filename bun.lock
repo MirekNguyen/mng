@@ -12,7 +12,9 @@
       "version": "1.0.50",
       "dependencies": {
         "@mng/database": "*",
+        "@types/luxon": "^3.7.1",
         "elysia": "latest",
+        "luxon": "^3.7.2",
         "zod": "^4.1.13",
       },
       "devDependencies": {
@@ -144,6 +146,17 @@
         "ts-node": "^10.9.2",
         "tsconfig-paths": "^4.2.0",
         "typescript": "^5.7.3",
+      },
+    },
+    "packages/common": {
+      "name": "@mng/common",
+      "version": "0.0.0",
+      "devDependencies": {
+        "@types/node": "^24.10.1",
+        "bun-types": "^1.3.3",
+        "oxfmt": "^0.16.0",
+        "oxlint": "^1.31.0",
+        "typescript": "^5.9.3",
       },
     },
     "packages/config": {
@@ -388,6 +401,8 @@
     "@lukeed/csprng": ["@lukeed/csprng@1.1.0", "", {}, "sha512-Z7C/xXCiGWsg0KuKsHTKJxbWhpI3Vs5GwLfOean7MGyVFGqdRgBbAjOCh6u4bbjPc/8MJ2pZmK/0DLdCbivLDA=="],
 
     "@mng/api": ["@mng/api@workspace:apps/elysia"],
+
+    "@mng/common": ["@mng/common@workspace:packages/common"],
 
     "@mng/config": ["@mng/config@workspace:packages/config"],
 
