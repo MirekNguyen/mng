@@ -19,5 +19,7 @@
   "devDependencies": {
     "bun-types": "latest"
   },
-  "module": "src/index.js"
+  "exports": {
+    ".": "./src/index.ts"
+  }
 }

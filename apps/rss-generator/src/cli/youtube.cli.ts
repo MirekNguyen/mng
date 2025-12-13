@@ -1,8 +1,8 @@
 import { program } from "commander";
-import YouTube from "youtube-sr";
 import { Feed } from "feed";
 import { write } from "bun";
-import { logger } from "../logger";
+import { logger } from "@mng/logger/logger";
+import { Video, YouTube } from "youtube-sr";
 
 program
   .requiredOption("-p, --playlistId <string>", "Query using Playlist ID")
@@ -43,7 +43,7 @@ const isShort = (duration: number) => {
   return duration / 1000 <= 60;
 };
 
-videos.forEach((video) => {
+videos.forEach((video: Video) => {
   if (isShort(video.duration)) return;
   feed.addItem({
     title: `${video.title}`,
