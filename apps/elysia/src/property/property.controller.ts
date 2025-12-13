@@ -5,8 +5,7 @@ import Elysia from "elysia";
 const app = new Elysia({ prefix: "property" });
 
 app.get("/", async (): Promise<Property[]> => {
-  const properties: Property[] = await db.query.properties.findMany();
-  return properties;
+  return await db.query.properties.findMany();
 });
 
 export { app as propertyController };
