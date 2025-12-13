@@ -9,7 +9,7 @@ import z from "zod";
 const app = new Elysia({ prefix: "food-entry" });
 
 app.get(
-  "food-entry",
+  "/",
   async ({ query }) => {
     const dateString = query.date.toISOString().split("T")[0];
     return await db.query.foodEntries.findMany({
@@ -22,7 +22,7 @@ app.get(
 );
 
 app.post(
-  "food-entry",
+  "/",
   async ({ body }) => {
     return (await db.insert(foodEntries).values(body).returning())[0];
   },

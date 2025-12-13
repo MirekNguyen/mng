@@ -3,7 +3,7 @@ import Elysia from "elysia";
 
 const app = new Elysia({ prefix: "food" });
 
-app.get("food", async () => {
+app.get("/", async () => {
   return await db.query.food.findMany();
 });
 
