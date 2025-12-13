@@ -22,7 +22,7 @@ export const properties = pgTable("properties", {
   latitude: doublePrecision("latitude"),
   longitude: doublePrecision("longitude"),
   imageUrls: json("image_urls").$type<string[]>(),
-  metaData: json("meta_data"),
+  // metaData: json("meta_data"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
