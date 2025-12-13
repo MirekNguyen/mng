@@ -18,8 +18,5 @@
   },
   "devDependencies": {
     "bun-types": "latest"
-  },
-  "exports": {
-    ".": "./src/index.ts"
   }
 }
