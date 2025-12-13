@@ -1,6 +1,6 @@
 import { db } from "@mng/database/db";
-import { Food } from "@mng/database/schema/other.schema";
 import Elysia from "elysia";
+import { Food } from "@mng/database/schema/other.schema";
 
 const app = new Elysia({ prefix: "food" });
 
