@@ -7,7 +7,8 @@
     "dev": "bun run --watch src/index.ts",
     "start": "bun run src/index.ts",
     "build": "echo 'No build step needed for Bun' && exit 0",
-    "cli:youtube": "bun src/cli/youtube.cli.ts"
+    "cli:youtube": "bun src/cli/youtube.cli.ts",
+    "cli:notification": "bun src/cli/notification.cli.ts"
   },
   "dependencies": {
     "@mng/logger": "*",
