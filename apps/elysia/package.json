@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@mng/database": "*",
+    "@mng/http": "*",
+    "@mng/logger": "*",
     "@types/luxon": "^3.7.1",
     "elysia": "latest",
     "luxon": "^3.7.2",

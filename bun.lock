@@ -12,6 +12,8 @@
       "version": "1.0.50",
       "dependencies": {
         "@mng/database": "*",
+        "@mng/http": "*",
+        "@mng/logger": "*",
         "@types/luxon": "^3.7.1",
         "elysia": "latest",
         "luxon": "^3.7.2",
@@ -148,17 +150,6 @@
         "typescript": "^5.7.3",
       },
     },
-    "packages/common": {
-      "name": "@mng/common",
-      "version": "0.0.0",
-      "devDependencies": {
-        "@types/node": "^24.10.1",
-        "bun-types": "^1.3.3",
-        "oxfmt": "^0.16.0",
-        "oxlint": "^1.31.0",
-        "typescript": "^5.9.3",
-      },
-    },
     "packages/config": {
       "name": "@mng/config",
       "version": "0.0.0",
@@ -177,6 +168,32 @@
         "@typescript/native-preview": "^7.0.0-dev.20251206.1",
         "bun-types": "^1.3.3",
         "drizzle-kit": "^0.31.8",
+        "oxfmt": "^0.16.0",
+        "oxlint": "^1.31.0",
+        "typescript": "^5.9.3",
+      },
+    },
+    "packages/http": {
+      "name": "@mng/http",
+      "version": "1.0.0",
+      "devDependencies": {
+        "@types/node": "^24.10.1",
+        "bun-types": "^1.3.3",
+        "oxfmt": "^0.16.0",
+        "oxlint": "^1.31.0",
+        "typescript": "^5.9.3",
+      },
+    },
+    "packages/logger": {
+      "name": "@mng/logger",
+      "version": "1.0.0",
+      "dependencies": {
+        "pino": "^10.1.0",
+        "pino-pretty": "^13.1.3",
+      },
+      "devDependencies": {
+        "@types/node": "^24.10.1",
+        "bun-types": "^1.3.3",
         "oxfmt": "^0.16.0",
         "oxlint": "^1.31.0",
         "typescript": "^5.9.3",
@@ -402,11 +419,13 @@
 
     "@mng/api": ["@mng/api@workspace:apps/elysia"],
 
-    "@mng/common": ["@mng/common@workspace:packages/common"],
-
     "@mng/config": ["@mng/config@workspace:packages/config"],
 
     "@mng/database": ["@mng/database@workspace:packages/database"],
+
+    "@mng/http": ["@mng/http@workspace:packages/http"],
+
+    "@mng/logger": ["@mng/logger@workspace:packages/logger"],
 
     "@mng/rss": ["@mng/rss@workspace:apps/rss-generator"],
 
