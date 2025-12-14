@@ -8,7 +8,10 @@
   },
   "scripts": {
     "build": "turbo build",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "lint:fix": "turbo lint:fix",
+    "format": "turbo format",
+    "format:fix": "turbo format:fix"
   },
   "packageManager": "bun@1.3.3",
   "workspaces": [
