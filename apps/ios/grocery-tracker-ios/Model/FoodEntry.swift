@@ -99,3 +99,15 @@ struct AnalyzedFoodData: Identifiable, Codable, Hashable {
     var amount: Double
     var unit: String
 }
+
+extension FoodEntry {
+    var formattedAmount: String {
+        let val = amount ?? 0
+        let isInteger = val.truncatingRemainder(dividingBy: 1) == 0
+        let numberString =
+            isInteger
+            ? String(format: "%.0f", val)
+            : String(format: "%.1f", val)
+        return "\(numberString) \(unit)"
+    }
+}

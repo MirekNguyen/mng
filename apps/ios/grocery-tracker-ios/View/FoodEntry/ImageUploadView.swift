@@ -100,6 +100,7 @@ struct ImageUploadView: View {
                 .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
+            .tint(.blue)
             .controlSize(.large)
             .disabled(selectedImages.isEmpty || isLoading)
         }

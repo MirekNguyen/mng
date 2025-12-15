@@ -18,8 +18,7 @@ struct FoodEntryList: View {
                 }, id: \.self
             ) { foodEntry in
                 FoodItemRow(
-                    weight:
-                        "\(foodEntry.amount?.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", foodEntry.amount ?? 0) : String(format: "%.1f", foodEntry.amount ?? 0)) \(foodEntry.unit)",
+                    weight: foodEntry.formattedAmount,
                     foodName: foodEntry.foodName,
                     protein: "\(String(format: "%.0f", foodEntry.protein))g protein",
                     calories: "\(String(format: "%.0f", foodEntry.calories)) kcal",
