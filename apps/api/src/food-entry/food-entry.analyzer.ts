@@ -40,14 +40,20 @@ export const FoodEntryAnalyzer = {
           {
             role: "system",
             content:
-              "You are an expert nutritionist AI. Analyze the food images and return structured nutritional data.",
+              "You are a food entry analyzer. Analyze the provided images of a meal and return a single, harmonized JSON object with the nutritional information. " +
+              "Never output anything but the JSON. No explanation.",
           },
           {
             role: "user",
             content: [
               {
                 type: "text",
-                text: "Identify this meal and estimate its nutritional content. If multiple images are provided, combine them for a single accurate estimate. Harmonize any discrepancies.",
+                text:                 "Analyze ALL these images of the SAME meal jointly for better accuracy. " +
+                "Use visual recognition, portion estimation (consider known object sizes for scale), AND if visible, any nutrition facts, ingredients lists, manufacturer stickers, or packaging for nutritional values. " +
+                "Prefer label/panel info if visible, otherwise estimate using up-to-date, regionally appropriate nutrition databases. " +
+                "Harmonize your answer if there are discrepancies. " +
+                "Output a single JSON object. Don't guess if not plausible.",
+
               },
               ...imageContent,
             ],
