@@ -31,16 +31,23 @@ struct ConfirmEntryView: View {
                     NutritionRow(label: "Fats", value: $entryData.fats, unit: "g")
                 }
             }
+            .scrollContentBackground(.hidden)
+            .background(.ultraThinMaterial)
             .navigationTitle("Confirm Entry")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
+                    Button(action: { dismiss() }) {
+                        Label("Cancel", systemImage: "xmark.circle.fill")
+                    }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { saveEntry() }
+                    Button(action: { saveEntry() }) {
+                        Label("Save", systemImage: "checkmark.circle.fill")
+                    }
                 }
             }
         }
+        .presentationBackground(.clear)
     }
 
     private func saveEntry() {
@@ -76,8 +83,10 @@ struct ConfirmEntryView: View {
                 try await repository.addEntry(newFoodEntry)
                 // 3. Dismiss the sheet on success
                 await MainActor.run {
+                    // Clear the pending entry first to dismiss ConfirmEntryView
+                    repository.pendingEntry = nil
                     dismiss()
-                    // Also dismiss the parent ImageUploadView
+                    // Then dismiss the parent ImageUploadView
                     onSave()
                 }
             } catch {
