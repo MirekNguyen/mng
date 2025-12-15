@@ -22,7 +22,9 @@ final class NetworkManager2 {
 
     func post<T: Encodable, U: Decodable>(endpoint: String, body: T) async throws -> U {
         do {
-            let data = try JSONEncoder().encode(body)
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            let data = try encoder.encode(body)
             let request = try createRequest(endpoint, method: "POST", body: data)
             return try await sendRequest(request)
         } catch {

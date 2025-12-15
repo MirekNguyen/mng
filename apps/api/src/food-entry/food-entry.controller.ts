@@ -63,7 +63,7 @@ app.patch(
   },
   {
     query: updateFoodEntrySchema,
-    params: z.object({ id: z.number().positive() }),
+    params: z.object({ id: z.coerce.number().positive() }),
   },
 );
 
@@ -73,7 +73,7 @@ app.delete(
     return FoodEntryRepository.delete(params.id);
   },
   {
-    params: z.object({ id: z.number().positive() }),
+    params: z.object({ id: z.coerce.number().positive() }),
   },
 );
 

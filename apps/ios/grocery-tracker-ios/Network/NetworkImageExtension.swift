@@ -4,7 +4,7 @@ struct ImageUploadData {
     let data: Data
     let fileName: String
     let mimeType: String
-    let formName: String = "images"
+    let formName: String = "files"
 }
 
 extension NetworkManager2 {

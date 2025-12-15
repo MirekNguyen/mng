@@ -3,11 +3,11 @@ import SwiftUI
 struct MainTabView: View {
     @StateObject private var networkManager = NetworkManager.shared
     @StateObject private var groceryRepository = ReceiptRepository(
-        networkManager: NetworkManager2(baseURL: "https://mng.dokploy.mirekng.com/"))
+        networkManager: NetworkManager2(baseURL: "https://api.mirekng.com/"))
     @StateObject private var foodEntryRepository = FoodEntryRepository(
-        networkManager: NetworkManager2(baseURL: "https://mng.dokploy.mirekng.com/"))
+        networkManager: NetworkManager2(baseURL: "https://api.mirekng.com/"))
     @StateObject private var foodRepository = FoodRepository(
-        networkManager: NetworkManager2(baseURL: "https://mng.dokploy.mirekng.com/"))
+        networkManager: NetworkManager2(baseURL: "https://api.mirekng.com/"))
 
     @State private var selectedTab: Int = 4
     var body: some View {
