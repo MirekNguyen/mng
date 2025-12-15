@@ -3,104 +3,144 @@ import SwiftUI
 
 struct ImageUploadView: View {
     @EnvironmentObject var repository: FoodEntryRepository
+    @Environment(\.dismiss) private var dismiss
+
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedImages: [UIImage] = []
     @State private var isLoading: Bool = false
-    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
-                PhotosPreview(selectedImages: selectedImages)
-                // MARK: - Photos Picker
-                PhotosPicker(
-                    selection: $selectedItems,
-                    maxSelectionCount: 5,
-                    matching: .images
-                ) {
-                    Label("Select Images", systemImage: "photo.on.rectangle.angled")
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 36)
-                }
-                .buttonStyle(.glass)
-                .padding(.horizontal)
-
-                // MARK: - Analyze/Upload Button
-                Button(action: analyzeSelectedImages) {
-                    if isLoading {
-                        ProgressView()
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 36)
-                    } else {
-                        Label("Analyze Meal", systemImage: "sparkle.magnifyingglass")
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 36)
-                    }
-                }
-                .buttonStyle(.glass)
-                .disabled(selectedImages.isEmpty || isLoading)
-                .padding(.horizontal)
-
-                // MARK: - Error Message
-                if let errorMessage = repository.errorMessage {
-                    Text(errorMessage)
-                        .font(.caption)
-                        .foregroundColor(.red)
-                        .padding()
+            VStack(spacing: 24) {
+                if selectedImages.isEmpty {
+                    emptyStateView
+                } else {
+                    imagePreviewList
                 }
 
                 Spacer()
+
+                if let error = repository.errorMessage {
+                    errorView(message: error)
+                }
+
+                actionButtons
             }
+            .padding()
+            .navigationTitle("Analyze New Meal")
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel", systemImage: "xmark", action: { dismiss() })
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
                 }
             }
-            .navigationTitle("Analyze New Meal")
             .onChange(of: selectedItems) { _, newItems in
                 Task {
-                    await MainActor.run { repository.errorMessage = nil }
                     await loadImages(from: newItems)
                 }
             }
-            // --- MODIFICATION ---
-            // Changed .sheet to .fullScreenCover
             .fullScreenCover(item: $repository.pendingEntry) { entryData in
-                // This content is now presented full-screen
                 ConfirmEntryView(data: entryData, repository: repository)
             }
         }
     }
 
-    /// Asynchronously loads the selected PhotosPickerItems into UIImages
+    private var emptyStateView: some View {
+        ContentUnavailableView(
+            "No Images Selected",
+            systemImage: "photo.badge.plus",
+            description: Text("Select photos of your food to begin analysis.")
+        )
+    }
+
+    private var imagePreviewList: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 12) {
+                ForEach(selectedImages, id: \.self) { image in
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 200, height: 200)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .shadow(radius: 4)
+                }
+            }
+            .padding(.horizontal, 4)
+        }
+        .frame(height: 220)
+    }
+
+    private var actionButtons: some View {
+        VStack(spacing: 16) {
+            PhotosPicker(
+                selection: $selectedItems,
+                maxSelectionCount: 5,
+                matching: .images
+            ) {
+                Label(
+                    selectedImages.isEmpty ? "Select Images" : "Change Selection",
+                    systemImage: "photo.on.rectangle"
+                )
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.large)
+
+            Button(action: analyzeSelectedImages) {
+                Group {
+                    if isLoading {
+                        ProgressView()
+                            .tint(.white)
+                    } else {
+                        Label("Analyze Meal", systemImage: "sparkle.magnifyingglass")
+                    }
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .disabled(selectedImages.isEmpty || isLoading)
+        }
+    }
+
+    private func errorView(message: String) -> some View {
+        Text(message)
+            .font(.footnote)
+            .foregroundStyle(.red)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal)
+            .transition(.opacity)
+    }
+
     private func loadImages(from items: [PhotosPickerItem]) async {
-        var images: [UIImage] = []
+        repository.errorMessage = nil
+
         await withTaskGroup(of: UIImage?.self) { group in
             for item in items {
                 group.addTask {
-                    do {
-                        if let data = try await item.loadTransferable(type: Data.self) {
-                            return UIImage(data: data)
-                        }
-                    } catch {
-                        print("Failed to load image: \(error)")
+                    if let data = try? await item.loadTransferable(type: Data.self) {
+                        return UIImage(data: data)
                     }
                     return nil
                 }
             }
+
+            var images: [UIImage] = []
             for await image in group {
-                if let image = image {
+                if let image {
                     images.append(image)
                 }
             }
-        }
 
-        await MainActor.run {
-            self.selectedImages = images
+            let finalImages = images
+            await MainActor.run {
+                self.selectedImages = finalImages
+            }
         }
     }
 
-    /// Calls the repository to upload the loaded images
     private func analyzeSelectedImages() {
         isLoading = true
         Task {
