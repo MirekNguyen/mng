@@ -8,8 +8,8 @@
   "scripts": {
     "format": "oxfmt --check ./src",
     "format:fix": "oxfmt ./src",
-    "lint": "oxlint ./src",
-    "lint:fix": "oxlint --fix-dangerously ./src"
+    "lint": "oxlint --type-aware ./src",
+    "lint:fix": "oxlint --type-aware --fix-dangerously ./src"
   },
   "dependencies": {
     "drizzle-orm": "^0.45.0",

@@ -5,9 +5,11 @@ import {
   FoodEntry,
   updateFoodEntrySchema,
 } from "@mng/database/schema/other.schema";
-import Elysia from "elysia";
+import Elysia, { t } from "elysia";
 import z from "zod";
 import { FoodEntryRepository } from "./food-entry.repository";
+import { FoodAnalysisResult, FoodEntryAnalyzer } from "./food-entry.analyzer";
+import { ServerError } from "@mng/http/server.error";
 
 const app = new Elysia({ prefix: "food-entry" });
 
@@ -31,6 +33,26 @@ app.post(
   },
   {
     body: createFoodEntrySchema,
+  },
+);
+
+app.post(
+  "/analyze",
+  async ({ body }): Promise<FoodAnalysisResult> => {
+    if (!body.files.length) {
+      throw new ServerError("At least one image file is required.");
+    }
+
+    return await FoodEntryAnalyzer.analyze(body.files);
+  },
+  {
+    body: t.Object({
+      files: t.Files({
+        type: ["image/jpeg", "image/png", "image/webp"],
+        maxSize: "10m",
+        minItems: 1,
+      }),
+    }),
   },
 );
 

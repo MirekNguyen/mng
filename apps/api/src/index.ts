@@ -1,10 +1,10 @@
 import { parseDatabaseError } from "@mng/database/db-error";
-import { ServerError } from "@mng/http/errors/server.error";
 import { logger } from "@mng/logger/logger";
 import Elysia from "elysia";
 import { foodController } from "./food/food.controller";
 import { foodEntryController } from "./food-entry/food-entry.controller";
 import { propertyController } from "./property/property.controller";
+import { ServerError } from "@mng/http/server.error";
 
 const app = new Elysia()
   .error({ ServerError })
