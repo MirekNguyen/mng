@@ -6,6 +6,7 @@ struct FoodItemRow: View {
     let protein: String
     let calories: String
     let time: String
+    @State private var isVisible: Bool = false
 
     var body: some View {
         HStack(spacing: 16) {
@@ -51,5 +52,11 @@ struct FoodItemRow: View {
                 .layoutPriority(1) // IMPORTANT: Ensures this view is never squished
         }
         .padding(.vertical, 16)
+        .opacity(isVisible ? 1 : 0)
+        .offset(x: isVisible ? 0 : 12, y: 0)
+        .animation(.spring(response: 0.45, dampingFraction: 0.8, blendDuration: 0), value: isVisible)
+        .onAppear {
+            isVisible = true
+        }
     }
 }

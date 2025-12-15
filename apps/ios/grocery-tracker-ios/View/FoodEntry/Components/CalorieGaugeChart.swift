@@ -4,6 +4,7 @@ import SwiftUI
 struct CalorieGaugeView: View {
     @Binding var selectedDate: Date
     @State private var calendarId: Int = 0
+    @State private var animatedProgress: Double = 0.0
 
     let currentCalories: Double
     let targetCalories: Double
@@ -26,7 +27,7 @@ struct CalorieGaugeView: View {
 
                 // Progress arc
                 SectorMark(
-                    angle: .value("Progress", progress),
+                    angle: .value("Progress", animatedProgress),
                     innerRadius: .ratio(0.7),
                     outerRadius: .ratio(0.9),
                     angularInset: 2
@@ -55,11 +56,15 @@ struct CalorieGaugeView: View {
                 // Fire emoji
                 Text("🔥")
                     .font(.system(size: 30))
+                    .scaleEffect(1.0 + (animatedProgress * 0.08))
+                    .animation(.easeOut(duration: 0.35), value: animatedProgress)
 
                 // Current calories
                 Text("\(Int(currentCalories)) kcal")
                     .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundColor(Styles.Colors.primaryText)
+                    .scaleEffect(1.0 + (animatedProgress * 0.06))
+                    .animation(.spring(response: 0.4, dampingFraction: 0.7), value: animatedProgress)
                 DatePicker("", selection: $selectedDate, displayedComponents: .date)
                     .labelsHidden()
                     .glassEffect()
@@ -76,5 +81,17 @@ struct CalorieGaugeView: View {
             }
         }
         .frame(maxWidth: 250, maxHeight: 250)
+        .onAppear {
+            // animate into the current progress
+            animatedProgress = 0.0
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.7)) {
+                animatedProgress = progress
+            }
+        }
+        .onChange(of: progress) { newValue in
+            withAnimation(.spring(response: 0.45, dampingFraction: 0.75)) {
+                animatedProgress = newValue
+            }
+        }
     }
 }

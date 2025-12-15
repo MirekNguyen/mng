@@ -5,6 +5,7 @@ struct FoodSummaryCard: View {
     let amount: Double
     let color: Color
     let unit: String
+    @State private var animatePulse: Bool = false
 
     var body: some View {
         VStack {
@@ -22,5 +23,14 @@ struct FoodSummaryCard: View {
         // .background(color.opacity(0.10))
         .glassEffect(.regular.tint(color.opacity(0.10)).interactive(), in: .rect(cornerRadius: 12))
         .clipShape(RoundedRectangle(cornerRadius: 12))
+        .scaleEffect(animatePulse ? 1.06 : 1.0)
+        .animation(.spring(response: 0.35, dampingFraction: 0.7), value: animatePulse)
+        .onChange(of: amount) { _ in
+            // Quick pulse when value changes
+            animatePulse = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                animatePulse = false
+            }
+        }
     }
 }

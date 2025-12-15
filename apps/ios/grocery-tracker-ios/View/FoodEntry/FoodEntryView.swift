@@ -9,7 +9,11 @@ struct FoodEntryView: View {
     @State private var showPhotosSheet = false
     @State private var entryToEdit: FoodEntry?
 
-    var entries: [FoodEntry] { foodEntryRepository.foodEntries ?? [] }
+    var entries: [FoodEntry] {
+        (foodEntryRepository.foodEntries ?? []).sorted {
+            $0.entryTime < $1.entryTime
+        }
+    }
     // (Keep your totalCalories / macros computed properties here)
     var totalCalories: Double { entries.reduce(0) { $0 + $1.calories } }
     var totalProtein: Double { entries.reduce(0) { $0 + $1.protein } }
@@ -45,6 +49,7 @@ struct FoodEntryView: View {
                         ActionButton(text: "Analyze", icon: "camera.fill", action: { showPhotosSheet = true })
                     }
                 }
+                .animation(.easeInOut(duration: 0.35), value: totalCalories)
                 .padding(.bottom, 20)
             }
             .listRowInsets(EdgeInsets())     // Remove default padding for header
@@ -64,6 +69,7 @@ struct FoodEntryView: View {
                     )
                     .listRowInsets(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
                     .listRowSeparator(.hidden)
+                    .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                         Button(role: .destructive) {
                             Task { await foodEntryRepository.deleteEntry(id: foodEntry.id) }
@@ -80,6 +86,7 @@ struct FoodEntryView: View {
                         .fill(.ultraThinMaterial) // Gives the glass look
                         //.glassEffect(.regular, in: .rect(cornerRadius: 0)) // Use your custom modifier here if preferred
                 )
+                .animation(.spring(response: 0.45, dampingFraction: 0.75), value: entries.count)
             }
         }
         // 2. This style creates the "Revolut" floating card look automatically

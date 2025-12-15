@@ -42,7 +42,9 @@ struct ImageUploadView: View {
                 }
             }
             .fullScreenCover(item: $repository.pendingEntry) { entryData in
-                ConfirmEntryView(data: entryData, repository: repository)
+                ConfirmEntryView(data: entryData, repository: repository, onSave: {
+                    dismiss()
+                })
             }
         }
     }
@@ -65,6 +67,8 @@ struct ImageUploadView: View {
                         .frame(width: 200, height: 200)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                         .shadow(radius: 4)
+                        .scaleEffect(1.0)
+                        .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
                 }
             }
             .padding(.horizontal, 4)
@@ -93,6 +97,8 @@ struct ImageUploadView: View {
                     if isLoading {
                         ProgressView()
                             .tint(.white)
+                            .scaleEffect(1.05)
+                            .transition(.scale)
                     } else {
                         Label("Analyze Meal", systemImage: "sparkle.magnifyingglass")
                     }

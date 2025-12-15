@@ -6,11 +6,14 @@ struct ConfirmEntryView: View {
 
     @ObservedObject var repository: FoodEntryRepository
     @Environment(\.dismiss) private var dismiss  // To close the sheet
+    
+    var onSave: () -> Void  // Callback to dismiss parent sheet
 
     // Initialize with the data from the repository
-    init(data: AnalyzedFoodData, repository: FoodEntryRepository) {
+    init(data: AnalyzedFoodData, repository: FoodEntryRepository, onSave: @escaping () -> Void = {}) {
         self._entryData = State(initialValue: data)
         self.repository = repository
+        self.onSave = onSave
     }
 
     var body: some View {
@@ -74,6 +77,8 @@ struct ConfirmEntryView: View {
                 // 3. Dismiss the sheet on success
                 await MainActor.run {
                     dismiss()
+                    // Also dismiss the parent ImageUploadView
+                    onSave()
                 }
             } catch {
                 // You could set an error message here if saving fails
