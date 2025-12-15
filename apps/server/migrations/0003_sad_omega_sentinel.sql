@@ -1,1 +1,0 @@
-ALTER TABLE "food_entries" ALTER COLUMN "fat" SET DATA TYPE numeric(10, 2);

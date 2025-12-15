@@ -1,1 +1,0 @@
-ALTER TABLE "food_entries" ALTER COLUMN "unit" SET DEFAULT 'pcs';
