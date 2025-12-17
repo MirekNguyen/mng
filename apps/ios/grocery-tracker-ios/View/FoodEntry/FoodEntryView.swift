@@ -64,46 +64,75 @@ struct FoodEntryView: View {
             // MARK: - Entries Section (Glass Card)
             // This section automatically becomes a rounded card because of .insetGrouped style
             Section {
-                ForEach(entries) { foodEntry in
-                    FoodItemRow(
-                        weight: foodEntry.formattedAmount,
-                        foodName: foodEntry.foodName,
-                        protein: "\(String(format: "%.0f", foodEntry.protein))g",
-                        calories: "\(String(format: "%.0f", foodEntry.calories)) kcal",
-                        time: foodEntry.entryTime
-                    )
-                    .listRowInsets(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
+                if entries.isEmpty {
+                    VStack(spacing: 24) {
+                        Image(systemName: "fork.knife.circle.fill")
+                            .font(.system(size: 64))
+                            .foregroundStyle(.white.opacity(0.9))
+                            .symbolEffect(.bounce, value: entries.isEmpty)
+                        
+                        VStack(spacing: 8) {
+                            Text("No entries yet")
+                                .font(.title2.weight(.semibold))
+                                .foregroundColor(.white)
+                            
+                            Text("Start tracking your meals by adding an entry or analyzing a photo")
+                                .font(.subheadline)
+                                .foregroundColor(.white.opacity(0.7))
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 32)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 60)
+                    .listRowInsets(EdgeInsets())
                     .listRowSeparator(.hidden)
-                    .transition(
-                        .asymmetric(
-                            insertion: .move(edge: .trailing).combined(with: .opacity),
-                            removal: .opacity)
+                    .listRowBackground(
+                        Rectangle()
+                            .fill(.ultraThinMaterial)
                     )
-                    .contentShape(Rectangle())
-                    .onTapGesture {
-                        selectedEntry = foodEntry
-                    }
-                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                        Button(role: .destructive) {
-                            Task { await foodEntryRepository.deleteEntry(id: foodEntry.id) }
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }.tint(.red)
+                } else {
+                    ForEach(entries) { foodEntry in
+                        FoodItemRow(
+                            weight: foodEntry.formattedAmount,
+                            foodName: foodEntry.foodName,
+                            protein: "\(String(format: "%.0f", foodEntry.protein))g",
+                            calories: "\(String(format: "%.0f", foodEntry.calories)) kcal",
+                            time: foodEntry.entryTime
+                        )
+                        .listRowInsets(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
+                        .listRowSeparator(.hidden)
+                        .transition(
+                            .asymmetric(
+                                insertion: .move(edge: .trailing).combined(with: .opacity),
+                                removal: .opacity)
+                        )
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            selectedEntry = foodEntry
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                Task { await foodEntryRepository.deleteEntry(id: foodEntry.id) }
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }.tint(.red)
 
-                        Button {
-                            entryToEdit = foodEntry
-                        } label: {
-                            Label("Edit", systemImage: "pencil")
-                        }.tint(.blue)
+                            Button {
+                                entryToEdit = foodEntry
+                            } label: {
+                                Label("Edit", systemImage: "pencil")
+                            }.tint(.blue)
+                        }
                     }
+                    // Apply Glass Effect to the rows
+                    .listRowBackground(
+                        Rectangle()
+                            .fill(.ultraThinMaterial)  // Gives the glass look
+                        //.glassEffect(.regular, in: .rect(cornerRadius: 0)) // Use your custom modifier here if preferred
+                    )
+                    .animation(.spring(response: 0.45, dampingFraction: 0.75), value: entries.count)
                 }
-                // Apply Glass Effect to the rows
-                .listRowBackground(
-                    Rectangle()
-                        .fill(.ultraThinMaterial)  // Gives the glass look
-                    //.glassEffect(.regular, in: .rect(cornerRadius: 0)) // Use your custom modifier here if preferred
-                )
-                .animation(.spring(response: 0.45, dampingFraction: 0.75), value: entries.count)
             }
         }
         // 2. This style creates the "Revolut" floating card look automatically
