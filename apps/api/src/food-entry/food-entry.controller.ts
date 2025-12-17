@@ -38,12 +38,19 @@ app.post(
 
 app.post(
   "/analyze",
-  async ({ body }): Promise<FoodAnalysisResult> => {
+  async ({ body, set }): Promise<FoodAnalysisResult> => {
     if (!body.files.length) {
       throw new ServerError("At least one image file is required.");
     }
 
-    return await FoodEntryAnalyzer.analyze(body.files);
+    // Use the new method with progress callback
+    return await FoodEntryAnalyzer.analyzeWithProgress(
+      body.files,
+      (message) => {
+        // Log progress messages on the server
+        console.log(`[Analysis Progress] ${message}`);
+      }
+    );
   },
   {
     body: t.Object({

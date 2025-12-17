@@ -1,5 +1,5 @@
 import { openai } from "@ai-sdk/openai";
-import { generateObject } from "ai";
+import { generateObject, streamText } from "ai";
 import { z } from "zod";
 import { env } from "@mng/database/env";
 import { logger } from "@mng/logger/logger";
@@ -35,6 +35,60 @@ export const FoodEntryAnalyzer = {
 
     try {
       const { object: result } = await generateObject({
+        model: google("gemini-2.0-flash-exp"),
+        schema: FoodAnalysisSchema,
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a food entry analyzer. Analyze the provided images of a meal and return a single, harmonized JSON object with the nutritional information. " +
+              "Never output anything but the JSON. No explanation.",
+          },
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text:                 "Analyze ALL these images of the SAME meal jointly for better accuracy. " +
+                "Use visual recognition, portion estimation (consider known object sizes for scale), AND if visible, any nutrition facts, ingredients lists, manufacturer stickers, or packaging for nutritional values. " +
+                "Prefer label/panel info if visible, otherwise estimate using up-to-date, regionally appropriate nutrition databases. " +
+                "Harmonize your answer if there are discrepancies. " +
+                "Output a single JSON object. Don't guess if not plausible.",
+
+              },
+              ...imageContent,
+            ],
+          },
+        ],
+      });
+
+      return result;
+    } catch (error) {
+      logger.error("AI Analysis failed");
+      logger.error(error);
+      throw new Error("Failed to analyze food images");
+    }
+  },
+  
+  async analyzeWithProgress(files: File[], onProgress: (message: string) => void): Promise<FoodAnalysisResult> {
+    if (files.length === 0) {
+      throw new Error("No files provided for analysis");
+    }
+
+    onProgress("Processing images...");
+
+    const imageContent = await Promise.all(
+      files.map(async (file) => ({
+        type: "image" as const,
+        image: await file.arrayBuffer(),
+        mimeType: file.type,
+      })),
+    );
+
+    onProgress("Analyzing food with AI...");
+
+    try {
+      const { object: result } = await generateObject({
         model: google("gemini-3-pro-preview"),
         schema: FoodAnalysisSchema,
         messages: [
@@ -62,6 +116,7 @@ export const FoodEntryAnalyzer = {
         ],
       });
 
+      onProgress("Analysis complete!");
       return result;
     } catch (error) {
       logger.error("AI Analysis failed");
