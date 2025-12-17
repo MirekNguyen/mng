@@ -3,11 +3,12 @@ import SwiftUI
 struct FoodEntryView: View {
     @EnvironmentObject var foodEntryRepository: FoodEntryRepository
     @Environment(\.scenePhase) var scenePhase: ScenePhase
-    
+
     @State var selectedDate = Date()
     @State private var showAddSheet = false
     @State private var showPhotosSheet = false
     @State private var entryToEdit: FoodEntry?
+    @State private var selectedEntry: FoodEntry?
 
     var entries: [FoodEntry] {
         (foodEntryRepository.foodEntries ?? []).sorted {
@@ -27,7 +28,7 @@ struct FoodEntryView: View {
     var body: some View {
         // 1. One List controls the whole page scrolling
         List {
-            
+
             // MARK: - Header Section
             // We put the header INSIDE the list as the first group
             Group {
@@ -37,23 +38,27 @@ struct FoodEntryView: View {
                         currentCalories: totalCalories,
                         targetCalories: 2000
                     )
-                    
+
                     HStack(spacing: 12) {
-                        FoodSummaryCard(name: "Protein", amount: totalProtein, color: .blue, unit: "g")
+                        FoodSummaryCard(
+                            name: "Protein", amount: totalProtein, color: .blue, unit: "g")
                         FoodSummaryCard(name: "Carbs", amount: totalCarbs, color: .green, unit: "g")
                         FoodSummaryCard(name: "Fat", amount: totalFat, color: .red, unit: "g")
                     }
-                    
+
                     HStack(spacing: 36) {
-                        ActionButton(text: "Add entry", icon: "plus", action: { showAddSheet = true })
-                        ActionButton(text: "Analyze", icon: "camera.fill", action: { showPhotosSheet = true })
+                        ActionButton(
+                            text: "Add entry", icon: "plus", action: { showAddSheet = true })
+                        ActionButton(
+                            text: "Analyze", icon: "camera.fill", action: { showPhotosSheet = true }
+                        )
                     }
                 }
                 .animation(.easeInOut(duration: 0.35), value: totalCalories)
                 .padding(.bottom, 20)
             }
-            .listRowInsets(EdgeInsets())     // Remove default padding for header
-            .listRowSeparator(.hidden)       // Hide divider below header
+            .listRowInsets(EdgeInsets())  // Remove default padding for header
+            .listRowSeparator(.hidden)  // Hide divider below header
             .listRowBackground(Color.clear)  // Transparent background for header
 
             // MARK: - Entries Section (Glass Card)
@@ -69,13 +74,25 @@ struct FoodEntryView: View {
                     )
                     .listRowInsets(EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16))
                     .listRowSeparator(.hidden)
-                    .transition(.asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
+                    .transition(
+                        .asymmetric(
+                            insertion: .move(edge: .trailing).combined(with: .opacity),
+                            removal: .opacity)
+                    )
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        selectedEntry = foodEntry
+                    }
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                         Button(role: .destructive) {
                             Task { await foodEntryRepository.deleteEntry(id: foodEntry.id) }
-                        } label: { Label("Delete", systemImage: "trash") }.tint(.red)
-                        
-                        Button { entryToEdit = foodEntry } label: {
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }.tint(.red)
+
+                        Button {
+                            entryToEdit = foodEntry
+                        } label: {
                             Label("Edit", systemImage: "pencil")
                         }.tint(.blue)
                     }
@@ -83,16 +100,16 @@ struct FoodEntryView: View {
                 // Apply Glass Effect to the rows
                 .listRowBackground(
                     Rectangle()
-                        .fill(.ultraThinMaterial) // Gives the glass look
-                        //.glassEffect(.regular, in: .rect(cornerRadius: 0)) // Use your custom modifier here if preferred
+                        .fill(.ultraThinMaterial)  // Gives the glass look
+                    //.glassEffect(.regular, in: .rect(cornerRadius: 0)) // Use your custom modifier here if preferred
                 )
                 .animation(.spring(response: 0.45, dampingFraction: 0.75), value: entries.count)
             }
         }
         // 2. This style creates the "Revolut" floating card look automatically
         .listStyle(.insetGrouped)
-        .scrollContentBackground(.hidden) // Removes default system gray background
-        
+        .scrollContentBackground(.hidden)  // Removes default system gray background
+
         // ... (Toolbar, Sheets, Task, etc. remain unchanged) ...
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -103,13 +120,27 @@ struct FoodEntryView: View {
             }
         }
         .fullScreenCover(isPresented: $showAddSheet, onDismiss: { Task { await loadData() } }) {
-             FoodEntryForm(selectedDate: $selectedDate).presentationBackground(.clear)
+            FoodEntryForm(selectedDate: $selectedDate).presentationBackground(.clear)
         }
         .fullScreenCover(isPresented: $showPhotosSheet, onDismiss: { Task { await loadData() } }) {
-             ImageUploadView().scrollContentBackground(.hidden).background(.ultraThinMaterial).presentationBackground(.clear)
+            ImageUploadView().scrollContentBackground(.hidden).background(.ultraThinMaterial)
+                .presentationBackground(.clear)
         }
         .fullScreenCover(item: $entryToEdit) { entry in
             NavigationStack { EditEntryForm(foodEntry: entry) }
+        }
+        .sheet(item: $selectedEntry) { entry in
+            FoodEntryDetailView(
+                foodEntry: entry,
+                onEdit: {
+                    entryToEdit = entry
+                },
+                onDelete: {
+                    Task { await foodEntryRepository.deleteEntry(id: entry.id) }
+                }
+            )
+            .presentationBackground(.ultraThinMaterial)
+
         }
         .task { await loadData() }
         .refreshable { await loadData() }

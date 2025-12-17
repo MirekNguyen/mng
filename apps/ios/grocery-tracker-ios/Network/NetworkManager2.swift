@@ -42,6 +42,18 @@ final class NetworkManager2 {
         }
 
     }
+    
+    func put<T: Encodable, U: Decodable>(endpoint: String, body: T) async throws -> U {
+        do {
+            let encoder = JSONEncoder()
+            encoder.dateEncodingStrategy = .iso8601
+            let data = try encoder.encode(body)
+            let request = try createRequest(endpoint, method: "PUT", body: data)
+            return try await sendRequest(request)
+        } catch {
+            throw NetworkError.encodingError(error)
+        }
+    }
 
     internal func createRequest(
         _ endpoint: String,

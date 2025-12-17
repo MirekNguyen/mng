@@ -1,7 +1,5 @@
-import { openai } from "@ai-sdk/openai";
-import { generateObject, streamText } from "ai";
+import { generateObject } from "ai";
 import { z } from "zod";
-import { env } from "@mng/database/env";
 import { logger } from "@mng/logger/logger";
 import { google } from "@ai-sdk/google";
 

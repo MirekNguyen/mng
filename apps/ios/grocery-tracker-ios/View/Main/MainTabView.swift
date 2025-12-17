@@ -9,31 +9,9 @@ struct MainTabView: View {
     @StateObject private var foodRepository = FoodRepository(
         networkManager: NetworkManager2(baseURL: "https://api.mirekng.com/"))
 
-    @State private var selectedTab: Int = 4
+    @State private var selectedTab: Int = 0
     var body: some View {
         TabView(selection: $selectedTab) {
-            NavigationStack {
-                ImageUploader(selectedTab: $selectedTab)
-                    .navigationTitle("Upload")
-            }
-            .tabItem { Label("Upload", systemImage: "photo") }
-            .tag(0)
-
-            NavigationStack {
-                OverviewView()
-                    .navigationTitle("Overview")
-                    .task { await networkManager.fetchReceipts() }
-            }
-            .tabItem { Label("Overview", systemImage: "doc.text.magnifyingglass") }
-            .tag(2)
-
-            NavigationStack {
-                StatsView()
-                    .navigationTitle("Stats")
-            }
-            .tabItem { Label("Stats", systemImage: "chart.bar.xaxis") }
-            .tag(3)
-
             NavigationStack {
                 ZStack {
                     // GradientBackgroundView()
@@ -49,13 +27,11 @@ struct MainTabView: View {
                 )
             }
             .tabItem { Label("Entries", systemImage: "chart.bar.xaxis") }
-            .tag(4)
-            NavigationStack {
-                CreateEventView()
-                    .navigationTitle("Stats")
-            }
-            .tabItem { Label("Stats", systemImage: "chart.bar.xaxis") }
-            .tag(5)
+            .tag(0)
+            
+            FoodListView()
+                .tabItem { Label("Foods", systemImage: "fork.knife") }
+                .tag(1)
         }
         .tint(.white)
         .toolbarBackground(Color.red, for: .tabBar)
