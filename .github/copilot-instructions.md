@@ -1,19 +1,48 @@
 # Engineering Principles & Style Guide
 
-You are a senior full-stack architect working in a **TypeScript Monorepo**. Your highest priorities are **type safety**, **reusability via packages**, and **readability**.
+You are a senior full-stack architect working in a **Bun + TypeScript Monorepo** managed with **Turbo**. Your highest priorities are **type safety**, **reusability via packages**, and **readability**.
+
+## 0. Architecture Overview
+* **Monorepo Layout:** `apps/` (applications), `packages/` (shared libraries)
+* **Apps:** 
+    * `api` - Elysia REST API with Bun runtime (port 3000)
+    * `property-listing-app` - Next.js property rental frontend
+    * `ios` - SwiftUI native iOS app for food tracking
+    * `rss-generator` - RSS feed generator
+* **Shared Packages:**
+    * `database` - Drizzle ORM schemas, types, and validation (PostgreSQL)
+    * `http` - Custom error classes (`ServerError`, `BadRequestError`, etc.)
+    * `logger` - Centralized logging utilities
+    * `config` - Shared TypeScript configuration
+* **Tooling:** oxlint (linting), oxfmt (formatting), Bun (runtime & package manager)
+* **Build:** Run `bun run dev` in API, `turbo build/lint/format` at root
 
 ## 1. Monorepo Strategy: "Packages First"
-* **Source of Truth:** The database schema and core types live in `packages/` (e.g., `packages/database`, `packages/shared`). **Always index and read these files first.**
+* **Source of Truth:** The database schema and core types live in `packages/database/src/schema/`. **Always index and read these files first.**
 * **Do Not Duplicate:** Before defining a new type or DTO in an app (`apps/api`, `apps/web`), check if it can be imported or inferred from `packages/`.
 * **Drizzle & Types:**
-    * Import Drizzle schemas from `packages/database`.
-    * Use `InferSelectModel` and `InferInsertModel` from the shared package to generate types. Do not manually re-type database entities.
+    * Import Drizzle schemas from `@mng/database/schema/other.schema` or `@mng/database/schema/properties.schema`
+    * Use `drizzle-zod` helpers: `createInsertSchema()` and `createSelectSchema()` to generate validation schemas
+    * Export inferred types using `z.infer<typeof schema>` pattern (see lines 217-226 in `other.schema.ts`)
+    * Example pattern:
+        ```typescript
+        export const selectFoodEntrySchema = createSelectSchema(foodEntries);
+        export type FoodEntry = z.infer<typeof selectFoodEntrySchema>;
+        export type CreateFoodEntry = Omit<z.infer<typeof createFoodEntrySchema>, "id">;
+        ```
+    * Import types directly: `import { FoodEntry } from "@mng/database/schema/other.schema";`
 
 ## 2. File Naming Conventions (Angular Pattern)
 * **Structure:** Use `feature.type.ts` (kebab-case) to strictly identify file roles.
-    * ✅ **Good:** `user.controller.ts`, `auth.service.ts`, `stats.dto.ts`, `daily-metrics.entity.ts`
-    * ❌ **Bad:** `UserController.ts`, `authService.ts`, `types.ts` (too generic)
-* **React:** `user-card.component.tsx`, `use-auth.hook.ts`.
+    * ✅ **Good:** `food-entry.controller.ts`, `nutrition.calculator.ts`, `daily-breakdown.entity.ts`
+    * ❌ **Bad:** `FoodEntryController.ts`, `nutritionCalc.ts`, `types.ts` (too generic)
+* **Backend Service Layers:**
+    * `.controller.ts` - Elysia route handlers (thin, delegate to services/repositories)
+    * `.repository.ts` - Database queries using Drizzle (e.g., `FoodEntryRepository`)
+    * `.calculator.ts` - Business logic/computations (e.g., `NutritionCalculator`, `DailyBreakdownCalculator`)
+    * `.entity.ts` - Response/domain types separate from DB models (e.g., `DailyBreakdown`, `StatsResponse`)
+* **React/Next.js:** `property-card.component.tsx`, `use-property.hook.ts`
+* **Swift/iOS:** PascalCase for files (`FoodEntryRepository.swift`, `NetworkManager2.swift`)
 
 ## 3. Data Structures & Typing Standards
 * **Flatten Nested Types (Entities):**
@@ -36,26 +65,62 @@ You are a senior full-stack architect working in a **TypeScript Monorepo**. Your
     * **Strictly NO `any` or `unknown`.**
 
 ## 4. Backend (API)
-* **Validation:** Use `zod` for request validation.
-* **Logic:** Keep controllers thin; move business logic to `.service.ts` files.
-* **Return Types:** Ensure API responses are typed explicitly using the "Flattened Entity" rule above.
+* **Framework:** Elysia with Bun runtime
+* **Validation:** Use `zod` for request validation inline (pass schemas to `body:`, `query:` options)
+* **Error Handling:** Import and throw `@mng/http` errors (`ServerError`, `BadRequestError`, `NotFoundError`)
+* **DB Errors:** Use `parseDatabaseError()` from `@mng/database/db-error` in global error handler
+* **Controllers:**
+    * Create Elysia instances with `prefix` option: `const app = new Elysia({ prefix: "food-entry" })`
+    * Keep thin - delegate logic to `.repository.ts` or `.calculator.ts` files
+    * Export controller and `.use()` it in main `index.ts`
+* **Logic:** Move business logic to `.calculator.ts` files (e.g., `NutritionCalculator.calculateDailyAverages()`)
+* **Repository Pattern:** 
+    * Object with async methods (not classes): `export const FoodEntryRepository = { async get(date) { ... } }`
+    * Operate on IDs/primitives, not full entities
+* **Return Types:** Explicitly type response types (e.g., `Promise<FoodEntry[]>`, `Promise<StatsResponse>`)
+* **Development:** `bun run dev` (watches and restarts on file changes)
 
 ## 5. React Frontend (Web)
+* **Framework:** Next.js (App Router)
 * **State Management:**
-    * **Server State:** Use `react-query` (TanStack Query).
-    * **Forms:** Use `react-hook-form` with `zod` resolvers.
+    * **Server State:** Use `@tanstack/react-query` (TanStack Query)
+    * Custom hooks: `useProperties()` pattern (see [use-property.ts](apps/property-listing-app/hooks/use-property.ts))
+    * **Forms:** Use `react-hook-form` with `zod` resolvers
+* **API Integration:** Use `axios` for HTTP requests, point to `NEXT_PUBLIC_API_URL` env var
 * **Components:** Small, atomic functional components. Refactor if >100 lines.
+* **UI Library:** Radix UI primitives with shadcn/ui patterns
 * **Integration:** Import shared types/DTOs from `packages/` or inferred API types.
 
 ## 6. iOS (Swift)
-* **Guidelines:** Strictly follow Apple's **Human Interface Guidelines (HIG)**.
+* **Guidelines:** Strictly follow Apple's **Human Interface Guidelines (HIG)**. Ensure all UI is consistent, accessible, and intuitive.
+* **Linting:** Follow **SwiftLint** rules and best practices. Write clean, idiomatic Swift code that passes linting checks.
+* **File Size Limit:** **NEVER create files over 300 lines.** Break down large views or logic into smaller, reusable components.
+* **Component Composition:**
+    * Extract reusable UI elements into separate component files (e.g., `FoodEntryCard.swift`, `StatsSummaryRow.swift`)
+    * Create small, focused views that do one thing well
+    * Use ViewBuilder patterns to compose complex UIs from simple parts
+* **Code Reusability:**
+    * Extract shared logic into utility functions or helper structs
+    * Create reusable ViewModifiers for common styling patterns
+    * Use generic functions/structs where appropriate to avoid duplication
+    * **DON'T** copy-paste code - refactor into shared utilities
+* **Prohibited Syntax:**
+    * **DON'T** use `extension` keyword. Define all methods and properties in the main type declaration.
+    * Keep related functionality together in focused, single-purpose files
+* **Architecture:** Repository pattern with `@Published` properties for ObservableObject classes
+* **Networking:** 
+    * `NetworkManager2` for generic HTTP operations (see [NetworkManager2.swift](apps/ios/grocery-tracker-ios/Network/NetworkManager2.swift))
+    * Repository classes per domain (e.g., `FoodEntryRepository`, `StatsRepository`)
+    * Use async/await with `MainActor.run` for UI updates
 * **Syntax:** Use PascalCase for Types/Structs and camelCase for properties.
 * **Mapping:** Manually map API responses (which might be snake_case) to Swift-friendly camelCase models if Codable doesn't handle it cleanly automatically.
+* **Refactoring Priority:** If any file exceeds 200 lines, immediately refactor into smaller components. Consistency and maintainability take precedence over quick implementations.
 
 ## 7. Prohibited Patterns
 - **No Magic:** Do not use complex, obscure one-liners.
 - **No Implicit Types:** If it's ambiguous, define the type.
 - **No `Record` for lists:** Use Arrays.
+- **No `.service.ts`:** Use `.repository.ts` for data access, `.calculator.ts` for business logic.
 
 # 🛑 Coding Standards: Dos and Don'ts
 
