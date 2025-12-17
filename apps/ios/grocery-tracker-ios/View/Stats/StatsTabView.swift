@@ -4,6 +4,9 @@ import Charts
 struct StatsTabView: View {
     @EnvironmentObject var statsRepository: StatsRepository
     @State private var selectedPeriod: TimePeriod = .week
+    @State private var selectedDate: String?
+    @State private var selectedMacro: String?
+    @State private var selectedMealType: String?
     
     var startDate: Date {
         switch selectedPeriod {
@@ -37,6 +40,9 @@ struct StatsTabView: View {
                     .padding(.top, 12)
                     .padding(.bottom, 20)
                     .onChange(of: selectedPeriod) { _, _ in
+                        selectedDate = nil
+                        selectedMacro = nil
+                        selectedMealType = nil
                         Task {
                             await statsRepository.fetchStats(startDate: startDate, endDate: Date())
                         }
@@ -59,16 +65,56 @@ struct StatsTabView: View {
                                         
                                         Chart(stats.dailyBreakdown) { day in
                                             BarMark(
-                                                x: .value("Date", formatDate(day.date)),
+                                                x: .value("Date", day.date),
                                                 y: .value("Calories", day.calories)
                                             )
                                             .foregroundStyle(.orange.gradient)
                                             .cornerRadius(4)
+                                            .opacity(selectedDate == nil ? 1.0 : (selectedDate == day.date ? 1.0 : 0.5))
+                                            
+                                            if let selectedDate, selectedDate == day.date {
+                                                RuleMark(x: .value("Date", day.date))
+                                                    .foregroundStyle(.orange.opacity(0.5))
+                                                    .lineStyle(StrokeStyle(lineWidth: 2))
+                                                    .annotation(
+                                                        position: .top,
+                                                        spacing: 8,
+                                                        overflowResolution: .init(x: .fit, y: .disabled)
+                                                    ) {
+                                                        VStack(alignment: .leading, spacing: 4) {
+                                                            Text(formatFullDate(day.date))
+                                                                .font(.caption.weight(.semibold))
+                                                                .foregroundColor(.primary)
+                                                            Text("\(Int(day.calories)) cal")
+                                                                .font(.caption2)
+                                                                .foregroundColor(.secondary)
+                                                        }
+                                                        .padding(8)
+                                                        .background(
+                                                            RoundedRectangle(cornerRadius: 8)
+                                                                .fill(.ultraThinMaterial)
+                                                                .shadow(radius: 2)
+                                                        )
+                                                    }
+                                            }
                                         }
                                         .frame(height: 240)
+                                        .chartXSelection(value: $selectedDate)
+                                        .chartXAxis {
+                                            AxisMarks(values: .stride(by: selectedPeriod == .week ? 1 : (selectedPeriod == .month ? 3 : 7))) { value in
+                                                if let dateString = value.as(String.self) {
+                                                    AxisValueLabel {
+                                                        Text(formatDate(dateString))
+                                                            .font(.caption2)
+                                                    }
+                                                    AxisGridLine()
+                                                }
+                                            }
+                                        }
                                         .chartYAxis {
                                             AxisMarks(position: .leading)
                                         }
+                                        .sensoryFeedback(.selection, trigger: selectedDate)
                                     }
                                     .padding(20)
                                     .background(
@@ -101,8 +147,38 @@ struct StatsTabView: View {
                                                 angularInset: 3
                                             )
                                             .foregroundStyle(macro.color.gradient)
+                                            .opacity(selectedMacro == nil ? 1.0 : (selectedMacro == macro.name ? 1.0 : 0.3))
                                         }
                                         .frame(height: 180)
+                                        .chartAngleSelection(value: $selectedMacro)
+                                        .onTapGesture { location in
+                                            // Cycle through macros or deselect
+                                            if let currentMacro = selectedMacro {
+                                                let currentIndex = macroData.firstIndex(where: { $0.name == currentMacro }) ?? 0
+                                                let nextIndex = (currentIndex + 1) % macroData.count
+                                                selectedMacro = nextIndex == 0 ? nil : macroData[nextIndex].name
+                                            } else {
+                                                selectedMacro = macroData[0].name
+                                            }
+                                        }
+                                        .chartBackground { proxy in
+                                            GeometryReader { geometry in
+                                                if let selectedMacro,
+                                                   let macro = macroData.first(where: { $0.name == selectedMacro }) {
+                                                    let frame = geometry[proxy.plotAreaFrame]
+                                                    VStack(spacing: 4) {
+                                                        Text(macro.name)
+                                                            .font(.headline)
+                                                            .foregroundColor(macro.color)
+                                                        Text(String(format: "%.1fg", macro.value))
+                                                            .font(.title2.weight(.bold))
+                                                            .foregroundColor(.primary)
+                                                    }
+                                                    .position(x: frame.midX, y: frame.midY)
+                                                }
+                                            }
+                                        }
+                                        .sensoryFeedback(.selection, trigger: selectedMacro)
                                         
                                         HStack(spacing: 24) {
                                             ForEach(macroData, id: \.name) { macro in
@@ -118,6 +194,15 @@ struct StatsTabView: View {
                                                         Text(String(format: "%.1fg", macro.value))
                                                             .font(.caption)
                                                             .foregroundColor(.secondary)
+                                                    }
+                                                }
+                                                .opacity(selectedMacro == nil ? 1.0 : (selectedMacro == macro.name ? 1.0 : 0.5))
+                                                .contentShape(Rectangle())
+                                                .onTapGesture {
+                                                    if selectedMacro == macro.name {
+                                                        selectedMacro = nil
+                                                    } else {
+                                                        selectedMacro = macro.name
                                                     }
                                                 }
                                             }
@@ -144,23 +229,75 @@ struct StatsTabView: View {
                                         
                                         Chart(stats.dailyBreakdown) { day in
                                             LineMark(
-                                                x: .value("Date", formatDate(day.date)),
+                                                x: .value("Date", day.date),
                                                 y: .value("Protein", day.protein)
                                             )
                                             .foregroundStyle(.blue.gradient)
                                             .lineStyle(StrokeStyle(lineWidth: 3))
-                                            .symbol(Circle().strokeBorder(lineWidth: 2))
+                                            .interpolationMethod(.catmullRom)
                                             
                                             AreaMark(
-                                                x: .value("Date", formatDate(day.date)),
+                                                x: .value("Date", day.date),
                                                 y: .value("Protein", day.protein)
                                             )
                                             .foregroundStyle(.blue.opacity(0.2).gradient)
+                                            .interpolationMethod(.catmullRom)
+                                            
+                                            if let selectedDate, selectedDate == day.date {
+                                                PointMark(
+                                                    x: .value("Date", day.date),
+                                                    y: .value("Protein", day.protein)
+                                                )
+                                                .foregroundStyle(.blue)
+                                                .symbolSize(100)
+                                                
+                                                RuleMark(x: .value("Date", day.date))
+                                                    .foregroundStyle(.blue.opacity(0.3))
+                                                    .lineStyle(StrokeStyle(lineWidth: 2))
+                                                    .annotation(
+                                                        position: .top,
+                                                        spacing: 8,
+                                                        overflowResolution: .init(x: .fit, y: .disabled)
+                                                    ) {
+                                                        VStack(spacing: 4) {
+                                                            Text(formatFullDate(day.date))
+                                                                .font(.caption.weight(.semibold))
+                                                                .foregroundColor(.primary)
+                                                            HStack(spacing: 4) {
+                                                                Text("Protein:")
+                                                                    .font(.caption2)
+                                                                    .foregroundColor(.secondary)
+                                                                Text(String(format: "%.1fg", day.protein))
+                                                                    .font(.caption.weight(.bold))
+                                                                    .foregroundColor(.blue)
+                                                            }
+                                                        }
+                                                        .padding(8)
+                                                        .background(
+                                                            RoundedRectangle(cornerRadius: 8)
+                                                                .fill(.ultraThinMaterial)
+                                                                .shadow(radius: 2)
+                                                        )
+                                                    }
+                                            }
                                         }
                                         .frame(height: 200)
+                                        .chartXSelection(value: $selectedDate)
+                                        .chartXAxis {
+                                            AxisMarks(values: .stride(by: selectedPeriod == .week ? 1 : (selectedPeriod == .month ? 3 : 7))) { value in
+                                                if let dateString = value.as(String.self) {
+                                                    AxisValueLabel {
+                                                        Text(formatDate(dateString))
+                                                            .font(.caption2)
+                                                    }
+                                                    AxisGridLine()
+                                                }
+                                            }
+                                        }
                                         .chartYAxis {
                                             AxisMarks(position: .leading)
                                         }
+                                        .sensoryFeedback(.selection, trigger: selectedDate)
                                     }
                                     .padding(20)
                                     .background(
@@ -182,16 +319,69 @@ struct StatsTabView: View {
                                         
                                         Chart(stats.mealTypeBreakdown) { mealType in
                                             BarMark(
-                                                x: .value("Meal", mealType.mealType.capitalized),
+                                                x: .value("Meal", mealType.mealType),
                                                 y: .value("Calories", mealType.averageCalories)
                                             )
                                             .foregroundStyle(.purple.gradient)
                                             .cornerRadius(4)
+                                            .opacity(selectedMealType == nil ? 1.0 : (selectedMealType == mealType.mealType ? 1.0 : 0.5))
+                                            
+                                            if let selectedMealType, selectedMealType == mealType.mealType {
+                                                RuleMark(x: .value("Meal", mealType.mealType))
+                                                    .foregroundStyle(.purple.opacity(0.3))
+                                                    .lineStyle(StrokeStyle(lineWidth: 2))
+                                                    .annotation(
+                                                        position: .top,
+                                                        spacing: 8,
+                                                        overflowResolution: .init(x: .fit, y: .disabled)
+                                                    ) {
+                                                        VStack(spacing: 4) {
+                                                            Text(mealType.mealType.capitalized)
+                                                                .font(.caption.weight(.semibold))
+                                                                .foregroundColor(.primary)
+                                                            HStack(spacing: 8) {
+                                                                VStack(alignment: .leading, spacing: 2) {
+                                                                    Text("Avg Calories")
+                                                                        .font(.caption2)
+                                                                        .foregroundColor(.secondary)
+                                                                    Text(String(format: "%.0f cal", mealType.averageCalories))
+                                                                        .font(.caption.weight(.bold))
+                                                                        .foregroundColor(.purple)
+                                                                }
+                                                                VStack(alignment: .leading, spacing: 2) {
+                                                                    Text("Percentage")
+                                                                        .font(.caption2)
+                                                                        .foregroundColor(.secondary)
+                                                                    Text(String(format: "%.1f%%", mealType.percentage))
+                                                                        .font(.caption.weight(.bold))
+                                                                        .foregroundColor(.purple)
+                                                                }
+                                                            }
+                                                        }
+                                                        .padding(8)
+                                                        .background(
+                                                            RoundedRectangle(cornerRadius: 8)
+                                                                .fill(.ultraThinMaterial)
+                                                                .shadow(radius: 2)
+                                                        )
+                                                    }
+                                            }
                                         }
                                         .frame(height: 200)
+                                        .chartXSelection(value: $selectedMealType)
+                                        .chartXAxis {
+                                            AxisMarks { value in
+                                                if let mealType = value.as(String.self) {
+                                                    AxisValueLabel {
+                                                        Text(mealType.capitalized)
+                                                    }
+                                                }
+                                            }
+                                        }
                                         .chartYAxis {
                                             AxisMarks(position: .leading)
                                         }
+                                        .sensoryFeedback(.selection, trigger: selectedMealType)
                                     }
                                     .padding(20)
                                     .background(
@@ -243,6 +433,16 @@ struct StatsTabView: View {
         let components = dateString.split(separator: "-")
         if components.count >= 2 {
             return "\(components[1])/\(components[2])"
+        }
+        return dateString
+    }
+    
+    private func formatFullDate(_ dateString: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-M-d"
+        if let date = formatter.date(from: dateString) {
+            formatter.dateFormat = "MMM d"
+            return formatter.string(from: date)
         }
         return dateString
     }
