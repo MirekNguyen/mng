@@ -11,26 +11,28 @@ struct ImageUploadView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                VStack(spacing: 24) {
+                VStack(spacing: 0) {
                     if selectedImages.isEmpty {
                         emptyStateView
+                            .frame(maxHeight: .infinity)
                     } else {
-                        imagePreviewList
+                        imagePreviewGrid
+                            .padding(.top, 16)
                     }
-
-                    Spacer()
 
                     if let error = repository.errorMessage {
                         errorView(message: error)
+                            .padding(.top, 12)
                     }
 
                     actionButtons
+                        .padding(.horizontal, 20)
+                        .padding(.vertical, 20)
                 }
-                .padding()
                 
                 // Overlay the progress view when analyzing
                 if repository.analysisStage != .idle {
-                    Color.black.opacity(0.3)
+                    Color.black.opacity(0.4)
                         .ignoresSafeArea()
                         .transition(.opacity)
                     
@@ -43,8 +45,13 @@ struct ImageUploadView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
+                    Button(action: {
                         dismiss()
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.title2)
+                            .foregroundStyle(.secondary)
+                            .symbolRenderingMode(.hierarchical)
                     }
                     .disabled(repository.analysisStage != .idle && repository.analysisStage != .failed(error: ""))
                 }
@@ -63,34 +70,90 @@ struct ImageUploadView: View {
     }
 
     private var emptyStateView: some View {
-        ContentUnavailableView(
-            "No Images Selected",
-            systemImage: "photo.badge.plus",
-            description: Text("Select photos of your food to begin analysis.")
-        )
+        VStack(spacing: 20) {
+            Image(systemName: "camera.metering.center.weighted")
+                .font(.system(size: 72))
+                .foregroundStyle(.blue.gradient)
+                .symbolEffect(.pulse)
+            
+            VStack(spacing: 8) {
+                Text("No Images Selected")
+                    .font(.title2.bold())
+                    .foregroundColor(.primary)
+                
+                Text("Select photos of your food to begin analysis")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 40)
+            }
+        }
+        .padding()
     }
 
-    private var imagePreviewList: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 12) {
-                ForEach(selectedImages, id: \.self) { image in
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: 200, height: 200)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                        .shadow(radius: 4)
-                        .scaleEffect(1.0)
-                        .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
+    private var imagePreviewGrid: some View {
+        ScrollView {
+            LazyVGrid(
+                columns: [
+                    GridItem(.flexible(), spacing: 12),
+                    GridItem(.flexible(), spacing: 12)
+                ],
+                spacing: 12
+            ) {
+                ForEach(Array(selectedImages.enumerated()), id: \.offset) { index, image in
+                    GeometryReader { geo in
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: geo.size.width, height: geo.size.width)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12)
+                                    .stroke(Color(.systemGray5), lineWidth: 1)
+                            )
+                            .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+                            .overlay(alignment: .topTrailing) {
+                                Text("\(index + 1)")
+                                    .font(.caption.bold())
+                                    .foregroundColor(.white)
+                                    .padding(6)
+                                    .background(
+                                        Circle()
+                                            .fill(Color.blue)
+                                            .shadow(color: .black.opacity(0.2), radius: 2)
+                                    )
+                                    .padding(8)
+                            }
+                    }
+                    .aspectRatio(1, contentMode: .fit)
+                    .transition(.asymmetric(
+                        insertion: .scale.combined(with: .opacity),
+                        removal: .opacity
+                    ))
                 }
             }
-            .padding(.horizontal, 4)
+            .padding(.horizontal, 20)
+            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedImages.count)
         }
-        .frame(height: 220)
     }
 
     private var actionButtons: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 12) {
+            if !selectedImages.isEmpty {
+                HStack(spacing: 8) {
+                    Image(systemName: "photo.stack")
+                        .foregroundColor(.secondary)
+                    Text("\(selectedImages.count) image\(selectedImages.count == 1 ? "" : "s") selected")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    Text("Max 5")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                .padding(.horizontal, 4)
+            }
+            
             PhotosPicker(
                 selection: $selectedItems,
                 maxSelectionCount: 5,

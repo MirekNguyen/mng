@@ -7,6 +7,9 @@ struct ImageUploader: View {
     @State private var selectedItem: PhotosPickerItem? = nil
     @State private var selectedImage: UIImage? = nil
     @State private var showError: Bool = false
+    @State private var isLoadingImage: Bool = false
+    @State private var analysisStage: AnalysisStage = .idle
+    @State private var showAnalysisOverlay: Bool = false
 
     var body: some View {
         ScrollView {
@@ -37,13 +40,24 @@ struct ImageUploader: View {
                         .fill(Color(.systemBackground))
                         .shadow(color: .black.opacity(0.07), radius: 12, x: 0, y: 4)
 
-                    if let image = selectedImage {
+                    if isLoadingImage {
+                        VStack(spacing: 16) {
+                            ProgressView()
+                                .scaleEffect(1.5)
+                                .tint(.accentColor)
+                            Text("Loading image...")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        .padding(.vertical, 32)
+                    } else if let image = selectedImage {
                         Image(uiImage: image)
                             .resizable()
                             .scaledToFit()
                             .frame(height: 220)
                             .clipShape(RoundedRectangle(cornerRadius: 16))
                             .padding()
+                            .transition(.opacity.combined(with: .scale(scale: 0.95)))
                     } else {
                         VStack {
                             Image(systemName: "photo.on.rectangle.angled")
@@ -65,6 +79,7 @@ struct ImageUploader: View {
                     CameraButton(
                         selectedImage: $selectedImage,
                         showError: $showError,
+                        isLoadingImage: $isLoadingImage,
                         resetNetwork: { networkManager.errorMessage = nil }
                     )
                     PhotosPicker(
@@ -83,20 +98,56 @@ struct ImageUploader: View {
                         .foregroundColor(Color.accentColor)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
+                    .disabled(isLoadingImage)
+                    .opacity(isLoadingImage ? 0.6 : 1.0)
 
                     if let image = selectedImage {
-                        if networkManager.isLoading {
-                            ProgressView("Analyzing...")
-                                .progressViewStyle(CircularProgressViewStyle(tint: .accentColor))
-                                .padding()
-                        } else {
+                        if !networkManager.isLoading {
                             Button(action: {
                                 Task {
+                                    withAnimation(.easeInOut(duration: 0.3)) {
+                                        showAnalysisOverlay = true
+                                        analysisStage = .preparing
+                                    }
+                                    
+                                    // Simulate preparation phase
+                                    try? await Task.sleep(nanoseconds: 500_000_000)
+                                    
+                                    withAnimation {
+                                        analysisStage = .uploading(progress: 0.0)
+                                    }
+                                    
                                     await networkManager.uploadReceiptImage(image)
+                                    
                                     if networkManager.errorMessage == nil {
+                                        withAnimation {
+                                            analysisStage = .analyzing
+                                        }
+                                        
+                                        try? await Task.sleep(nanoseconds: 800_000_000)
+                                        
+                                        withAnimation {
+                                            analysisStage = .completed
+                                        }
+                                        
+                                        try? await Task.sleep(nanoseconds: 600_000_000)
+                                        
+                                        withAnimation(.easeInOut(duration: 0.3)) {
+                                            showAnalysisOverlay = false
+                                        }
+                                        
                                         selectedTab = 1
                                     } else {
-                                        withAnimation { showError = true }
+                                        withAnimation {
+                                            analysisStage = .failed(error: networkManager.errorMessage ?? "Unknown error")
+                                        }
+                                        
+                                        try? await Task.sleep(nanoseconds: 1_500_000_000)
+                                        
+                                        withAnimation(.easeInOut(duration: 0.3)) {
+                                            showAnalysisOverlay = false
+                                            showError = true
+                                        }
                                     }
                                 }
                             }) {
@@ -151,16 +202,39 @@ struct ImageUploader: View {
         .onChange(of: selectedItem) {
             if let selectedItem {
                 Task {
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        isLoadingImage = true
+                    }
+                    
                     if let data = try? await selectedItem.loadTransferable(type: Data.self),
                         let uiImage = UIImage(data: data)
                     {
-                        selectedImage = uiImage
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            selectedImage = uiImage
+                            isLoadingImage = false
+                        }
                         networkManager.errorMessage = nil
                         showError = false
+                    } else {
+                        withAnimation(.easeInOut(duration: 0.2)) {
+                            isLoadingImage = false
+                        }
                     }
                 }
             }
         }
         .animation(.easeInOut, value: showError)
+        .overlay {
+            if showAnalysisOverlay {
+                ZStack {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+                        .transition(.opacity)
+                    
+                    AnalysisProgressView(stage: analysisStage)
+                        .transition(.scale.combined(with: .opacity))
+                }
+            }
+        }
     }
 }

@@ -52,12 +52,22 @@ struct EditEntryForm: View {
         .navigationTitle("Edit entry")
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") { dismiss() }
+                Button(action: { dismiss() }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(.secondary)
+                        .symbolRenderingMode(.hierarchical)
+                }
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button("Save") {
+                Button(action: {
                     editEntry()
                     dismiss()
+                }) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(.blue)
+                        .symbolRenderingMode(.hierarchical)
                 }
             }
         }

@@ -37,12 +37,18 @@ struct ConfirmEntryView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(action: { dismiss() }) {
-                        Label("Cancel", systemImage: "xmark.circle.fill")
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.title2)
+                            .foregroundStyle(.secondary)
+                            .symbolRenderingMode(.hierarchical)
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button(action: { saveEntry() }) {
-                        Label("Save", systemImage: "checkmark.circle.fill")
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.title2)
+                            .foregroundStyle(.blue)
+                            .symbolRenderingMode(.hierarchical)
                     }
                 }
             }
