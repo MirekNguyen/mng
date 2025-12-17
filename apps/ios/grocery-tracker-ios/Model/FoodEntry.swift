@@ -90,7 +90,7 @@ struct EditFoodEntry: Codable {
 /// A custom struct to decode the analysis response from the server.
 /// Make it Hashable so we can use it with .sheet(item: ...).
 struct AnalyzedFoodData: Identifiable, Codable, Hashable {
-    let id = UUID()
+    let id: UUID
     var name: String
     var calories: Double
     var protein: Double

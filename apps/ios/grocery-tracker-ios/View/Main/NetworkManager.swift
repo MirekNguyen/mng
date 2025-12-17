@@ -325,7 +325,7 @@ extension NetworkManager {
             }
             return created
         } catch {
-            await handle(error: error)
+            handle(error: error)
             return nil
         }
     }

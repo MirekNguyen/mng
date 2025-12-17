@@ -1,11 +1,10 @@
 import Foundation
 
 struct Stats: Codable {
-    let totalCalories: Double
-    let totalProtein: Double
-    let totalCarbs: Double
-    let totalFat: Double
-    let averageCaloriesPerDay: Double
+    let averageCalories: Double
+    let averageProtein: Double
+    let averageCarbs: Double
+    let averageFat: Double
     let entryCount: Int
     let dailyBreakdown: [DailyStats]
     let mealTypeBreakdown: [MealTypeStats]
@@ -24,6 +23,7 @@ struct DailyStats: Codable, Identifiable {
 struct MealTypeStats: Codable, Identifiable {
     var id: String { mealType }
     let mealType: String
-    let calories: Double
+    let averageCalories: Double
+    let percentage: Double
     let entryCount: Int
 }

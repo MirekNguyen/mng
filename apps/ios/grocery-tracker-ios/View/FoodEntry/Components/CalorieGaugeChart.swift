@@ -88,7 +88,7 @@ struct CalorieGaugeView: View {
                 animatedProgress = progress
             }
         }
-        .onChange(of: progress) { newValue in
+        .onChange(of: progress) { _, newValue in
             withAnimation(.spring(response: 0.45, dampingFraction: 0.75)) {
                 animatedProgress = newValue
             }

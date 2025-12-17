@@ -83,14 +83,14 @@ struct StatsTabView: View {
                                 
                                 // Macros Breakdown Chart
                                 VStack(alignment: .leading, spacing: 12) {
-                                    Text("Macros Distribution")
+                                    Text("Average Daily Macros")
                                         .font(.title3.weight(.semibold))
                                         .foregroundColor(.primary)
                                     
                                     let macroData = [
-                                        (name: "Protein", value: stats.totalProtein, color: Color.blue),
-                                        (name: "Carbs", value: stats.totalCarbs, color: Color.green),
-                                        (name: "Fat", value: stats.totalFat, color: Color.red)
+                                        (name: "Protein", value: stats.averageProtein, color: Color.blue),
+                                        (name: "Carbs", value: stats.averageCarbs, color: Color.green),
+                                        (name: "Fat", value: stats.averageFat, color: Color.red)
                                     ]
                                     
                                     VStack(spacing: 20) {
@@ -176,14 +176,14 @@ struct StatsTabView: View {
                                 // Meal Distribution
                                 if !stats.mealTypeBreakdown.isEmpty {
                                     VStack(alignment: .leading, spacing: 12) {
-                                        Text("Calories by Meal")
+                                        Text("Average Calories by Meal")
                                             .font(.title3.weight(.semibold))
                                             .foregroundColor(.primary)
                                         
                                         Chart(stats.mealTypeBreakdown) { mealType in
                                             BarMark(
                                                 x: .value("Meal", mealType.mealType.capitalized),
-                                                y: .value("Calories", mealType.calories)
+                                                y: .value("Calories", mealType.averageCalories)
                                             )
                                             .foregroundStyle(.purple.gradient)
                                             .cornerRadius(4)
@@ -306,7 +306,7 @@ struct MealTypeRow: View {
             
             Spacer()
             
-            Text(String(format: "%.0f cal", mealType.calories))
+            Text(String(format: "%.0f cal", mealType.averageCalories))
                 .font(.body)
                 .foregroundColor(.secondary)
         }

@@ -25,7 +25,7 @@ struct FoodSummaryCard: View {
         .clipShape(RoundedRectangle(cornerRadius: 12))
         .scaleEffect(animatePulse ? 1.06 : 1.0)
         .animation(.spring(response: 0.35, dampingFraction: 0.7), value: animatePulse)
-        .onChange(of: amount) { _ in
+        .onChange(of: amount) { _, _ in
             // Quick pulse when value changes
             animatePulse = true
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
