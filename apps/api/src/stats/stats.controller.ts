@@ -9,11 +9,10 @@ import { DailyBreakdown } from "./daily-breakdown.entity";
 import { MealTypeBreakdown } from "./meal-type-breakdown.entity";
 
 export type StatsResponse = {
-  totalCalories: number;
-  totalProtein: number;
-  totalCarbs: number;
-  totalFat: number;
-  averageCaloriesPerDay: number;
+  averageCalories: number;
+  averageProtein: number;
+  averageCarbs: number;
+  averageFat: number;
   entryCount: number;
   dailyBreakdown: DailyBreakdown[];
   mealTypeBreakdown: MealTypeBreakdown[];
@@ -38,7 +37,7 @@ app.get(
       DateTime.fromISO(endDate).diff(DateTime.fromISO(startDate), "days").days +
       1;
 
-    const nutritionTotals = NutritionCalculator.calculateTotals(
+    const dailyAverages = NutritionCalculator.calculateDailyAverages(
       entries,
       dayCount,
     );
@@ -46,7 +45,7 @@ app.get(
     const mealTypeBreakdown = MealTypeCalculator.calculate(entries);
 
     return {
-      ...nutritionTotals,
+      ...dailyAverages,
       entryCount: entries.length,
       dailyBreakdown,
       mealTypeBreakdown,

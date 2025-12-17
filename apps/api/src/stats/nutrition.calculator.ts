@@ -1,15 +1,14 @@
 import { FoodEntry } from "@mng/database/schema/other.schema";
 
-export type NutritionTotals = {
-  totalCalories: number;
-  totalProtein: number;
-  totalCarbs: number;
-  totalFat: number;
-  averageCaloriesPerDay: number;
+export type DailyAverages = {
+  averageCalories: number;
+  averageProtein: number;
+  averageCarbs: number;
+  averageFat: number;
 };
 
 export const NutritionCalculator = {
-  calculateTotals(entries: FoodEntry[], dayCount: number): NutritionTotals {
+  calculateDailyAverages(entries: FoodEntry[], dayCount: number): DailyAverages {
     const totalCalories = entries.reduce(
       (sum, entry) => sum + entry.calories,
       0,
@@ -18,15 +17,20 @@ export const NutritionCalculator = {
     const totalCarbs = entries.reduce((sum, entry) => sum + entry.carbs, 0);
     const totalFat = entries.reduce((sum, entry) => sum + entry.fat, 0);
 
-    const averageCaloriesPerDay =
-      dayCount > 0 ? totalCalories / dayCount : 0;
+    if (dayCount === 0) {
+      return {
+        averageCalories: 0,
+        averageProtein: 0,
+        averageCarbs: 0,
+        averageFat: 0,
+      };
+    }
 
     return {
-      totalCalories,
-      totalProtein,
-      totalCarbs,
-      totalFat,
-      averageCaloriesPerDay,
+      averageCalories: totalCalories / dayCount,
+      averageProtein: totalProtein / dayCount,
+      averageCarbs: totalCarbs / dayCount,
+      averageFat: totalFat / dayCount,
     };
   },
 };
