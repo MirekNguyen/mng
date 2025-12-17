@@ -114,7 +114,7 @@ struct AnalysisProgressView: View {
     VStack(spacing: 40) {
         AnalysisProgressView(stage: .preparing)
         AnalysisProgressView(stage: .uploading(progress: 0.5))
-        AnalysisProgressView(stage: .analyzing)
+        AnalysisProgressView(stage: .analyzing(message: "Identifying food items..."))
         AnalysisProgressView(stage: .completed)
     }
 }

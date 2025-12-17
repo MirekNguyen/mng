@@ -121,7 +121,7 @@ struct ImageUploader: View {
                                     
                                     if networkManager.errorMessage == nil {
                                         withAnimation {
-                                            analysisStage = .analyzing
+                                            analysisStage = .analyzing(message: "Processing receipt data...")
                                         }
                                         
                                         try? await Task.sleep(nanoseconds: 800_000_000)

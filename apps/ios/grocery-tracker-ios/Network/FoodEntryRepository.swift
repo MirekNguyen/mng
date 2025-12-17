@@ -96,28 +96,20 @@ final class FoodEntryRepository: ObservableObject {
         try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
 
         // 1. Convert [UIImage] to [ImageUploadData]
-        //
-        //    HERE IS THE FIX:
-        //    The type must be [ImageUploadData], not [UIImage]
-        //
         let imagesToUpload: [ImageUploadData] = images.compactMap { image in
             // Compress image to JPEG
             guard let imageData = image.jpegData(compressionQuality: 0.8) else {
                 return nil
             }
 
-            // Create the upload data structure
             return ImageUploadData(
                 data: imageData,
-                fileName: "\(UUID().uuidString).jpg",  // Create a unique filename
+                fileName: "\(UUID().uuidString).jpg",
                 mimeType: "image/jpeg"
             )
         }
 
-        // Check if any images failed to convert
         if imagesToUpload.isEmpty && !images.isEmpty {
-            // This check is now more robust:
-            // If we had images but none converted, it's an error.
             await MainActor.run {
                 self.errorMessage = "An error occurred while preparing images."
                 self.analysisStage = .failed(error: "Failed to prepare images")
@@ -137,18 +129,49 @@ final class FoodEntryRepository: ObservableObject {
                 await MainActor.run {
                     self.analysisStage = .uploading(progress: progress)
                 }
-                try? await Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
+                try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
             }
             
-            // Update stage: analyzing
+            // Update stage: analyzing with detailed messages
+            let analysisMessages = [
+                "Processing image data...",
+                "Identifying food items...",
+                "Analyzing portions and ingredients...",
+                "Calculating nutritional values...",
+                "Estimating calories and macros...",
+                "Finalizing analysis..."
+            ]
+            
+            // Start analysis phase
             await MainActor.run {
-                self.analysisStage = .analyzing
+                self.analysisStage = .analyzing(message: analysisMessages[0])
+            }
+            
+            // Create a background task to cycle through messages
+            let messageTask = Task {
+                for (index, message) in analysisMessages.enumerated() {
+                    // Skip first message since we already set it
+                    guard index > 0 else { continue }
+                    
+                    // Wait 4-5 seconds between messages to simulate progress
+                    try? await Task.sleep(nanoseconds: UInt64.random(in: 4_000_000_000...5_000_000_000))
+                    
+                    await MainActor.run {
+                        // Only update if still analyzing
+                        if case .analyzing = self.analysisStage {
+                            self.analysisStage = .analyzing(message: message)
+                        }
+                    }
+                }
             }
 
             let newEntry: AnalyzedFoodData? = try await networkManager.postImages(
                 endpoint: "/food-entry/analyze",
                 images: imagesToUpload
             )
+            
+            // Cancel the message task once we have results
+            messageTask.cancel()
 
             print("✅ Analysis successful. Server response:", newEntry ?? "Server returned null")
 
@@ -158,9 +181,8 @@ final class FoodEntryRepository: ObservableObject {
             }
             
             // Brief delay to show completion state
-            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+            try? await Task.sleep(nanoseconds: 600_000_000) // 0.6 seconds
 
-            // 2. Instead of appending, publish the pending entry
             if let newEntry = newEntry {
                 await MainActor.run {
                     self.pendingEntry = newEntry
