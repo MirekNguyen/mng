@@ -28,7 +28,7 @@ struct MainTabView: View {
                         .edgesIgnoringSafeArea(.all)
                 )
             }
-            .tabItem { Label("Entries", systemImage: "chart.bar.xaxis") }
+            .tabItem { Label("Home", systemImage: "house.fill") }
             .tag(0)
             
             FoodListView()
