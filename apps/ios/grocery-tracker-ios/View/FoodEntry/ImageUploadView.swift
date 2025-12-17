@@ -7,26 +7,38 @@ struct ImageUploadView: View {
 
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedImages: [UIImage] = []
-    @State private var isLoading: Bool = false
 
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
-                if selectedImages.isEmpty {
-                    emptyStateView
-                } else {
-                    imagePreviewList
+            ZStack {
+                VStack(spacing: 24) {
+                    if selectedImages.isEmpty {
+                        emptyStateView
+                    } else {
+                        imagePreviewList
+                    }
+
+                    Spacer()
+
+                    if let error = repository.errorMessage {
+                        errorView(message: error)
+                    }
+
+                    actionButtons
                 }
-
-                Spacer()
-
-                if let error = repository.errorMessage {
-                    errorView(message: error)
+                .padding()
+                
+                // Overlay the progress view when analyzing
+                if repository.analysisStage != .idle {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
+                        .transition(.opacity)
+                    
+                    AnalysisProgressView(stage: repository.analysisStage)
+                        .transition(.scale.combined(with: .opacity))
                 }
-
-                actionButtons
             }
-            .padding()
+            .animation(.easeInOut(duration: 0.3), value: repository.analysisStage != .idle)
             .navigationTitle("Analyze New Meal")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -34,6 +46,7 @@ struct ImageUploadView: View {
                     Button("Cancel") {
                         dismiss()
                     }
+                    .disabled(repository.analysisStage != .idle && repository.analysisStage != .failed(error: ""))
                 }
             }
             .onChange(of: selectedItems) { _, newItems in
@@ -91,24 +104,16 @@ struct ImageUploadView: View {
             }
             .buttonStyle(.bordered)
             .controlSize(.large)
+            .disabled(repository.analysisStage != .idle)
 
             Button(action: analyzeSelectedImages) {
-                Group {
-                    if isLoading {
-                        ProgressView()
-                            .tint(.white)
-                            .scaleEffect(1.05)
-                            .transition(.scale)
-                    } else {
-                        Label("Analyze Meal", systemImage: "sparkle.magnifyingglass")
-                    }
-                }
-                .frame(maxWidth: .infinity)
+                Label("Analyze Meal", systemImage: "sparkle.magnifyingglass")
+                    .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
             .tint(.blue)
             .controlSize(.large)
-            .disabled(selectedImages.isEmpty || isLoading)
+            .disabled(selectedImages.isEmpty || repository.analysisStage != .idle)
         }
     }
 
@@ -149,12 +154,10 @@ struct ImageUploadView: View {
     }
 
     private func analyzeSelectedImages() {
-        isLoading = true
         Task {
             await repository.analyzeImages(images: selectedImages)
 
             await MainActor.run {
-                isLoading = false
                 if repository.errorMessage == nil {
                     selectedItems = []
                     selectedImages = []

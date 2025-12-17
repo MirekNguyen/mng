@@ -6,6 +6,7 @@ final class FoodEntryRepository: ObservableObject {
     @Published var foodEntries: [FoodEntry]?
     @Published var errorMessage: String?
     @Published var pendingEntry: AnalyzedFoodData?
+    @Published var analysisStage: AnalysisStage = .idle
 
     private let networkManager: NetworkManager2
 
@@ -85,6 +86,15 @@ final class FoodEntryRepository: ObservableObject {
             return
         }
 
+        // Update stage: preparing
+        await MainActor.run {
+            self.analysisStage = .preparing
+            self.errorMessage = nil
+        }
+        
+        // Simulate a brief delay for preparing (compress images)
+        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+
         // 1. Convert [UIImage] to [ImageUploadData]
         //
         //    HERE IS THE FIX:
@@ -110,15 +120,29 @@ final class FoodEntryRepository: ObservableObject {
             // If we had images but none converted, it's an error.
             await MainActor.run {
                 self.errorMessage = "An error occurred while preparing images."
+                self.analysisStage = .failed(error: "Failed to prepare images")
             }
             return
         }
 
         // 2. Make the network call
         do {
-            // Clear the error message before starting the request
+            // Update stage: uploading with progress simulation
             await MainActor.run {
-                self.errorMessage = nil
+                self.analysisStage = .uploading(progress: 0.0)
+            }
+            
+            // Simulate upload progress
+            for progress in stride(from: 0.0, through: 1.0, by: 0.2) {
+                await MainActor.run {
+                    self.analysisStage = .uploading(progress: progress)
+                }
+                try? await Task.sleep(nanoseconds: 200_000_000) // 0.2 seconds
+            }
+            
+            // Update stage: analyzing
+            await MainActor.run {
+                self.analysisStage = .analyzing
             }
 
             let newEntry: AnalyzedFoodData? = try await networkManager.postImages(
@@ -128,19 +152,30 @@ final class FoodEntryRepository: ObservableObject {
 
             print("✅ Analysis successful. Server response:", newEntry ?? "Server returned null")
 
+            // Update stage: completed
+            await MainActor.run {
+                self.analysisStage = .completed
+            }
+            
+            // Brief delay to show completion state
+            try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+
             // 2. Instead of appending, publish the pending entry
             if let newEntry = newEntry {
                 await MainActor.run {
                     self.pendingEntry = newEntry
+                    self.analysisStage = .idle
                 }
             } else {
                 await MainActor.run {
                     self.errorMessage = "Analysis complete, but no food data could be extracted."
+                    self.analysisStage = .failed(error: "No food data found")
                 }
             }
         } catch {
             await MainActor.run {
                 self.errorMessage = error.localizedDescription
+                self.analysisStage = .failed(error: error.localizedDescription)
             }
         }
     }
