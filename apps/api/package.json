@@ -13,6 +13,7 @@
     "lint:fix": "oxlint --type-aware --fix-dangerously ./src"
   },
   "dependencies": {
+    "@ai-sdk/google": "^2.0.48",
     "@ai-sdk/openai": "^2.0.86",
     "@mng/database": "*",
     "@mng/http": "*",

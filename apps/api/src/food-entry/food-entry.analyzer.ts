@@ -3,6 +3,7 @@ import { generateObject } from "ai";
 import { z } from "zod";
 import { env } from "@mng/database/env";
 import { logger } from "@mng/logger/logger";
+import { google } from "@ai-sdk/google";
 
 export const FoodAnalysisSchema = z.object({
   name: z.string().describe("The common name of the food or meal."),
@@ -34,7 +35,7 @@ export const FoodEntryAnalyzer = {
 
     try {
       const { object: result } = await generateObject({
-        model: openai(env.OPENAI_MODEL),
+        model: google("gemini-3-pro-preview"),
         schema: FoodAnalysisSchema,
         messages: [
           {
