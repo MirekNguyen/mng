@@ -2,14 +2,26 @@ import SwiftUI
 
 struct AnalysisProgressView: View {
     let stage: AnalysisStage
+    @State private var rotation: Double = 0
     
     var body: some View {
         VStack(spacing: 20) {
             // Icon with animation
             ZStack {
+                // Rotating background ring for analyzing state
+                if case .analyzing = stage {
+                    Circle()
+                        .stroke(iconColor.opacity(0.3), lineWidth: 3)
+                        .frame(width: 90, height: 90)
+                        .rotationEffect(.degrees(rotation))
+                        .animation(.linear(duration: 2).repeatForever(autoreverses: false), value: rotation)
+                }
+                
                 Circle()
                     .fill(iconBackgroundColor)
                     .frame(width: 80, height: 80)
+                    .scaleEffect(isAnimated ? 1.05 : 1.0)
+                    .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: isAnimated)
                 
                 Image(systemName: stage.systemImage)
                     .font(.system(size: 36, weight: .medium))
@@ -17,6 +29,11 @@ struct AnalysisProgressView: View {
                     .symbolEffect(.pulse, options: .repeating, value: isAnimated)
             }
             .padding(.top, 8)
+            .onAppear {
+                if case .analyzing = stage {
+                    rotation = 360
+                }
+            }
             
             // Title
             Text(stage.title)
@@ -32,7 +49,7 @@ struct AnalysisProgressView: View {
                     .progressViewStyle(LinearProgressViewStyle(tint: progressTint))
                     .frame(width: 240)
                     .scaleEffect(x: 1, y: 2, anchor: .center)
-                    .animation(.easeInOut(duration: 0.3), value: stage.progress)
+                    .animation(.spring(response: 0.6, dampingFraction: 0.8), value: stage.progress)
             }
             
             // Message
@@ -43,6 +60,7 @@ struct AnalysisProgressView: View {
                 .lineLimit(2)
                 .frame(maxWidth: 280)
                 .padding(.horizontal)
+                .animation(.easeInOut(duration: 0.2), value: stage.message)
         }
         .padding(24)
         .background(
@@ -114,7 +132,7 @@ struct AnalysisProgressView: View {
     VStack(spacing: 40) {
         AnalysisProgressView(stage: .preparing)
         AnalysisProgressView(stage: .uploading(progress: 0.5))
-        AnalysisProgressView(stage: .analyzing(message: "Identifying food items..."))
+        AnalysisProgressView(stage: .analyzing(message: "Identifying food items...", progress: 0.3))
         AnalysisProgressView(stage: .completed)
     }
 }

@@ -142,16 +142,21 @@ final class FoodEntryRepository: ObservableObject {
                 "Finalizing analysis..."
             ]
             
-            // Start analysis phase
+            // Start analysis phase with initial progress
             await MainActor.run {
-                self.analysisStage = .analyzing(message: analysisMessages[0])
+                self.analysisStage = .analyzing(message: analysisMessages[0], progress: 0.0)
             }
             
-            // Create a background task to cycle through messages
+            // Create a background task to cycle through messages with progress
             let messageTask = Task {
+                let totalMessages = analysisMessages.count
                 for (index, message) in analysisMessages.enumerated() {
                     // Skip first message since we already set it
                     guard index > 0 else { continue }
+                    
+                    // Calculate progress: gradually increase from 0.0 to 0.95
+                    let messageProgress = Double(index) / Double(totalMessages - 1)
+                    let adjustedProgress = min(messageProgress * 0.95, 0.95)
                     
                     // Wait 4-5 seconds between messages to simulate progress
                     try? await Task.sleep(nanoseconds: UInt64.random(in: 4_000_000_000...5_000_000_000))
@@ -159,7 +164,7 @@ final class FoodEntryRepository: ObservableObject {
                     await MainActor.run {
                         // Only update if still analyzing
                         if case .analyzing = self.analysisStage {
-                            self.analysisStage = .analyzing(message: message)
+                            self.analysisStage = .analyzing(message: message, progress: adjustedProgress)
                         }
                     }
                 }

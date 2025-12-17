@@ -4,7 +4,7 @@ enum AnalysisStage: Equatable {
     case idle
     case preparing
     case uploading(progress: Double)
-    case analyzing(message: String)
+    case analyzing(message: String, progress: Double)
     case completed
     case failed(error: String)
     
@@ -33,7 +33,7 @@ enum AnalysisStage: Equatable {
             return "Optimizing images for analysis..."
         case .uploading(let progress):
             return "Uploading to server... \(Int(progress * 100))%"
-        case .analyzing(let message):
+        case .analyzing(let message, _):
             return message
         case .completed:
             return "Analysis complete!"
@@ -67,8 +67,8 @@ enum AnalysisStage: Equatable {
             return 0.15
         case .uploading(let progress):
             return 0.15 + (progress * 0.25)  // 15% to 40%
-        case .analyzing:
-            return 0.70  // Show as 70% during analysis
+        case .analyzing(_, let progress):
+            return 0.40 + (progress * 0.55)  // 40% to 95% during analysis
         case .completed:
             return 1.0
         case .failed:
