@@ -1,5 +1,6 @@
 export type MealTypeBreakdown = {
   mealType: string;
-  calories: number;
+  averageCalories: number;
+  percentage: number;
   entryCount: number;
 };
