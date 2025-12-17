@@ -53,7 +53,7 @@ enum AnalysisStage: Equatable {
         case .analyzing:
             return "sparkle.magnifyingglass"
         case .completed:
-            return "checkmark.circle.fill"
+            return "checkmark"
         case .failed:
             return "exclamationmark.triangle.fill"
         }

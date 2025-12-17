@@ -53,7 +53,7 @@ struct EditEntryForm: View {
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button(action: { dismiss() }) {
-                    Image(systemName: "xmark.circle.fill")
+                    Image(systemName: "xmark")
                         .font(.title2)
                         .foregroundStyle(.secondary)
                         .symbolRenderingMode(.hierarchical)
@@ -64,7 +64,7 @@ struct EditEntryForm: View {
                     editEntry()
                     dismiss()
                 }) {
-                    Image(systemName: "checkmark.circle.fill")
+                    Image(systemName: "checkmark")
                         .font(.title2)
                         .foregroundStyle(.blue)
                         .symbolRenderingMode(.hierarchical)

@@ -181,7 +181,7 @@ struct NewReceiptTab: View {
                         Button {
                             withAnimation { showError = false }
                         } label: {
-                            Image(systemName: "xmark.circle.fill")
+                            Image(systemName: "xmark")
                                 .foregroundColor(.white)
                         }
                     }

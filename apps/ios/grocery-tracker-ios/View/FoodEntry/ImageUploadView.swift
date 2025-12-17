@@ -48,7 +48,7 @@ struct ImageUploadView: View {
                     Button(action: {
                         dismiss()
                     }) {
-                        Image(systemName: "xmark.circle.fill")
+                        Image(systemName: "xmark")
                             .font(.title2)
                             .foregroundStyle(.secondary)
                             .symbolRenderingMode(.hierarchical)
