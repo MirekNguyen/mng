@@ -19,20 +19,34 @@ struct ConfirmEntryView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("Analysis Result")) {
-                    TextField("Food Name", text: $entryData.name)
+                Section {
+                    TextField("Food name", text: $entryData.name)
+                        .font(.body)
+                    
                     NutritionRow(label: "Amount", value: $entryData.amount, unit: entryData.unit)
                         .keyboardType(.decimalPad)
+                } header: {
+                    Text("Food Details")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundColor(.secondary)
+                        .textCase(nil)
                 }
-                Section(header: Text("Nutrition")) {
-                    NutritionRow(label: "Calories", value: $entryData.calories, unit: "kcal")
-                    NutritionRow(label: "Protein", value: $entryData.protein, unit: "g")
-                    NutritionRow(label: "Carbs", value: $entryData.carbs, unit: "g")
-                    NutritionRow(label: "Fats", value: $entryData.fats, unit: "g")
+                
+                Section {
+                    NutritionRow(label: "Calories", value: $entryData.calories, unit: "kcal", icon: "flame.fill")
+                    NutritionRow(label: "Protein", value: $entryData.protein, unit: "g", icon: "scalemass.fill")
+                    NutritionRow(label: "Carbs", value: $entryData.carbs, unit: "g", icon: "leaf.fill")
+                    NutritionRow(label: "Fats", value: $entryData.fats, unit: "g", icon: "drop.fill")
+                } header: {
+                    Text("Nutrition")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundColor(.secondary)
+                        .textCase(nil)
                 }
             }
             .scrollContentBackground(.hidden)
             .background(.ultraThinMaterial)
+            .scrollDismissesKeyboard(.interactively)
             .navigationTitle("Confirm Entry")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -108,16 +122,24 @@ struct NutritionRow: View {
     let label: String
     @Binding var value: Double
     let unit: String
+    var icon: String? = nil
 
     var body: some View {
         HStack {
-            Text(label)
+            if let icon = icon {
+                Label(label, systemImage: icon)
+                    .foregroundColor(.primary)
+            } else {
+                Text(label)
+                    .foregroundColor(.primary)
+            }
             Spacer()
-            TextField(unit, value: $value, format: .number)
+            TextField("0", value: $value, format: .number.precision(.fractionLength(0...2)))
                 .keyboardType(.decimalPad)
                 .multilineTextAlignment(.trailing)
-                .frame(width: 80)  // Give it a defined width
+                .frame(width: 80)
             Text(unit)
+                .foregroundColor(.secondary)
         }
     }
 }

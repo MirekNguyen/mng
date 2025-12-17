@@ -64,71 +64,132 @@ struct FoodEntryForm: View {
 
     private var foodEntryFormView: some View {
         Form {
-            Section(header: Text("Selected Food")) {
-                HStack {
-                    Text(selectedFood?.name ?? "")
-                    Spacer()
-                    Button("Change") {
-                        selectedFood = nil  // This will go back to food search
+            Section {
+                HStack(spacing: 12) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.accentColor.opacity(0.15))
+                            .frame(width: 40, height: 40)
+                        
+                        Image(systemName: "fork.knife")
+                            .font(.system(size: 16))
+                            .foregroundColor(.accentColor)
                     }
-                    .foregroundColor(.blue)
-                }
-            }
-
-            Section(header: Text("Details")) {
-                HStack {
-                    Text("Amount:")
-                    Spacer()
-                    HStack {
-                        TextField(
-                            "0", value: $amount,
-                            format: .number.precision(.fractionLength(0...2))
-                        )
-                        .keyboardType(.decimalPad)
-                        .multilineTextAlignment(.trailing)
-                        .focused($isAmountFieldFocused)
-
-                        Text(selectedFood?.unit ?? "pcs")
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(selectedFood?.name ?? "")
+                            .font(.body)
+                            .foregroundColor(.primary)
+                        Text("Selected food")
+                            .font(.caption)
                             .foregroundColor(.secondary)
                     }
+                    
+                    Spacer()
+                    
+                    Button("Change") {
+                        selectedFood = nil
+                    }
+                    .font(.subheadline)
+                    .foregroundColor(.accentColor)
+                }
+                .padding(.vertical, 4)
+            } header: {
+                Text("Food")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundColor(.secondary)
+                    .textCase(nil)
+            }
+
+            Section {
+                HStack {
+                    Text("Amount")
+                        .foregroundColor(.primary)
+                    Spacer()
+                    TextField(
+                        "0", value: $amount,
+                        format: .number.precision(.fractionLength(0...2))
+                    )
+                    .keyboardType(.decimalPad)
+                    .multilineTextAlignment(.trailing)
+                    .focused($isAmountFieldFocused)
+                    .frame(width: 80)
+
+                    Text(selectedFood?.unit ?? "pcs")
+                        .foregroundColor(.secondary)
                 }
 
-                Picker("Meal type", selection: $mealType) {
+                Picker("Meal Type", selection: $mealType) {
                     ForEach(mealTypes, id: \.self) { mealType in
                         Text(mealType.capitalized).tag(mealType)
                     }
                 }
+                
                 DatePicker("Time", selection: $time, displayedComponents: .hourAndMinute)
+            } header: {
+                Text("Details")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundColor(.secondary)
+                    .textCase(nil)
             }
 
             if let food = selectedFood {
-                Section(header: Text("Overview")) {
+                Section {
                     HStack {
-                        Text("Calories:")
+                        Label("Calories", systemImage: "flame.fill")
+                            .foregroundColor(.primary)
                         Spacer()
                         Text("\(food.calories * amount, specifier: "%.0f") kcal")
+                            .foregroundColor(.secondary)
                     }
+                } header: {
+                    Text("Nutrition Preview")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundColor(.secondary)
+                        .textCase(nil)
                 }
             }
 
             if let error = errorMessage {
-                Text(error).foregroundColor(.red)
+                Section {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundColor(.red)
+                        Text(error)
+                            .font(.subheadline)
+                            .foregroundColor(.red)
+                    }
+                }
             }
 
             Section {
                 Button(action: submit) {
-                    if isSubmitting {
-                        ProgressView()
-                    } else {
-                        Text("Add Entry")
+                    HStack {
+                        Spacer()
+                        if isSubmitting {
+                            ProgressView()
+                                .tint(.white)
+                        } else {
+                            Text("Add Entry")
+                                .fontWeight(.semibold)
+                        }
+                        Spacer()
                     }
                 }
                 .disabled(isSubmitting)
+                .listRowBackground(
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(Color.accentColor)
+                )
+                .foregroundColor(.white)
                 .alert("Entry Added", isPresented: $showConfirmation) {
                     Button("OK", role: .cancel) { showConfirmation = false }
                 }
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(.ultraThinMaterial)
+        .scrollDismissesKeyboard(.interactively)
         .onAppear {
             isAmountFieldFocused = true
         }

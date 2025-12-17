@@ -16,40 +16,37 @@ struct EditEntryForm: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(header: Text("Selected Food")) {
-                    TextField("", text: $editFoodEntry.foodName)
-                        .font(.title3)
-                        .font(.body.bold())
-                        .foregroundColor(Styles.Colors.primaryText)
-                        // .placeholder(when: eventName.isEmpty) {
-                        //     Text("Event Name")
-                        //         .font(.lumaBody.bold())
-                        //         .foregroundColor(.lumaTextPlaceholder)
-                        // }
-                        .frame(height: Styles.Input.inputRowHeight)
-
-                    // HStack {
-                    //     Text(foodEntry.foodName)
-                    //     Spacer()
-                    //         .foregroundColor(.blue)
-                    // }
+                Section {
+                    TextField("Food name", text: $editFoodEntry.foodName)
+                        .font(.body)
+                } header: {
+                    Text("Food")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundColor(.secondary)
+                        .textCase(nil)
                 }
-                Section(header: Text("Change Date")) {
+                
+                Section {
                     DatePicker(
                         "Date", selection: $editFoodEntry.entryDate,
                         displayedComponents: .date)
-                }
-                Section(header: Text("Change Time")) {
+                    
                     DatePicker(
                         "Time", selection: $editFoodEntry.entryTime,
                         displayedComponents: .hourAndMinute)
+                } header: {
+                    Text("Date & Time")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundColor(.secondary)
+                        .textCase(nil)
                 }
             }
             .scrollContentBackground(.hidden)
             .background(.ultraThinMaterial)
+            .scrollDismissesKeyboard(.interactively)
             .presentationBackground(.clear)
         }
-        .navigationTitle("Edit entry")
+        .navigationTitle("Edit Entry")
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button(action: { dismiss() }) {
