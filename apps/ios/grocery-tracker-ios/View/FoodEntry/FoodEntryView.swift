@@ -2,6 +2,7 @@ import SwiftUI
 
 struct FoodEntryView: View {
     @EnvironmentObject var foodEntryRepository: FoodEntryRepository
+    @EnvironmentObject var userProfileRepository: UserProfileRepository
     @Environment(\.scenePhase) var scenePhase: ScenePhase
 
     @State var selectedDate = Date()
@@ -11,6 +12,7 @@ struct FoodEntryView: View {
     @State private var entryToEdit: FoodEntry?
     @State private var selectedEntry: FoodEntry?
     @State private var selectedMacro: MacroType?
+    @State private var showProfileSheet = false
 
     var entries: [FoodEntry] {
         (foodEntryRepository.foodEntries ?? []).sorted {
@@ -149,10 +151,40 @@ struct FoodEntryView: View {
         // ... (Toolbar, Sheets, Task, etc. remain unchanged) ...
         .toolbar {
             ToolbarItem(placement: .principal) {
-                Text("Welcome, Mirek!").font(.headline).fontWeight(.semibold)
+                if let profile = userProfileRepository.profile {
+                    Text("Welcome, \(profile.firstName ?? "Guest")!").font(.headline).fontWeight(.semibold)
+                } else {
+                    Text("Welcome!").font(.headline).fontWeight(.semibold)
+                }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Profile", systemImage: "person.fill", action: {})
+                Button(action: { showProfileSheet = true }) {
+                    if let profile = userProfileRepository.profile,
+                       let avatarUrlString = profile.avatarUrl,
+                       let avatarUrl = URL(string: avatarUrlString) {
+                        AsyncImage(url: avatarUrl) { phase in
+                            switch phase {
+                            case .empty:
+                                Circle()
+                                    .fill(Color.gray.opacity(0.3))
+                                    .frame(width: 32, height: 32)
+                                    .overlay(ProgressView().tint(.white))
+                            case .success(let image):
+                                image
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 32, height: 32)
+                                    .clipShape(Circle())
+                            case .failure:
+                                profileInitialsButton
+                            @unknown default:
+                                profileInitialsButton
+                            }
+                        }
+                    } else {
+                        profileInitialsButton
+                    }
+                }
             }
         }
         .fullScreenCover(isPresented: $showAddSheet, onDismiss: { Task { await loadData() } }) {
@@ -185,6 +217,11 @@ struct FoodEntryView: View {
         .sheet(isPresented: $showSummarySheet) {
             DailySummarySheet(date: selectedDate)
         }
+        .sheet(isPresented: $showProfileSheet) {
+            NavigationStack {
+                ProfileView(repository: userProfileRepository)
+            }
+        }
         .navigationTitle("Overview")
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -195,8 +232,33 @@ struct FoodEntryView: View {
                 .disabled(entries.isEmpty)
             }
         }
-        .task { await loadData() }
+        .task {
+            await loadData()
+            if userProfileRepository.profile == nil {
+                await userProfileRepository.fetchProfile()
+            }
+        }
         .refreshable { await loadData() }
         .onChange(of: selectedDate) { Task { await loadData() } }
+    }
+    
+    private var profileInitialsButton: some View {
+        Circle()
+            .fill(
+                AngularGradient(
+                    colors: [
+                        Color(red: 1.0, green: 0.7, blue: 0.3),
+                        Color(red: 1.0, green: 0.6, blue: 0.2),
+                        Color(red: 1.0, green: 0.65, blue: 0.25)
+                    ],
+                    center: .center
+                )
+            )
+            .frame(width: 32, height: 32)
+            .overlay(
+                Text(userProfileRepository.profile?.name.prefix(2).uppercased() ?? "?")
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                    .foregroundColor(.white)
+            )
     }
 }

@@ -2,7 +2,8 @@ import Foundation
 
 struct UserProfile: Codable, Identifiable {
     let id: Int
-    let name: String
+    let firstName: String?
+    let lastName: String?
     let email: String
     let avatarUrl: String?
     let age: Int?
@@ -14,8 +15,12 @@ struct UserProfile: Codable, Identifiable {
     let goal: String?
     let dailyCalorieTarget: Int?
     let createdAt: Date
-    let streak: Int
-    let totalEntries: Int
+    let updatedAt: Date
+    
+    var name: String {
+        let fullName = "\(firstName ?? "") \(lastName ?? "")".trimmingCharacters(in: .whitespaces)
+        return fullName.isEmpty ? "Guest User" : fullName
+    }
     
     var isProfileComplete: Bool {
         age != nil && gender != nil && height != nil && weight != nil && targetWeight != nil && activityLevel != nil && goal != nil && dailyCalorieTarget != nil

@@ -10,6 +10,8 @@ struct MainTabView: View {
         networkManager: NetworkManager2(baseURL: "https://api.mirekng.com/"))
     @StateObject private var statsRepository = StatsRepository(
         networkManager: NetworkManager2(baseURL: "https://api.mirekng.com/"))
+    @StateObject private var userProfileRepository = UserProfileRepository(
+        networkManager: NetworkManager2(baseURL: "https://api.mirekng.com/"))
 
     @State private var selectedTab: Int = 0
     var body: some View {
@@ -39,7 +41,7 @@ struct MainTabView: View {
                 .tabItem { Label("Stats", systemImage: "chart.bar.xaxis") }
                 .tag(2)
             
-            ProfileView(networkManager: NetworkManager2(baseURL: "https://api.mirekng.com/"))
+            ProfileView(repository: userProfileRepository)
                 .tabItem { Label("Profile", systemImage: "person.fill") }
                 .tag(3)
 
@@ -51,6 +53,7 @@ struct MainTabView: View {
         .environmentObject(foodEntryRepository)
         .environmentObject(foodRepository)
         .environmentObject(statsRepository)
+        .environmentObject(userProfileRepository)
     }
 
 }
