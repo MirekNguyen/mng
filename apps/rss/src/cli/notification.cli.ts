@@ -24,7 +24,7 @@ const feed = new Feed({
 
 feed.addItem({
   title: `${options.notification}`,
-  id: options.link,
+  id: options.link + (new Date().toISOString()),
   link: options.link,
   description: ``,
   date: new Date(),
