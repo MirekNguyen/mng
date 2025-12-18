@@ -9,6 +9,7 @@ import Elysia, { t } from "elysia";
 import z from "zod";
 import { FoodEntryRepository } from "./food-entry.repository";
 import { FoodAnalysisResult, FoodEntryAnalyzer } from "./food-entry.analyzer";
+import { FoodEntrySummarizer } from "./food-entry.summarizer";
 import { ServerError } from "@mng/http/server.error";
 
 const app = new Elysia({ prefix: "food-entry" });
@@ -60,6 +61,30 @@ app.post(
         minItems: 1,
       }),
     }),
+  },
+);
+
+app.get(
+  "/summarize",
+  async ({ query, set }) => {
+    const dateString = query.date.toISOString().split("T")[0];
+    const entries = await db.query.foodEntries.findMany({
+      where: eq(foodEntries.entryDate, dateString),
+    });
+
+    if (entries.length === 0) {
+      throw new ServerError("No entries found for this date");
+    }
+
+    const stream = await FoodEntrySummarizer.summarizeDay(entries);
+    set.headers["Content-Type"] = "text/event-stream";
+    set.headers["Cache-Control"] = "no-cache";
+    set.headers["Connection"] = "keep-alive";
+    
+    return stream;
+  },
+  {
+    query: z.object({ date: z.coerce.date() }),
   },
 );
 
