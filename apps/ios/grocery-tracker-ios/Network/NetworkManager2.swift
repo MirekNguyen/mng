@@ -78,16 +78,35 @@ final class NetworkManager2 {
         guard let httpResponse = response as? HTTPURLResponse,
             (200...299).contains(httpResponse.statusCode)
         else {
+            let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 0
+            print("❌ Server error - Status: \(statusCode)")
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("Response body: \(responseString)")
+            }
             throw NetworkError.serverError(
-                statusCode: (response as? HTTPURLResponse)?.statusCode ?? 0,
+                statusCode: statusCode,
                 data: data
             )
         }
+        
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
+            
+            // Debug: Print raw response
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("✅ Response received (\(data.count) bytes): \(responseString.prefix(500))")
+            }
+            
             return try decoder.decode(T.self, from: data)
+        } catch let decodingError as DecodingError {
+            print("❌ Decoding error: \((decodingError as DecodingError).detailedDescription)")
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("Raw response data: \(responseString)")
+            }
+            throw NetworkError.decodingError(decodingError)
         } catch {
+            print("❌ Unknown decoding error: \(error.localizedDescription)")
             throw NetworkError.decodingError(error)
         }
     }

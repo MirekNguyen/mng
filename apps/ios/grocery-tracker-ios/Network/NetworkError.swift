@@ -8,6 +8,7 @@ enum NetworkError: Error, LocalizedError {
     case encodingError(Error)
     case noData
     case underlying(Error)
+    
     var errorDescription: String? {
         switch self {
         case .invalidURL:
@@ -22,6 +23,9 @@ enum NetworkError: Error, LocalizedError {
             }
             return msg
         case .decodingError(let error):
+            if let decodingError = error as? DecodingError {
+                return "Decoding failed: \(decodingError.detailedDescription)"
+            }
             return "Decoding failed: \(error.localizedDescription)"
         case .encodingError(let error):
             return "Encoding failed: \(error.localizedDescription)"
@@ -29,6 +33,23 @@ enum NetworkError: Error, LocalizedError {
             return "No data was received."
         case .underlying(let err):
             return err.localizedDescription
+        }
+    }
+}
+
+extension DecodingError {
+    var detailedDescription: String {
+        switch self {
+        case .typeMismatch(let type, let context):
+            return "Type mismatch: Expected \(type), at path: \(context.codingPath.map { $0.stringValue }.joined(separator: ".")). Debug: \(context.debugDescription)"
+        case .valueNotFound(let type, let context):
+            return "Value not found: Expected \(type), at path: \(context.codingPath.map { $0.stringValue }.joined(separator: ".")). Debug: \(context.debugDescription)"
+        case .keyNotFound(let key, let context):
+            return "Key not found: '\(key.stringValue)', at path: \(context.codingPath.map { $0.stringValue }.joined(separator: ".")). Debug: \(context.debugDescription)"
+        case .dataCorrupted(let context):
+            return "Data corrupted at path: \(context.codingPath.map { $0.stringValue }.joined(separator: ".")). Debug: \(context.debugDescription)"
+        @unknown default:
+            return localizedDescription
         }
     }
 }

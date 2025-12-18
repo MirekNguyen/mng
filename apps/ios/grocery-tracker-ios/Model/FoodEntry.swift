@@ -90,7 +90,7 @@ struct EditFoodEntry: Codable {
 /// A custom struct to decode the analysis response from the server.
 /// Make it Hashable so we can use it with .sheet(item: ...).
 struct AnalyzedFoodData: Identifiable, Codable, Hashable {
-    let id: UUID
+    var id: UUID
     var name: String
     var calories: Double
     var protein: Double
@@ -98,6 +98,18 @@ struct AnalyzedFoodData: Identifiable, Codable, Hashable {
     var fats: Double
     var amount: Double
     var unit: String
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+        self.name = try container.decode(String.self, forKey: .name)
+        self.calories = try container.decode(Double.self, forKey: .calories)
+        self.protein = try container.decode(Double.self, forKey: .protein)
+        self.carbs = try container.decode(Double.self, forKey: .carbs)
+        self.fats = try container.decode(Double.self, forKey: .fats)
+        self.amount = try container.decode(Double.self, forKey: .amount)
+        self.unit = try container.decode(String.self, forKey: .unit)
+    }
 }
 
 extension FoodEntry {

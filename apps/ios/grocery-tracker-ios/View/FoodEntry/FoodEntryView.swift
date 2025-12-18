@@ -7,6 +7,7 @@ struct FoodEntryView: View {
     @State var selectedDate = Date()
     @State private var showAddSheet = false
     @State private var showPhotosSheet = false
+    @State private var showSummarySheet = false
     @State private var entryToEdit: FoodEntry?
     @State private var selectedEntry: FoodEntry?
     @State private var selectedMacro: MacroType?
@@ -181,7 +182,19 @@ struct FoodEntryView: View {
             MacroDetailSheet(macroType: macro, entries: entries)
                 .presentationBackground(.clear)
         }
+        .sheet(isPresented: $showSummarySheet) {
+            DailySummarySheet(date: selectedDate)
+        }
         .navigationTitle("Overview")
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button(action: { showSummarySheet = true }) {
+                    Label("AI Summary", systemImage: "sparkles")
+                        .font(.system(size: 16, weight: .medium))
+                }
+                .disabled(entries.isEmpty)
+            }
+        }
         .task { await loadData() }
         .refreshable { await loadData() }
         .onChange(of: selectedDate) { Task { await loadData() } }
