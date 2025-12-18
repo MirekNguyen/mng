@@ -64,7 +64,7 @@ videos.forEach((video: Video) => {
         Published: ${video.uploadedAt}<br>
         Duration: ${video.durationFormatted}
       `,
-    date: new Date(video.uploadedAt ?? ""),
+    date: new Date(video.uploadedAt ?? Date.now()),
   });
 });
 
