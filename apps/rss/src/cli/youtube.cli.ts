@@ -39,13 +39,17 @@ const feed = new Feed({
   copyright: "",
 });
 
+const getMinutes = (duration: number): number => {
+  return duration / 1000 / 60;
+};
+
 const isShort = (duration: number): boolean => {
-  return duration / 1000 <= 60;
+  return getMinutes(duration) <= 1;
 };
 
 const isVod = (duration: number): boolean => {
-  return duration / 1000 >= 180;
-}
+  return getMinutes(duration) >= 180;
+};
 
 videos.forEach((video: Video) => {
   if (isVod(video.duration)) return;
