@@ -187,10 +187,6 @@ export const userSettings = pgTable("user_settings", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
-// Zod schemas for validation
-export const insertUserSchema = createInsertSchema(users);
-export const selectUserSchema = createSelectSchema(users);
-
 export const createFoodSchema = createInsertSchema(food);
 export const selectFoodSchema = createSelectSchema(food);
 export const updateFoodSchema = createInsertSchema(food).partial();
