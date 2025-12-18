@@ -26,15 +26,15 @@ export const users = pgTable("users", {
   lastName: varchar("last_name", { length: 100 }),
   email: varchar("email", { length: 255 }).notNull().unique(),
   age: integer("age"),
-  gender: varchar("gender", { length: 50 }),
-  height: integer("height"),
-  targetWeight: integer("target_weight"),
+  gender: varchar("gender", { length: 20 }),
+  height: integer("height"), // cm
+  weight: numeric("weight", { precision: 10, scale: 2, mode: "number" }), // kg
+  targetWeight: numeric("target_weight", { precision: 10, scale: 2, mode: "number" }), // kg
   activityLevel: varchar("activity_level", { length: 50 }),
-  weeklyGoal: varchar("weekly_goal", { length: 50 }),
-  measurementUnit: varchar("measurement_unit", { length: 20 }).default("imperial"),
-  theme: varchar("theme", { length: 20 }).default("light"),
-  language: varchar("language", { length: 10 }).default("en"),
-  createdAt: timestamp("created_at").defaultNow(),
+  goal: varchar("goal", { length: 20 }),
+  dailyCalorieTarget: integer("daily_calorie_target"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 // Meals table (reusable meal templates)
@@ -214,9 +214,20 @@ export const selectMealPlanSchema = createSelectSchema(mealPlans);
 export const createUserSettingsSchema = createInsertSchema(userSettings);
 export const selectUserSettingsSchema = createSelectSchema(userSettings);
 
+// User schemas
+export const userZodSchema = createSelectSchema(users);
+export const createUserZodSchema = createInsertSchema(users);
+export const updateUserZodSchema = createUserZodSchema.partial();
+
+// Legacy exports for backwards compatibility
+export const insertUserSchema = createUserZodSchema;
+export const selectUserSchema = userZodSchema;
+export const updateUserSchema = updateUserZodSchema;
+
 // Custom types
-export type User = z.infer<typeof selectUserSchema>;
-export type NewUser = z.infer<typeof insertUserSchema>;
+export type User = z.infer<typeof userZodSchema>;
+export type CreateUser = z.infer<typeof createUserZodSchema>;
+export type UpdateUser = z.infer<typeof updateUserZodSchema>;
 
 export type Food = z.infer<typeof selectFoodSchema>;
 export type CreateFood = Omit<z.infer<typeof createFoodSchema>, "id">;
