@@ -181,6 +181,7 @@ struct FoodEntryView: View {
             MacroDetailSheet(macroType: macro, entries: entries)
                 .presentationBackground(.clear)
         }
+        .navigationTitle("Overview")
         .task { await loadData() }
         .refreshable { await loadData() }
         .onChange(of: selectedDate) { Task { await loadData() } }
