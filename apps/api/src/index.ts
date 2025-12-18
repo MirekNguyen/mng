@@ -5,6 +5,7 @@ import { foodController } from "./food/food.controller";
 import { foodEntryController } from "./food-entry/food-entry.controller";
 import { propertyController } from "./property/property.controller";
 import { statsController } from "./stats/stats.controller";
+import { userController } from "./user/user.controller";
 import { ServerError } from "@mng/http/server.error";
 
 const app = new Elysia()
@@ -22,6 +23,7 @@ const app = new Elysia()
   .use(foodController)
   .use(foodEntryController)
   .use(statsController)
+  .use(userController)
   .listen(3000);
 
 console.log(
