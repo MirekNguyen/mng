@@ -25,6 +25,7 @@ export const users = pgTable("users", {
   firstName: varchar("first_name", { length: 100 }),
   lastName: varchar("last_name", { length: 100 }),
   email: varchar("email", { length: 255 }).notNull().unique(),
+  avatarUrl: varchar("avatar_url", { length: 500 }),
   age: integer("age"),
   gender: varchar("gender", { length: 20 }),
   height: integer("height"), // cm
