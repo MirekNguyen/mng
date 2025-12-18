@@ -62,6 +62,16 @@ struct CalorieGaugeView: View {
                         .foregroundColor(.secondary.opacity(0.8))
                 }
             }
+            .gesture(
+                DragGesture(minimumDistance: 30)
+                    .onEnded { value in
+                        if value.translation.width > 0 {
+                            previousDay()
+                        } else if value.translation.width < 0 {
+                            nextDay()
+                        }
+                    }
+            )
 
             dateNavigationView
         }
