@@ -14,23 +14,19 @@ struct CalorieGaugeView: View {
     }
 
     var progressColor: Color {
-        switch progress {
-        case 0..<0.7: return .green
-        case 0.7..<0.9: return .orange
-        default: return .red
-        }
+        .orange
     }
 
     var progressGradient: AngularGradient {
         AngularGradient(
             gradient: Gradient(colors: [
-                progressColor.opacity(0.7),
-                progressColor,
-                progressColor.opacity(0.9)
+                Color(red: 1.0, green: 0.7, blue: 0.3),
+                Color(red: 1.0, green: 0.6, blue: 0.2),
+                Color(red: 1.0, green: 0.65, blue: 0.25)
             ]),
             center: .center,
-            startAngle: .degrees(0),
-            endAngle: .degrees(360 * Double(animatedProgress))
+            startAngle: .degrees(-90),
+            endAngle: .degrees(-90 + 360 * Double(animatedProgress))
         )
     }
 
@@ -38,30 +34,32 @@ struct CalorieGaugeView: View {
         VStack(spacing: 20) {
             ZStack {
                 Circle()
-                    .stroke(Color.gray.opacity(0.08), lineWidth: 26)
+                    .stroke(Color.gray.opacity(0.1), lineWidth: 24)
                     .frame(width: 220, height: 220)
 
                 Circle()
                     .trim(from: 0, to: animatedProgress)
-                    .stroke(progressGradient, style: StrokeStyle(lineWidth: 26, lineCap: .round))
+                    .stroke(progressGradient, style: StrokeStyle(lineWidth: 24, lineCap: .round))
                     .frame(width: 220, height: 220)
                     .rotationEffect(.degrees(-90))
-                    .shadow(color: progressColor.opacity(0.4), radius: 8, x: 0, y: 4)
+                    .shadow(color: progressColor.opacity(0.3), radius: 10, x: 0, y: 5)
 
-                VStack(spacing: 4) {
-                    HStack(alignment: .lastTextBaseline, spacing: 4) {
+                VStack(spacing: 2) {
+                    HStack(alignment: .firstTextBaseline, spacing: 3) {
                         Text("\(Int(currentCalories))")
-                            .font(.system(size: 54, weight: .bold, design: .rounded))
+                            .font(.system(size: 50, weight: .bold, design: .rounded))
                             .foregroundColor(.primary)
+                            .monospacedDigit()
                         
                         Text("kcal")
-                            .font(.system(size: 18, weight: .medium))
+                            .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.secondary)
+                            .offset(y: -2)
                     }
 
                     Text("of \(Int(targetCalories))")
                         .font(.system(size: 15, weight: .medium))
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.secondary.opacity(0.8))
                 }
             }
 
