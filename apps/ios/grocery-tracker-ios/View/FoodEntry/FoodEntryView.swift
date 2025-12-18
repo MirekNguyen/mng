@@ -9,6 +9,7 @@ struct FoodEntryView: View {
     @State private var showPhotosSheet = false
     @State private var entryToEdit: FoodEntry?
     @State private var selectedEntry: FoodEntry?
+    @State private var selectedMacro: MacroType?
 
     var entries: [FoodEntry] {
         (foodEntryRepository.foodEntries ?? []).sorted {
@@ -41,9 +42,14 @@ struct FoodEntryView: View {
 
                     HStack(spacing: 12) {
                         FoodSummaryCard(
-                            name: "Protein", amount: totalProtein, color: .blue, unit: "g")
-                        FoodSummaryCard(name: "Carbs", amount: totalCarbs, color: .green, unit: "g")
-                        FoodSummaryCard(name: "Fat", amount: totalFat, color: .red, unit: "g")
+                            name: "Protein", amount: totalProtein, color: .blue, unit: "g",
+                            onTap: { selectedMacro = .protein })
+                        FoodSummaryCard(
+                            name: "Carbs", amount: totalCarbs, color: .green, unit: "g",
+                            onTap: { selectedMacro = .carbs })
+                        FoodSummaryCard(
+                            name: "Fat", amount: totalFat, color: .red, unit: "g",
+                            onTap: { selectedMacro = .fat })
                     }
 
                     HStack(spacing: 36) {
@@ -170,6 +176,10 @@ struct FoodEntryView: View {
             )
             .presentationBackground(.ultraThinMaterial)
 
+        }
+        .sheet(item: $selectedMacro) { macro in
+            MacroDetailSheet(macroType: macro, entries: entries)
+                .presentationBackground(.clear)
         }
         .task { await loadData() }
         .refreshable { await loadData() }

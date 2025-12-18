@@ -94,7 +94,7 @@ You are a senior full-stack architect working in a **Bun + TypeScript Monorepo**
 ## 6. iOS (Swift)
 * **Guidelines:** Strictly follow Apple's **Human Interface Guidelines (HIG)**. Ensure all UI is consistent, accessible, and intuitive.
 * **Linting:** Follow **SwiftLint** rules and best practices. Write clean, idiomatic Swift code that passes linting checks.
-* **File Size Limit:** **NEVER create files over 300 lines.** Break down large views or logic into smaller, reusable components.
+* **File Size Limit:** **NEVER create files over 200 lines.** Break down large views or logic into smaller, reusable components.
 * **Component Composition:**
     * Extract reusable UI elements into separate component files (e.g., `FoodEntryCard.swift`, `StatsSummaryRow.swift`)
     * Create small, focused views that do one thing well
