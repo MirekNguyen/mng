@@ -65,18 +65,7 @@ struct CalorieGaugeView: View {
                 }
             }
 
-            DatePicker("", selection: $selectedDate, displayedComponents: .date)
-                .labelsHidden()
-                .glassEffect()
-                .id(calendarId)
-                .onChange(of: selectedDate) { oldValue, newValue in
-                    let components = Calendar.current.dateComponents(
-                        [.year, .month], from: oldValue, to: newValue)
-                    guard components.year == 0 && components.month == 0 else {
-                        return
-                    }
-                    calendarId += 1
-                }
+            dateNavigationView
         }
         .padding(.vertical, 20)
         .onAppear {
@@ -90,5 +79,62 @@ struct CalorieGaugeView: View {
                 animatedProgress = newValue
             }
         }
+    }
+    
+    private var dateNavigationView: some View {
+        HStack(spacing: 16) {
+            Button(action: previousDay) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.primary)
+                    .frame(width: 32, height: 32)
+                    .background(Color.gray.opacity(0.15))
+                    .clipShape(Circle())
+            }
+            .buttonStyle(.plain)
+            
+            DatePicker("", selection: $selectedDate, displayedComponents: .date)
+                .labelsHidden()
+                .glassEffect()
+                .id(calendarId)
+                .onChange(of: selectedDate) { oldValue, newValue in
+                    let components = Calendar.current.dateComponents(
+                        [.year, .month], from: oldValue, to: newValue)
+                    guard components.year == 0 && components.month == 0 else {
+                        return
+                    }
+                    calendarId += 1
+                }
+                .gesture(
+                    DragGesture(minimumDistance: 30)
+                        .onEnded { value in
+                            if value.translation.width > 0 {
+                                previousDay()
+                            } else if value.translation.width < 0 {
+                                nextDay()
+                            }
+                        }
+                )
+            
+            Button(action: nextDay) {
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.primary)
+                    .frame(width: 32, height: 32)
+                    .background(Color.gray.opacity(0.15))
+                    .clipShape(Circle())
+            }
+            .buttonStyle(.plain)
+        }
+    }
+    
+    private func previousDay() {
+        let newDate = Calendar.current.date(byAdding: .day, value: -1, to: selectedDate) ?? selectedDate
+        selectedDate = newDate
+    }
+    
+    private func nextDay() {
+        let newDate = Calendar.current.date(byAdding: .day, value: 1, to: selectedDate) ?? selectedDate
+        selectedDate = newDate
     }
 }
