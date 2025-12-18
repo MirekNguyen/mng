@@ -38,6 +38,10 @@ struct MainTabView: View {
             StatsTabView()
                 .tabItem { Label("Stats", systemImage: "chart.bar.xaxis") }
                 .tag(2)
+            
+            ProfileView(networkManager: NetworkManager2(baseURL: "https://api.mirekng.com/"))
+                .tabItem { Label("Profile", systemImage: "person.fill") }
+                .tag(3)
 
         }
         .tint(.white)
