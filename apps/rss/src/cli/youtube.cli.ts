@@ -2,7 +2,7 @@ import { program } from "commander";
 import { Feed } from "feed";
 import { write } from "bun";
 import { logger } from "@mng/logger/logger";
-import { Video, YouTube } from "youtube-sr";
+import { Playlist, Video, YouTube } from "youtube-sr";
 
 program
   .requiredOption("-p, --playlistId <string>", "Query using Playlist ID")
@@ -11,7 +11,7 @@ program
 program.parse(process.argv);
 const options = program.opts();
 
-const getPlaylist = async (playlistId: string) => {
+const getPlaylist = async (playlistId: string): Promise<Playlist> => {
   try {
     return await YouTube.getPlaylist(playlistId, {
       limit: 3,
@@ -39,11 +39,16 @@ const feed = new Feed({
   copyright: "",
 });
 
-const isShort = (duration: number) => {
+const isShort = (duration: number): boolean => {
   return duration / 1000 <= 60;
 };
 
+const isVod = (duration: number): boolean => {
+  return duration / 1000 >= 180;
+}
+
 videos.forEach((video: Video) => {
+  if (isVod(video.duration)) return;
   if (isShort(video.duration)) return;
   feed.addItem({
     title: `${video.title}`,
