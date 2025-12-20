@@ -52,6 +52,7 @@ const isVod = (duration: number): boolean => {
 };
 
 videos.forEach((video: Video) => {
+  if (video.live) return;
   if (isVod(video.duration)) return;
   if (isShort(video.duration)) return;
   feed.addItem({
