@@ -1,5 +1,6 @@
 import { parseDatabaseError } from "@mng/database/db-error";
 import { logger } from "@mng/logger/logger";
+import { cors } from "@elysiajs/cors";
 import Elysia from "elysia";
 import { emailController } from "./email/email.controller";
 import { foodController } from "./food/food.controller";
@@ -10,6 +11,7 @@ import { userController } from "./user/user.controller";
 import { ServerError } from "@mng/http/server.error";
 
 const app = new Elysia()
+  .use(cors())
   .error({ ServerError })
   .onError(({ error }) => {
     const dbError = parseDatabaseError(error);
