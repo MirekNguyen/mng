@@ -1,6 +1,7 @@
 import { parseDatabaseError } from "@mng/database/db-error";
 import { logger } from "@mng/logger/logger";
 import Elysia from "elysia";
+import { emailController } from "./email/email.controller";
 import { foodController } from "./food/food.controller";
 import { foodEntryController } from "./food-entry/food-entry.controller";
 import { propertyController } from "./property/property.controller";
@@ -24,6 +25,7 @@ const app = new Elysia()
   .use(foodEntryController)
   .use(statsController)
   .use(userController)
+  .use(emailController)
   .listen(3000);
 
 console.log(
