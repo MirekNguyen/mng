@@ -19,6 +19,7 @@
     "@mng/database": "*",
     "@mng/http": "*",
     "@mng/logger": "*",
+    "@mng/scraper": "*",
     "@types/luxon": "^3.7.1",
     "ai": "^5.0.113",
     "elysia": "latest",
