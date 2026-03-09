@@ -26,8 +26,10 @@ export const srealityEstateResponseSchema = z.object({
   items: z.array(
     z.object({
       type: z.string(),
+      name: z.string(),
       value: z.unknown(),
       unit: z.string().optional(),
+      value_type: z.string().optional(),
     }),
   ),
   _embedded: z.object({

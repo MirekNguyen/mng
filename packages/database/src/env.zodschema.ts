@@ -10,4 +10,3 @@ export const dbSchema = z.object({
 export const envSchema = dbSchema.extend({
   OPENAI_MODEL: z.string().min(1),
 });
-
