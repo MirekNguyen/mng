@@ -1,0 +1,21 @@
+{
+  "name": "@mng/scraper",
+  "version": "1.0.0",
+  "private": true,
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "format": "oxfmt --check ./src",
+    "format:fix": "oxfmt ./src",
+    "lint": "oxlint ./src",
+    "lint:fix": "oxlint --fix-dangerously ./src"
+  },
+  "dependencies": {
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.17.0",
+    "oxlint": "^1.32.0"
+  }
+}
