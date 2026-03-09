@@ -16,9 +16,7 @@ const app = new Elysia()
   .onError(({ error }) => {
     const dbError = parseDatabaseError(error);
     if (dbError) {
-      logger.error(
-        `Database Error: ${dbError.message} [Code: ${dbError.code}]`,
-      );
+      logger.error(`Database Error: ${dbError.message} [Code: ${dbError.code}]`);
       return new Response("Internal database error");
     }
   })
@@ -30,6 +28,4 @@ const app = new Elysia()
   .use(emailController)
   .listen(3000);
 
-console.log(
-  `🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}`,
-);
+console.log(`🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}`);
