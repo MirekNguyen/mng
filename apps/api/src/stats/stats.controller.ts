@@ -23,24 +23,14 @@ const app = new Elysia({ prefix: "stats" });
 app.get(
   "/",
   async ({ query }): Promise<StatsResponse> => {
-    const startDate = DateTime.fromJSDate(query.startDate).toFormat(
-      "yyyy-M-dd",
-    );
+    const startDate = DateTime.fromJSDate(query.startDate).toFormat("yyyy-M-dd");
     const endDate = DateTime.fromJSDate(query.endDate).toFormat("yyyy-M-dd");
 
-    const entries = await StatsRepository.getFoodEntriesByDateRange(
-      startDate,
-      endDate,
-    );
+    const entries = await StatsRepository.getFoodEntriesByDateRange(startDate, endDate);
 
-    const dayCount =
-      DateTime.fromISO(endDate).diff(DateTime.fromISO(startDate), "days").days +
-      1;
+    const dayCount = DateTime.fromISO(endDate).diff(DateTime.fromISO(startDate), "days").days + 1;
 
-    const dailyAverages = NutritionCalculator.calculateDailyAverages(
-      entries,
-      dayCount,
-    );
+    const dailyAverages = NutritionCalculator.calculateDailyAverages(entries, dayCount);
     const dailyBreakdown = DailyBreakdownCalculator.calculate(entries);
     const mealTypeBreakdown = MealTypeCalculator.calculate(entries);
 

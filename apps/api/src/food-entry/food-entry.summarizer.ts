@@ -4,7 +4,7 @@ import { logger } from "@mng/logger/logger";
 import type { FoodEntry } from "@mng/database/schema/other.schema";
 
 export const FoodEntrySummarizer = {
-  async summarizeDay(entries: FoodEntry[]) {
+  summarizeDay(entries: FoodEntry[]): Response {
     if (entries.length === 0) {
       throw new Error("No entries to summarize");
     }
@@ -53,7 +53,7 @@ Provide:
 Keep it conversational, positive, and under 200 words.`;
 
     try {
-      const result = await streamText({
+      const result = streamText({
         model: google("gemini-2.0-flash-exp"),
         messages: [
           {

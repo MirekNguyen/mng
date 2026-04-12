@@ -16,9 +16,7 @@ export const FoodEntryRepository = {
   },
 
   async create(foodEntry: CreateFoodEntry): Promise<FoodEntry> {
-    const created = (
-      await db.insert(foodEntries).values(foodEntry).returning()
-    )[0];
+    const created = (await db.insert(foodEntries).values(foodEntry).returning())[0];
     if (!created) {
       throw new Error("Failed to create food entry");
     }
@@ -27,11 +25,7 @@ export const FoodEntryRepository = {
 
   async update(id: number, foodEntry: UpdateFoodEntry): Promise<FoodEntry> {
     const updated = (
-      await db
-        .update(foodEntries)
-        .set(foodEntry)
-        .where(eq(foodEntries.id, id))
-        .returning()
+      await db.update(foodEntries).set(foodEntry).where(eq(foodEntries.id, id)).returning()
     )[0];
     if (!updated) {
       throw new Error(`Food entry not found for update`);
@@ -40,9 +34,7 @@ export const FoodEntryRepository = {
   },
 
   async delete(id: number): Promise<FoodEntry> {
-    const deleted = (
-      await db.delete(foodEntries).where(eq(foodEntries.id, id)).returning()
-    )[0];
+    const deleted = (await db.delete(foodEntries).where(eq(foodEntries.id, id)).returning())[0];
     if (!deleted) {
       throw new Error(`Food entry with id ${id} not found`);
     }

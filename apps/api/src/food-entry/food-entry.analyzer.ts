@@ -47,12 +47,12 @@ export const FoodEntryAnalyzer = {
             content: [
               {
                 type: "text",
-                text:                 "Analyze ALL these images of the SAME meal jointly for better accuracy. " +
-                "Use visual recognition, portion estimation (consider known object sizes for scale), AND if visible, any nutrition facts, ingredients lists, manufacturer stickers, or packaging for nutritional values. " +
-                "Prefer label/panel info if visible, otherwise estimate using up-to-date, regionally appropriate nutrition databases. " +
-                "Harmonize your answer if there are discrepancies. " +
-                "Output a single JSON object. Don't guess if not plausible.",
-
+                text:
+                  "Analyze ALL these images of the SAME meal jointly for better accuracy. " +
+                  "Use visual recognition, portion estimation (consider known object sizes for scale), AND if visible, any nutrition facts, ingredients lists, manufacturer stickers, or packaging for nutritional values. " +
+                  "Prefer label/panel info if visible, otherwise estimate using up-to-date, regionally appropriate nutrition databases. " +
+                  "Harmonize your answer if there are discrepancies. " +
+                  "Output a single JSON object. Don't guess if not plausible.",
               },
               ...imageContent,
             ],
@@ -67,8 +67,11 @@ export const FoodEntryAnalyzer = {
       throw new Error("Failed to analyze food images");
     }
   },
-  
-  async analyzeWithProgress(files: File[], onProgress: (message: string) => void): Promise<FoodAnalysisResult> {
+
+  async analyzeWithProgress(
+    files: File[],
+    onProgress: (message: string) => void,
+  ): Promise<FoodAnalysisResult> {
     if (files.length === 0) {
       throw new Error("No files provided for analysis");
     }
@@ -101,12 +104,12 @@ export const FoodEntryAnalyzer = {
             content: [
               {
                 type: "text",
-                text:                 "Analyze ALL these images of the SAME meal jointly for better accuracy. " +
-                "Use visual recognition, portion estimation (consider known object sizes for scale), AND if visible, any nutrition facts, ingredients lists, manufacturer stickers, or packaging for nutritional values. " +
-                "Prefer label/panel info if visible, otherwise estimate using up-to-date, regionally appropriate nutrition databases. " +
-                "Harmonize your answer if there are discrepancies. " +
-                "Output a single JSON object. Don't guess if not plausible.",
-
+                text:
+                  "Analyze ALL these images of the SAME meal jointly for better accuracy. " +
+                  "Use visual recognition, portion estimation (consider known object sizes for scale), AND if visible, any nutrition facts, ingredients lists, manufacturer stickers, or packaging for nutritional values. " +
+                  "Prefer label/panel info if visible, otherwise estimate using up-to-date, regionally appropriate nutrition databases. " +
+                  "Harmonize your answer if there are discrepancies. " +
+                  "Output a single JSON object. Don't guess if not plausible.",
               },
               ...imageContent,
             ],

@@ -20,10 +20,14 @@ app.get("/profile", async () => {
   }
 });
 
-app.patch("/profile", async ({ body }) => {
-  return await UserRepository.update(CURRENT_USER_ID, body);
-}, {
-  body: updateUserZodSchema,
-});
+app.patch(
+  "/profile",
+  async ({ body }) => {
+    return await UserRepository.update(CURRENT_USER_ID, body);
+  },
+  {
+    body: updateUserZodSchema,
+  },
+);
 
 export { app as userController };

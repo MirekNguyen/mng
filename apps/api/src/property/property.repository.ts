@@ -1,9 +1,26 @@
-import { db } from "@mng/database/db";
+import { db, sql, getTableColumns } from "@mng/database/db";
 import {
   properties,
   type CreateProperty,
   type Property,
 } from "@mng/database/schema/properties.schema";
+
+import type { SQL } from "@mng/database/db";
+
+const buildConflictUpdateColumns = <Q extends keyof typeof properties.$inferInsert>(
+  columns: Q[],
+): Record<Q, SQL> => {
+  const cls = getTableColumns(properties);
+
+  return columns.reduce(
+    (acc, column) => {
+      const colName = cls[column].name;
+      acc[column] = sql.raw(`excluded.${colName}`);
+      return acc;
+    },
+    {} as Record<Q, SQL>,
+  );
+};
 
 export const PropertyRepository = {
   async upsertMany(values: CreateProperty[]): Promise<Property[]> {
@@ -13,27 +30,29 @@ export const PropertyRepository = {
       .onConflictDoUpdate({
         target: properties.externalId,
         set: {
-          title: properties.title,
-          description: properties.description,
-          address: properties.address,
-          price: properties.price,
-          currency: properties.currency,
-          priceNote: properties.priceNote,
-          usableArea: properties.usableArea,
-          floor: properties.floor,
-          buildingType: properties.buildingType,
-          buildingCondition: properties.buildingCondition,
-          ownership: properties.ownership,
-          energyEfficiency: properties.energyEfficiency,
-          energyEfficiencyRating: properties.energyEfficiencyRating,
-          locationType: properties.locationType,
-          telecom: properties.telecom,
-          isElevator: properties.isElevator,
-          isBarrierFree: properties.isBarrierFree,
-          availableFrom: properties.availableFrom,
-          latitude: properties.latitude,
-          longitude: properties.longitude,
-          imageUrls: properties.imageUrls,
+          ...buildConflictUpdateColumns([
+            "title",
+            "description",
+            "address",
+            "price",
+            "currency",
+            "priceNote",
+            "usableArea",
+            "floor",
+            "buildingType",
+            "buildingCondition",
+            "ownership",
+            "energyEfficiency",
+            "energyEfficiencyRating",
+            "locationType",
+            "telecom",
+            "isElevator",
+            "isBarrierFree",
+            "availableFrom",
+            "latitude",
+            "longitude",
+            "imageUrls",
+          ]),
           updatedAt: new Date(),
         },
       })

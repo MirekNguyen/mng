@@ -9,10 +9,7 @@ export type DailyAverages = {
 
 export const NutritionCalculator = {
   calculateDailyAverages(entries: FoodEntry[], dayCount: number): DailyAverages {
-    const totalCalories = entries.reduce(
-      (sum, entry) => sum + entry.calories,
-      0,
-    );
+    const totalCalories = entries.reduce((sum, entry) => sum + entry.calories, 0);
     const totalProtein = entries.reduce((sum, entry) => sum + entry.protein, 0);
     const totalCarbs = entries.reduce((sum, entry) => sum + entry.carbs, 0);
     const totalFat = entries.reduce((sum, entry) => sum + entry.fat, 0);

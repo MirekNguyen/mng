@@ -39,19 +39,16 @@ app.post(
 
 app.post(
   "/analyze",
-  async ({ body, set }): Promise<FoodAnalysisResult> => {
+  async ({ body }): Promise<FoodAnalysisResult> => {
     if (!body.files.length) {
       throw new ServerError("At least one image file is required.");
     }
 
     // Use the new method with progress callback
-    return await FoodEntryAnalyzer.analyzeWithProgress(
-      body.files,
-      (message) => {
-        // Log progress messages on the server
-        console.log(`[Analysis Progress] ${message}`);
-      }
-    );
+    return await FoodEntryAnalyzer.analyzeWithProgress(body.files, (message) => {
+      // Log progress messages on the server
+      console.log(`[Analysis Progress] ${message}`);
+    });
   },
   {
     body: t.Object({
@@ -76,11 +73,11 @@ app.get(
       throw new ServerError("No entries found for this date");
     }
 
-    const stream = await FoodEntrySummarizer.summarizeDay(entries);
+    const stream = FoodEntrySummarizer.summarizeDay(entries);
     set.headers["Content-Type"] = "text/event-stream";
     set.headers["Cache-Control"] = "no-cache";
     set.headers["Connection"] = "keep-alive";
-    
+
     return stream;
   },
   {

@@ -26,10 +26,7 @@ export const MealTypeCalculator = {
       }
     }
 
-    const totalCalories = grouped.reduce(
-      (sum, g) => sum + g.totalCalories,
-      0,
-    );
+    const totalCalories = grouped.reduce((sum, g) => sum + g.totalCalories, 0);
 
     return grouped.map((g) => ({
       mealType: g.mealType,
