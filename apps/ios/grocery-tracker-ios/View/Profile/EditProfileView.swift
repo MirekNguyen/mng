@@ -379,9 +379,44 @@ struct EditProfileView: View {
         )
     }
 
+    // MARK: - Validation
+
+    private func validate() -> String? {
+        if firstName.trimmingCharacters(in: .whitespaces).isEmpty {
+            return "First name is required."
+        }
+        if let ageInt = age.isEmpty ? nil : Int(age), ageInt <= 0 || ageInt > 120 {
+            return "Please enter a valid age (1–120)."
+        }
+        if !age.isEmpty && Int(age) == nil {
+            return "Age must be a whole number."
+        }
+        if let h = height.isEmpty ? nil : Int(height), h <= 0 || h > 300 {
+            return "Please enter a valid height in cm."
+        }
+        if !height.isEmpty && Int(height) == nil {
+            return "Height must be a whole number."
+        }
+        if !weight.isEmpty && Double(weight) == nil {
+            return "Current weight must be a number."
+        }
+        if !targetWeight.isEmpty && Double(targetWeight) == nil {
+            return "Target weight must be a number."
+        }
+        if !dailyCalorieTarget.isEmpty && Int(dailyCalorieTarget) == nil {
+            return "Daily calorie target must be a whole number."
+        }
+        return nil
+    }
+
     // MARK: - Actions
 
     private func saveProfile() {
+        if let validationError = validate() {
+            errorMessage = validationError
+            return
+        }
+
         errorMessage = nil
         isSaving = true
 
