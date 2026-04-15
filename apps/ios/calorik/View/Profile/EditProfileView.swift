@@ -397,8 +397,14 @@ struct EditProfileView: View {
         if !height.isEmpty && Int(height) == nil {
             return "Height must be a whole number."
         }
+        if let w = weight.isEmpty ? nil : Double(weight), w <= 0 || w > 500 {
+            return "Please enter a valid weight (1–500 kg)."
+        }
         if !weight.isEmpty && Double(weight) == nil {
             return "Current weight must be a number."
+        }
+        if let tw = targetWeight.isEmpty ? nil : Double(targetWeight), tw <= 0 || tw > 500 {
+            return "Please enter a valid target weight (1–500 kg)."
         }
         if !targetWeight.isEmpty && Double(targetWeight) == nil {
             return "Target weight must be a number."
