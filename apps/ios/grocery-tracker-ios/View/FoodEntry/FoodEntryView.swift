@@ -71,7 +71,7 @@ struct FoodEntryView: View {
 
                     HStack(spacing: 36) {
                         ActionButton(
-                            text: "Add entry", icon: "plus", action: { showAddSheet = true })
+                            text: "Add entry", icon: "plus.circle.fill", action: { showAddSheet = true })
                         ActionButton(
                             text: "Analyze", icon: "camera.fill", action: { showPhotosSheet = true }
                         )

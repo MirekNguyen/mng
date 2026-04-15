@@ -85,7 +85,7 @@ struct NewReceiptView: View {
                     )
                     editingItemIndex = draft.items.count - 1
                 } label: {
-                    Label("Add Item", systemImage: "plus.circle")
+                    Label("Add Item", systemImage: "plus.circle.fill")
                 }
             }
         }

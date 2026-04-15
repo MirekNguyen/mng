@@ -72,7 +72,7 @@ struct EditReceiptView: View {
                         )
                     )
                 } label: {
-                    Label("Add Item", systemImage: "plus.circle")
+                    Label("Add Item", systemImage: "plus.circle.fill")
                 }
             }
         }
