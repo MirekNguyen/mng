@@ -38,7 +38,7 @@ export const FoodEntryAnalyzer = {
 
     try {
       const { object: result } = await generateObject({
-        model: google("gemini-2.0-flash"),
+        model: google("gemini-3.1-pro-preview"),
         schema: FoodAnalysisSchema,
         messages: [
           {
@@ -90,7 +90,7 @@ export const FoodEntryAnalyzer = {
 
     try {
       const { object: result } = await generateObject({
-        model: google("gemini-2.0-flash"),
+        model: google("gemini-3.1-pro-preview"),
         schema: FoodAnalysisSchema,
         messages: [
           {
