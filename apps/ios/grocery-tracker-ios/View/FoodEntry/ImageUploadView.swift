@@ -7,6 +7,7 @@ struct ImageUploadView: View {
 
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedImages: [UIImage] = []
+    @State private var showCamera: Bool = false
 
     var body: some View {
         NavigationStack {
@@ -65,6 +66,16 @@ struct ImageUploadView: View {
                 ConfirmEntryView(data: entryData, repository: repository, onSave: {
                     dismiss()
                 })
+            }
+            .sheet(isPresented: $showCamera) {
+                CameraPicker { image in
+                    if selectedImages.count < 5 {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                            selectedImages.append(image)
+                        }
+                        repository.errorMessage = nil
+                    }
+                }
             }
         }
     }
@@ -154,20 +165,34 @@ struct ImageUploadView: View {
                 .padding(.horizontal, 4)
             }
             
-            PhotosPicker(
-                selection: $selectedItems,
-                maxSelectionCount: 5,
-                matching: .images
-            ) {
-                Label(
-                    selectedImages.isEmpty ? "Select Images" : "Change Selection",
-                    systemImage: "photo.on.rectangle"
-                )
-                .frame(maxWidth: .infinity)
+            HStack(spacing: 12) {
+                PhotosPicker(
+                    selection: $selectedItems,
+                    maxSelectionCount: 5,
+                    matching: .images
+                ) {
+                    Label(
+                        selectedImages.isEmpty ? "Select Images" : "Change Selection",
+                        systemImage: "photo.on.rectangle"
+                    )
+                    .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.large)
+                .disabled(repository.analysisStage != .idle || selectedImages.count >= 5)
+
+                if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                    Button {
+                        showCamera = true
+                    } label: {
+                        Label("Camera", systemImage: "camera.fill")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.large)
+                    .disabled(repository.analysisStage != .idle || selectedImages.count >= 5)
+                }
             }
-            .buttonStyle(.bordered)
-            .controlSize(.large)
-            .disabled(repository.analysisStage != .idle)
 
             Button(action: analyzeSelectedImages) {
                 Label("Analyze Meal", systemImage: "sparkle.magnifyingglass")
