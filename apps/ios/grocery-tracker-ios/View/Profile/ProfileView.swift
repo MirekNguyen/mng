@@ -28,6 +28,7 @@ struct ProfileView: View {
                 }
             }
             .navigationTitle("Profile")
+            .navigationBarTitleDisplayMode(.inline)
             .task {
                 await repository.fetchProfile()
             }
@@ -59,13 +60,17 @@ struct ProfileView: View {
                         metabolismSection(profile: profile)
                     }
                 }
-                .padding(.vertical, 20)
+                // Use a fixed top padding so the profile card has consistent breathing room
+                // regardless of whether the large nav title is expanded or collapsed.
+                .padding(.top, 16)
+                .padding(.bottom, 20)
+                .padding(.horizontal, 16)
             }
             .listRowInsets(EdgeInsets())
             .listRowSeparator(.hidden)
             .listRowBackground(Color.clear)
         }
-        .listStyle(.insetGrouped)
+        .listStyle(.plain)
         .scrollContentBackground(.hidden)
     }
     
