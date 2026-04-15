@@ -2,6 +2,7 @@ import SwiftUI
 
 struct ProfileView: View {
     @ObservedObject var repository: UserProfileRepository
+    @EnvironmentObject var statsRepository: StatsRepository
     @State private var showCompleteProfile = false
     @State private var showEditProfile = false
     
@@ -74,6 +75,8 @@ struct ProfileView: View {
                     if profile.bmr != nil || profile.tdee != nil {
                         metabolismSection(profile: profile)
                     }
+                    
+                    ProfileStatsSection(statsRepository: statsRepository)
                 }
                 // Use a fixed top padding so the profile card has consistent breathing room
                 // regardless of whether the large nav title is expanded or collapsed.
