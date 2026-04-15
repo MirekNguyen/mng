@@ -34,11 +34,11 @@ struct ProfileStatsSection: View {
                 .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 4)
         )
         .task {
-            if statsRepository.stats == nil && !statsRepository.isLoading {
-                let end = Date()
-                let start = Calendar.current.date(byAdding: .day, value: -30, to: end) ?? end
-                await statsRepository.fetchStats(startDate: start, endDate: end)
-            }
+            // Always fetch with the 30-day window regardless of any pre-existing stats
+            // that may have been loaded by the Stats tab with a different time window.
+            let end = Date()
+            let start = Calendar.current.date(byAdding: .day, value: -30, to: end) ?? end
+            await statsRepository.fetchStats(startDate: start, endDate: end)
         }
     }
 
