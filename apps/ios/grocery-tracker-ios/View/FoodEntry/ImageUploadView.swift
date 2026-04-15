@@ -198,9 +198,10 @@ struct ImageUploadView: View {
                         systemImage: "photo.on.rectangle"
                     )
                     .frame(maxWidth: .infinity)
+                    .lineLimit(1)
                 }
                 .buttonStyle(.bordered)
-                .controlSize(.large)
+                .controlSize(.regular)
                 .disabled(repository.analysisStage != .idle || selectedImages.count >= 5)
 
                 if UIImagePickerController.isSourceTypeAvailable(.camera) {
@@ -209,9 +210,10 @@ struct ImageUploadView: View {
                     } label: {
                         Label("Camera", systemImage: "camera.fill")
                             .frame(maxWidth: .infinity)
+                            .lineLimit(1)
                     }
                     .buttonStyle(.bordered)
-                    .controlSize(.large)
+                    .controlSize(.regular)
                     .disabled(repository.analysisStage != .idle || selectedImages.count >= 5)
                 }
             }
