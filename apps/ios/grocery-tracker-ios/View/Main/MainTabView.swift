@@ -14,6 +14,8 @@ struct MainTabView: View {
         networkManager: NetworkManager2(baseURL: "https://api.mirekng.com/"))
 
     @State private var selectedTab: Int = 0
+    @State private var showOnboarding: Bool = false
+
     var body: some View {
         TabView(selection: $selectedTab) {
             NavigationStack {
@@ -54,6 +56,16 @@ struct MainTabView: View {
         .environmentObject(foodRepository)
         .environmentObject(statsRepository)
         .environmentObject(userProfileRepository)
+        .sheet(isPresented: $showOnboarding) {
+            CompleteProfileView(repository: userProfileRepository, profile: userProfileRepository.profile)
+                .interactiveDismissDisabled(true)
+        }
+        .task {
+            await userProfileRepository.fetchProfile()
+            if let profile = userProfileRepository.profile, !profile.isProfileComplete {
+                showOnboarding = true
+            }
+        }
     }
 
 }

@@ -54,6 +54,10 @@ struct ProfileView: View {
                     if profile.goal != nil || profile.activityLevel != nil || profile.dailyCalorieTarget != nil {
                         goalSection(profile: profile)
                     }
+                    
+                    if profile.bmr != nil || profile.tdee != nil {
+                        metabolismSection(profile: profile)
+                    }
                 }
                 .padding(.vertical, 20)
             }
@@ -273,6 +277,37 @@ struct ProfileView: View {
                 
                 if let dailyCalorieTarget = profile.dailyCalorieTarget {
                     metricRow(label: "Daily Target", value: "\(dailyCalorieTarget) kcal", icon: "flame")
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 24)
+        }
+        .background(
+            RoundedRectangle(cornerRadius: 24)
+                .fill(.ultraThinMaterial)
+                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 4)
+        )
+    }
+    
+    private func metabolismSection(profile: UserProfile) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("Metabolism")
+                .font(.system(size: 20, weight: .bold))
+                .foregroundColor(.white)
+                .padding(.horizontal, 20)
+                .padding(.top, 24)
+                .padding(.bottom, 20)
+            
+            VStack(spacing: 0) {
+                if let bmr = profile.bmr {
+                    metricRow(label: "BMR", value: "\(Int(bmr)) kcal/day", icon: "heart.fill")
+                    if profile.tdee != nil {
+                        Divider().opacity(0.15).padding(.leading, 60)
+                    }
+                }
+                
+                if let tdee = profile.tdee {
+                    metricRow(label: "TDEE", value: "\(Int(tdee)) kcal/day", icon: "flame.fill")
                 }
             }
             .padding(.horizontal, 20)

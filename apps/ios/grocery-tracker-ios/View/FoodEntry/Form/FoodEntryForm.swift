@@ -3,6 +3,7 @@ import SwiftUI
 struct FoodEntryForm: View {
     @EnvironmentObject var foodRepo: FoodRepository
     @EnvironmentObject var foodEntryRepo: FoodEntryRepository
+    @EnvironmentObject var userProfileRepo: UserProfileRepository
     @Environment(\.dismiss) private var dismiss
     @Binding var selectedDate: Date
     @State private var selectedFood: Food?
@@ -207,7 +208,7 @@ struct FoodEntryForm: View {
         let timeString = formatter.string(from: time)
 
         let entry = CreateFoodEntry(
-            userId: 1,
+            userId: userProfileRepo.profile?.id,
             mealId: food.id,
             foodName: food.name,
             mealType: mealType,  // Use the selected mealType

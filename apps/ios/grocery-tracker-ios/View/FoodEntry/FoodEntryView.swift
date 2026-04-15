@@ -19,6 +19,19 @@ struct FoodEntryView: View {
             $0.entryTime < $1.entryTime
         }
     }
+    
+    /// Meal type display order
+    private let mealOrder = ["breakfast", "lunch", "dinner", "snack"]
+    
+    /// Entries grouped by meal type, in canonical meal order
+    var groupedEntries: [(mealType: String, entries: [FoodEntry])] {
+        let dict = Dictionary(grouping: entries) { $0.mealType.lowercased() }
+        let sortedKeys = mealOrder.filter { dict[$0] != nil } + dict.keys.filter { !mealOrder.contains($0) }.sorted()
+        return sortedKeys.compactMap { key in
+            guard let items = dict[key] else { return nil }
+            return (mealType: key, entries: items)
+        }
+    }
     // (Keep your totalCalories / macros computed properties here)
     var totalCalories: Double { entries.reduce(0) { $0 + $1.calories } }
     var totalProtein: Double { entries.reduce(0) { $0 + $1.protein } }
@@ -40,7 +53,7 @@ struct FoodEntryView: View {
                     CalorieGaugeView(
                         selectedDate: $selectedDate,
                         currentCalories: totalCalories,
-                        targetCalories: 2000
+                        targetCalories: Double(userProfileRepository.profile?.dailyCalorieTarget ?? 2000)
                     )
 
                     HStack(spacing: 12) {
@@ -100,8 +113,18 @@ struct FoodEntryView: View {
                         Rectangle()
                             .fill(.ultraThinMaterial)
                     )
-                } else {
-                    ForEach(entries) { foodEntry in
+                }
+            }
+            
+            ForEach(groupedEntries, id: \.mealType) { group in
+                Section(header:
+                    Text(group.mealType.capitalized)
+                        .font(.caption.weight(.semibold))
+                        .foregroundColor(.white.opacity(0.6))
+                        .textCase(nil)
+                        .padding(.horizontal, 4)
+                ) {
+                    ForEach(group.entries) { foodEntry in
                         FoodItemRow(
                             weight: foodEntry.formattedAmount,
                             foodName: foodEntry.foodName,
@@ -138,9 +161,8 @@ struct FoodEntryView: View {
                     .listRowBackground(
                         Rectangle()
                             .fill(.ultraThinMaterial)  // Gives the glass look
-                        //.glassEffect(.regular, in: .rect(cornerRadius: 0)) // Use your custom modifier here if preferred
                     )
-                    .animation(.spring(response: 0.45, dampingFraction: 0.75), value: entries.count)
+                    .animation(.spring(response: 0.45, dampingFraction: 0.75), value: group.entries.count)
                 }
             }
         }
@@ -240,6 +262,24 @@ struct FoodEntryView: View {
         }
         .refreshable { await loadData() }
         .onChange(of: selectedDate) { Task { await loadData() } }
+        .onChange(of: foodEntryRepository.errorMessage) { _, errorMsg in
+            if let msg = errorMsg, !msg.isEmpty {
+                // Auto-clear error after 4 seconds
+                DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+                    foodEntryRepository.errorMessage = nil
+                }
+            }
+        }
+        .overlay(alignment: .top) {
+            if let error = foodEntryRepository.errorMessage {
+                ErrorToastView(message: error) {
+                    foodEntryRepository.errorMessage = nil
+                }
+                .transition(.move(edge: .top).combined(with: .opacity))
+                .animation(.spring(response: 0.4, dampingFraction: 0.75), value: foodEntryRepository.errorMessage)
+                .padding(.top, 8)
+            }
+        }
     }
     
     private var profileInitialsButton: some View {
