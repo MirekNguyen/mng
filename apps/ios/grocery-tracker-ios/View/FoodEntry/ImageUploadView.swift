@@ -138,16 +138,16 @@ struct ImageUploadView: View {
                         )
                         .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
                         .overlay(alignment: .topTrailing) {
-                            Text("\(index + 1)")
-                                .font(.caption.bold())
-                                .foregroundColor(.white)
-                                .padding(6)
-                                .background(
-                                    Circle()
-                                        .fill(Color.blue)
-                                        .shadow(color: .black.opacity(0.2), radius: 2)
-                                )
-                                .padding(8)
+                            Button {
+                                removeImage(at: index)
+                            } label: {
+                                Image(systemName: "xmark.circle.fill")
+                                    .font(.title3)
+                                    .foregroundStyle(.white, Color.black.opacity(0.6))
+                                    .symbolRenderingMode(.palette)
+                            }
+                            .disabled(repository.analysisStage != .idle)
+                            .padding(6)
                         }
                 }
                 .aspectRatio(1, contentMode: .fit)
@@ -159,6 +159,16 @@ struct ImageUploadView: View {
         }
         .padding(.horizontal, 20)
         .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedImages.count)
+    }
+
+    private func removeImage(at index: Int) {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+            selectedImages.remove(at: index)
+            // Do not modify selectedItems here — selectedImages is the source of
+            // truth for analysis once images are loaded. Mutating selectedItems
+            // would trigger onChange → loadImages and overwrite selectedImages,
+            // losing any camera-captured photos that have no PhotosPickerItem.
+        }
     }
 
     private var canAnalyze: Bool {
