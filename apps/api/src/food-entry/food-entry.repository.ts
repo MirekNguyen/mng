@@ -9,7 +9,7 @@ import { DateTime } from "luxon";
 
 export const FoodEntryRepository = {
   async get(date: Date): Promise<FoodEntry[]> {
-    const dateString = DateTime.fromJSDate(date).toFormat("yyyy-M-dd");
+    const dateString = DateTime.fromJSDate(date).toFormat("yyyy-MM-dd");
     return await db.query.foodEntries.findMany({
       where: eq(foodEntries.entryDate, dateString),
     });
