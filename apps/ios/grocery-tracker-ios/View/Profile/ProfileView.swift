@@ -3,6 +3,7 @@ import SwiftUI
 struct ProfileView: View {
     @ObservedObject var repository: UserProfileRepository
     @State private var showCompleteProfile = false
+    @State private var showEditProfile = false
     
     init(repository: UserProfileRepository) {
         self.repository = repository
@@ -29,11 +30,25 @@ struct ProfileView: View {
             }
             .navigationTitle("Profile")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    if repository.profile != nil {
+                        Button(action: { showEditProfile = true }) {
+                            Image(systemName: "pencil")
+                                .font(.system(size: 15, weight: .medium))
+                                .foregroundColor(.orange)
+                        }
+                    }
+                }
+            }
             .task {
                 await repository.fetchProfile()
             }
             .sheet(isPresented: $showCompleteProfile) {
                 CompleteProfileView(repository: repository, profile: repository.profile)
+            }
+            .sheet(isPresented: $showEditProfile) {
+                EditProfileView(repository: repository)
             }
         }
     }
