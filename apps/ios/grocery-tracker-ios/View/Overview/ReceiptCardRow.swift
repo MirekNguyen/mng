@@ -28,11 +28,14 @@ struct ReceiptCardRow: View {
                     .foregroundColor(.primary)
             }
         }
-        .padding(12)
+        .padding(Styles.Spacing.m)
         .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(Color(.systemBackground))
-                .shadow(color: .black.opacity(0.04), radius: 4, x: 0, y: 2)
+            RoundedRectangle(cornerRadius: Styles.CornerRadius.card)
+                .fill(.ultraThinMaterial)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: Styles.CornerRadius.card)
+                .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
         )
         .padding(.vertical, 5)
     }

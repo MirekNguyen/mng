@@ -19,7 +19,7 @@ struct FoodEntryForm: View {
     let mealTypes = ["breakfast", "lunch", "dinner", "snack"]
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Group {
                 if selectedFood == nil {
                     FoodSearchView(
@@ -42,7 +42,7 @@ struct FoodEntryForm: View {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: { dismiss() }) {
                         Image(systemName: "xmark")
-                            .font(.title2)
+                            .font(.body.weight(.semibold))
                             .foregroundStyle(.secondary)
                             .symbolRenderingMode(.hierarchical)
                     }

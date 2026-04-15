@@ -89,6 +89,8 @@ struct NewReceiptView: View {
                 }
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(.ultraThinMaterial)
         .navigationTitle("New Receipt")
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {

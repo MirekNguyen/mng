@@ -76,6 +76,8 @@ struct EditReceiptView: View {
                 }
             }
         }
+        .scrollContentBackground(.hidden)
+        .background(.ultraThinMaterial)
         .navigationTitle("Edit Receipt")
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {

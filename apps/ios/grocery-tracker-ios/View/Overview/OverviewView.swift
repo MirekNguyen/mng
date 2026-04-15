@@ -42,7 +42,17 @@ struct OverviewView: View {
                 }
             }
         }
-        .background(Color(.systemGroupedBackground).ignoresSafeArea())
+        .scrollContentBackground(.hidden)
+        .background(
+            ZStack {
+                Image("Wallpaper")
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .edgesIgnoringSafeArea(.all)
+                Color.clear.background(.ultraThinMaterial)
+                    .edgesIgnoringSafeArea(.all)
+            }
+        )
         .task {
             if networkManager.receipts.isEmpty {
                 await networkManager.fetchReceipts()
