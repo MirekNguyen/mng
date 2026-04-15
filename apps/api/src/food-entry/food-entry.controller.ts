@@ -40,23 +40,28 @@ app.post(
 app.post(
   "/analyze",
   async ({ body }): Promise<FoodAnalysisResult> => {
-    if (!body.files.length) {
-      throw new ServerError("At least one image file is required.");
+    const files = body.files ?? [];
+    const prompt = body.prompt?.trim() ?? "";
+
+    if (!files.length && !prompt) {
+      throw new ServerError("Please provide at least one image or a meal description.");
     }
 
     // Use the new method with progress callback
-    return await FoodEntryAnalyzer.analyzeWithProgress(body.files, (message) => {
+    return await FoodEntryAnalyzer.analyzeWithProgress(files, prompt || undefined, (message) => {
       // Log progress messages on the server
       console.log(`[Analysis Progress] ${message}`);
     });
   },
   {
     body: t.Object({
-      files: t.Files({
-        type: ["image/jpeg", "image/png", "image/webp"],
-        maxSize: "10m",
-        minItems: 1,
-      }),
+      files: t.Optional(
+        t.Files({
+          type: ["image/jpeg", "image/png", "image/webp"],
+          maxSize: "10m",
+        }),
+      ),
+      prompt: t.Optional(t.String({ maxLength: 300 })),
     }),
   },
 );

@@ -78,10 +78,12 @@ final class FoodEntryRepository: ObservableObject {
         }
     }
 
-    func analyzeImages(images: [UIImage]) async {
-        guard !images.isEmpty else {
+    func analyzeImages(images: [UIImage], prompt: String? = nil) async {
+        let hasImages = !images.isEmpty
+        let hasPrompt = prompt != nil && !(prompt!.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+        guard hasImages || hasPrompt else {
             await MainActor.run {
-                self.errorMessage = "No images were selected for analysis."
+                self.errorMessage = "Please add a photo or describe your meal before analysing."
             }
             return
         }
@@ -119,21 +121,28 @@ final class FoodEntryRepository: ObservableObject {
 
         // 2. Make the network call
         do {
-            // Update stage: uploading with progress simulation
-            await MainActor.run {
-                self.analysisStage = .uploading(progress: 0.0)
-            }
-            
-            // Simulate upload progress
-            for progress in stride(from: 0.0, through: 1.0, by: 0.2) {
+            let isTextOnly = imagesToUpload.isEmpty
+
+            // Update stage: uploading with progress simulation (skip for text-only)
+            if !isTextOnly {
                 await MainActor.run {
-                    self.analysisStage = .uploading(progress: progress)
+                    self.analysisStage = .uploading(progress: 0.0)
                 }
-                try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
+                for progress in stride(from: 0.0, through: 1.0, by: 0.2) {
+                    await MainActor.run {
+                        self.analysisStage = .uploading(progress: progress)
+                    }
+                    try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
+                }
             }
             
             // Update stage: analyzing with detailed messages
-            let analysisMessages = [
+            let analysisMessages: [String] = isTextOnly ? [
+                "Reading your description...",
+                "Looking up nutritional data...",
+                "Estimating calories and macros...",
+                "Finalizing analysis..."
+            ] : [
                 "Processing image data...",
                 "Identifying food items...",
                 "Analyzing portions and ingredients...",
@@ -151,18 +160,11 @@ final class FoodEntryRepository: ObservableObject {
             let messageTask = Task {
                 let totalMessages = analysisMessages.count
                 for (index, message) in analysisMessages.enumerated() {
-                    // Skip first message since we already set it
                     guard index > 0 else { continue }
-                    
-                    // Calculate progress: gradually increase from 0.0 to 0.95
                     let messageProgress = Double(index) / Double(totalMessages - 1)
                     let adjustedProgress = min(messageProgress * 0.95, 0.95)
-                    
-                    // Wait 4-5 seconds between messages to simulate progress
                     try? await Task.sleep(nanoseconds: UInt64.random(in: 4_000_000_000...5_000_000_000))
-                    
                     await MainActor.run {
-                        // Only update if still analyzing
                         if case .analyzing = self.analysisStage {
                             self.analysisStage = .analyzing(message: message, progress: adjustedProgress)
                         }
@@ -170,8 +172,11 @@ final class FoodEntryRepository: ObservableObject {
                 }
             }
 
+            // Always use multipart /food-entry/analyze; prompt is an optional text field,
+            // images array may be empty for text-only analysis.
             let newEntry: AnalyzedFoodData? = try await networkManager.postImages(
                 endpoint: "/food-entry/analyze",
+                parameters: prompt.map { ["prompt": $0] },
                 images: imagesToUpload
             )
             

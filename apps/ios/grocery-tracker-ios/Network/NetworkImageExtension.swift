@@ -11,9 +11,11 @@ extension NetworkManager2 {
     private func createMultipartBody(
         parameters: [String: String]?,
         images: [ImageUploadData],
-        boundary: String,
+        boundary: String
     ) -> Data {
         var body = Data()
+
+        // Append text parameters
         if let parameters = parameters {
             for (key, value) in parameters {
                 body.append(Data("--\(boundary)\r\n".utf8))
@@ -21,8 +23,10 @@ extension NetworkManager2 {
                 body.append(Data("\(value)\r\n".utf8))
             }
         }
-        body.append(Data("--\(boundary)\r\n".utf8))
+
+        // Append image parts
         for image in images {
+            body.append(Data("--\(boundary)\r\n".utf8))
             body.append(
                 Data("Content-Disposition: form-data; name=\"\(image.formName)\"; filename=\"\(image.fileName)\"\r\n".utf8)
             )
@@ -30,6 +34,7 @@ extension NetworkManager2 {
             body.append(image.data)
             body.append(Data("\r\n".utf8))
         }
+
         body.append(Data("--\(boundary)--\r\n".utf8))
         return body
     }
@@ -37,13 +42,13 @@ extension NetworkManager2 {
     func postImages<U: Decodable>(
         endpoint: String,
         parameters: [String: String]? = nil,
-        images: [ImageUploadData],
+        images: [ImageUploadData] = []
     ) async throws -> U {
         let boundary = UUID().uuidString
         let body = createMultipartBody(
             parameters: parameters,
             images: images,
-            boundary: boundary,
+            boundary: boundary
         )
         let request = try createRequest(
             endpoint,

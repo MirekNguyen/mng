@@ -8,22 +8,37 @@ struct ImageUploadView: View {
     @State private var selectedItems: [PhotosPickerItem] = []
     @State private var selectedImages: [UIImage] = []
     @State private var showCamera: Bool = false
+    @State private var mealPrompt: String = ""
 
     var body: some View {
         NavigationStack {
             ZStack {
                 VStack(spacing: 0) {
-                    if selectedImages.isEmpty {
-                        emptyStateView
-                            .frame(maxHeight: .infinity)
-                    } else {
-                        imagePreviewGrid
-                            .padding(.top, 16)
+                    ScrollView {
+                        VStack(spacing: 16) {
+                            if selectedImages.isEmpty {
+                                emptyStateView
+                                    .padding(.top, 24)
+                            } else {
+                                imagePreviewGrid
+                                    .padding(.top, 16)
+                            }
+
+                            // Meal prompt input — always visible, appears below photo area
+                            MealPromptTextField(
+                                text: $mealPrompt,
+                                isBusy: repository.analysisStage != .idle
+                            )
+                            .padding(.horizontal, 20)
+                            .padding(.bottom, 8)
+                        }
                     }
+                    .scrollDismissesKeyboard(.interactively)
 
                     if let error = repository.errorMessage {
                         errorView(message: error)
-                            .padding(.top, 12)
+                            .padding(.horizontal, 20)
+                            .padding(.top, 8)
                     }
 
                     actionButtons
@@ -92,7 +107,7 @@ struct ImageUploadView: View {
                     .font(.title2.bold())
                     .foregroundColor(.primary)
                 
-                Text("Select photos of your food to begin analysis")
+                Text("Add a photo, type a description, or both — to help the AI analyse your meal accurately.")
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -148,6 +163,10 @@ struct ImageUploadView: View {
         }
     }
 
+    private var canAnalyze: Bool {
+        !selectedImages.isEmpty || !mealPrompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
     private var actionButtons: some View {
         VStack(spacing: 12) {
             if !selectedImages.isEmpty {
@@ -201,7 +220,7 @@ struct ImageUploadView: View {
             .buttonStyle(.borderedProminent)
             .tint(.blue)
             .controlSize(.large)
-            .disabled(selectedImages.isEmpty || repository.analysisStage != .idle)
+            .disabled(!canAnalyze || repository.analysisStage != .idle)
         }
     }
 
@@ -242,13 +261,18 @@ struct ImageUploadView: View {
     }
 
     private func analyzeSelectedImages() {
+        let trimmedPrompt = mealPrompt.trimmingCharacters(in: .whitespacesAndNewlines)
         Task {
-            await repository.analyzeImages(images: selectedImages)
+            await repository.analyzeImages(
+                images: selectedImages,
+                prompt: trimmedPrompt.isEmpty ? nil : trimmedPrompt
+            )
 
             await MainActor.run {
                 if repository.errorMessage == nil {
                     selectedItems = []
                     selectedImages = []
+                    mealPrompt = ""
                 }
             }
         }

@@ -30,7 +30,7 @@ enum AnalysisStage: Equatable {
         case .idle:
             return ""
         case .preparing:
-            return "Optimizing images for analysis..."
+            return "Preparing for analysis..."
         case .uploading(let progress):
             return "Uploading to server... \(Int(progress * 100))%"
         case .analyzing(let message, _):
