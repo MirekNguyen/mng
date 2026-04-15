@@ -247,9 +247,11 @@ struct FoodEntryForm: View {
         switch hour {
         case 5..<11:
             return "breakfast"
-        case 11..<15:
+        case 11..<14:
             return "lunch"
-        case 15..<20:
+        case 14..<17:
+            return "snack"
+        case 17..<22:
             return "dinner"
         default:
             return "snack"
