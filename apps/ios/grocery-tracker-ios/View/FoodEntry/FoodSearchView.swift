@@ -39,6 +39,10 @@ struct FoodSearchView: View {
         Array(foods.sorted { $0.name < $1.name }.prefix(6))
     }
 
+    var allFoods: [Food] {
+        foods.sorted { $0.name < $1.name }
+    }
+
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 0) {
@@ -52,6 +56,21 @@ struct FoodSearchView: View {
                             .padding(.top, 16)
                         
                         ForEach(suggestedFoods) { food in
+                            FoodRowView(food: food, searchQuery: searchText) {
+                                selectedFood = food
+                            }
+                        }
+                    }
+
+                    // All foods section
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("All Foods")
+                            .font(.title3.bold())
+                            .foregroundColor(.primary)
+                            .padding(.horizontal, 16)
+                            .padding(.top, 16)
+
+                        ForEach(allFoods) { food in
                             FoodRowView(food: food, searchQuery: searchText) {
                                 selectedFood = food
                             }
