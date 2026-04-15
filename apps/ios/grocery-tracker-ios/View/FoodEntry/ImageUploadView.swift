@@ -77,11 +77,6 @@ struct ImageUploadView: View {
                     await loadImages(from: newItems)
                 }
             }
-            .fullScreenCover(item: $repository.pendingEntry) { entryData in
-                ConfirmEntryView(data: entryData, repository: repository, onSave: {
-                    dismiss()
-                })
-            }
             .sheet(isPresented: $showCamera) {
                 CameraPicker { image in
                     if selectedImages.count < 5 {
@@ -270,19 +265,20 @@ struct ImageUploadView: View {
 
     private func analyzeSelectedImages() {
         let trimmedPrompt = mealPrompt.trimmingCharacters(in: .whitespacesAndNewlines)
+        let imagesToAnalyze = selectedImages
+        let promptToSend = trimmedPrompt.isEmpty ? nil : trimmedPrompt
+
+        // Start background analysis — the sheet dismisses immediately so the
+        // user can continue using the app while the AI works.
         Task {
             await repository.analyzeImages(
-                images: selectedImages,
-                prompt: trimmedPrompt.isEmpty ? nil : trimmedPrompt
+                images: imagesToAnalyze,
+                prompt: promptToSend,
+                background: true
             )
-
-            await MainActor.run {
-                if repository.errorMessage == nil {
-                    selectedItems = []
-                    selectedImages = []
-                    mealPrompt = ""
-                }
-            }
         }
+
+        // Dismiss right away (don't wait for analysis to finish).
+        dismiss()
     }
 }

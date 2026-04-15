@@ -8,6 +8,13 @@ final class FoodEntryRepository: ObservableObject {
     @Published var pendingEntry: AnalyzedFoodData?
     @Published var analysisStage: AnalysisStage = .idle
 
+    /// `true` while analysis is running in the background (sheet dismissed).
+    @Published var isAnalyzingInBackground: Bool = false
+    /// Progress stage reported while running in the background.
+    @Published var backgroundAnalysisStage: AnalysisStage = .idle
+
+    private var backgroundTask: Task<Void, Never>?
+
     private let networkManager: NetworkManager2
 
     init(networkManager: NetworkManager2) {
@@ -78,7 +85,17 @@ final class FoodEntryRepository: ObservableObject {
         }
     }
 
-    func analyzeImages(images: [UIImage], prompt: String? = nil) async {
+    // MARK: - Analysis
+
+    /// Starts meal analysis. When `background` is `true` the analysis runs as a
+    /// detached task so the caller can dismiss its sheet immediately — the user
+    /// can keep using the app while the work completes.
+    ///
+    /// Progress is reflected on:
+    ///   • `analysisStage`          – used by `ImageUploadView` while the sheet is still open
+    ///   • `backgroundAnalysisStage` / `isAnalyzingInBackground` – used by `FoodEntryView`
+    ///     to show the floating indicator after the sheet is gone
+    func analyzeImages(images: [UIImage], prompt: String? = nil, background: Bool = false) async {
         let hasImages = !images.isEmpty
         let hasPrompt = prompt != nil && !(prompt!.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
         guard hasImages || hasPrompt else {
@@ -88,22 +105,72 @@ final class FoodEntryRepository: ObservableObject {
             return
         }
 
-        // Update stage: preparing
-        await MainActor.run {
-            self.analysisStage = .preparing
-            self.errorMessage = nil
+        if background {
+            // Fire-and-forget: caller dismisses its sheet immediately.
+            await MainActor.run {
+                self.isAnalyzingInBackground = true
+                self.backgroundAnalysisStage = .preparing
+                self.errorMessage = nil
+            }
+            backgroundTask?.cancel()
+            backgroundTask = Task {
+                await self._runAnalysis(images: images, prompt: prompt, stageSetter: { [weak self] stage in
+                    await MainActor.run {
+                        self?.backgroundAnalysisStage = stage
+                    }
+                }, onComplete: { [weak self] entry in
+                    await MainActor.run {
+                        self?.isAnalyzingInBackground = false
+                        self?.backgroundAnalysisStage = .idle
+                        self?.pendingEntry = entry
+                    }
+                }, onError: { [weak self] message in
+                    await MainActor.run {
+                        self?.isAnalyzingInBackground = false
+                        self?.backgroundAnalysisStage = .idle
+                        self?.errorMessage = message
+                    }
+                })
+            }
+        } else {
+            // Foreground (blocking): show progress overlay inside the sheet.
+            await MainActor.run {
+                self.analysisStage = .preparing
+                self.errorMessage = nil
+            }
+            await _runAnalysis(images: images, prompt: prompt, stageSetter: { [weak self] stage in
+                await MainActor.run {
+                    self?.analysisStage = stage
+                }
+            }, onComplete: { [weak self] entry in
+                await MainActor.run {
+                    self?.pendingEntry = entry
+                    self?.analysisStage = .idle
+                }
+            }, onError: { [weak self] message in
+                await MainActor.run {
+                    self?.errorMessage = message
+                    self?.analysisStage = .failed(error: message)
+                }
+            })
         }
-        
+    }
+
+    // MARK: - Private analysis core
+
+    private func _runAnalysis(
+        images: [UIImage],
+        prompt: String?,
+        stageSetter: @escaping (AnalysisStage) async -> Void,
+        onComplete: @escaping (AnalyzedFoodData?) async -> Void,
+        onError: @escaping (String) async -> Void
+    ) async {
         // Simulate a brief delay for preparing (compress images)
         try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
 
         // 1. Convert [UIImage] to [ImageUploadData]
         let imagesToUpload: [ImageUploadData] = images.compactMap { image in
-            // Compress image to JPEG
-            guard let imageData = image.jpegData(compressionQuality: 0.8) else {
-                return nil
-            }
-
+            guard let imageData = image.jpegData(compressionQuality: 0.8) else { return nil }
             return ImageUploadData(
                 data: imageData,
                 fileName: "\(UUID().uuidString).jpg",
@@ -112,30 +179,22 @@ final class FoodEntryRepository: ObservableObject {
         }
 
         if imagesToUpload.isEmpty && !images.isEmpty {
-            await MainActor.run {
-                self.errorMessage = "An error occurred while preparing images."
-                self.analysisStage = .failed(error: "Failed to prepare images")
-            }
+            await onError("An error occurred while preparing images.")
             return
         }
 
-        // 2. Make the network call
         do {
             let isTextOnly = imagesToUpload.isEmpty
 
             // Update stage: uploading with progress simulation (skip for text-only)
             if !isTextOnly {
-                await MainActor.run {
-                    self.analysisStage = .uploading(progress: 0.0)
-                }
+                await stageSetter(.uploading(progress: 0.0))
                 for progress in stride(from: 0.0, through: 1.0, by: 0.2) {
-                    await MainActor.run {
-                        self.analysisStage = .uploading(progress: progress)
-                    }
+                    await stageSetter(.uploading(progress: progress))
                     try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
                 }
             }
-            
+
             // Update stage: analyzing with detailed messages
             let analysisMessages: [String] = isTextOnly ? [
                 "Reading your description...",
@@ -150,30 +209,23 @@ final class FoodEntryRepository: ObservableObject {
                 "Estimating calories and macros...",
                 "Finalizing analysis..."
             ]
-            
+
             // Start analysis phase with initial progress
-            await MainActor.run {
-                self.analysisStage = .analyzing(message: analysisMessages[0], progress: 0.0)
-            }
-            
-            // Create a background task to cycle through messages with progress
+            await stageSetter(.analyzing(message: analysisMessages[0], progress: 0.0))
+
+            // Cycle through progress messages in a child task
             let messageTask = Task {
-                let totalMessages = analysisMessages.count
+                let total = analysisMessages.count
                 for (index, message) in analysisMessages.enumerated() {
                     guard index > 0 else { continue }
-                    let messageProgress = Double(index) / Double(totalMessages - 1)
-                    let adjustedProgress = min(messageProgress * 0.95, 0.95)
+                    let messageProgress = Double(index) / Double(total - 1)
+                    let adjusted = min(messageProgress * 0.95, 0.95)
                     try? await Task.sleep(nanoseconds: UInt64.random(in: 4_000_000_000...5_000_000_000))
-                    await MainActor.run {
-                        if case .analyzing = self.analysisStage {
-                            self.analysisStage = .analyzing(message: message, progress: adjustedProgress)
-                        }
-                    }
+                    await stageSetter(.analyzing(message: message, progress: adjusted))
                 }
             }
 
-            // Always use multipart /food-entry/analyze for image (+ optional text) requests.
-            // For text-only analysis, use the dedicated /food-entry/analyze-text JSON endpoint.
+            // Make the network call
             let newEntry: AnalyzedFoodData?
             if isTextOnly, let trimmedPrompt = prompt {
                 struct TextPromptBody: Encodable { let prompt: String }
@@ -188,36 +240,21 @@ final class FoodEntryRepository: ObservableObject {
                     images: imagesToUpload
                 )
             }
-            
-            // Cancel the message task once we have results
-            messageTask.cancel()
 
+            messageTask.cancel()
             print("✅ Analysis successful. Server response:", newEntry ?? "Server returned null")
 
-            // Update stage: completed
-            await MainActor.run {
-                self.analysisStage = .completed
-            }
-            
-            // Brief delay to show completion state
+            // Show completed briefly, then hand result to caller
+            await stageSetter(.completed)
             try? await Task.sleep(nanoseconds: 600_000_000) // 0.6 seconds
 
             if let newEntry = newEntry {
-                await MainActor.run {
-                    self.pendingEntry = newEntry
-                    self.analysisStage = .idle
-                }
+                await onComplete(newEntry)
             } else {
-                await MainActor.run {
-                    self.errorMessage = "Analysis complete, but no food data could be extracted."
-                    self.analysisStage = .failed(error: "No food data found")
-                }
+                await onError("Analysis complete, but no food data could be extracted.")
             }
         } catch {
-            await MainActor.run {
-                self.errorMessage = error.localizedDescription
-                self.analysisStage = .failed(error: error.localizedDescription)
-            }
+            await onError(error.localizedDescription)
         }
     }
 }

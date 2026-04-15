@@ -12,6 +12,7 @@ struct FoodEntryView: View {
     @State private var entryToEdit: FoodEntry?
     @State private var selectedEntry: FoodEntry?
     @State private var selectedMacro: MacroType?
+    @State private var showConfirmEntry = false
     @State private var showProfileSheet = false
 
     var entries: [FoodEntry] {
@@ -244,6 +245,25 @@ struct FoodEntryView: View {
                 ProfileView(repository: userProfileRepository)
             }
         }
+        // MARK: - Background analysis: Confirm entry sheet
+        // Triggered from the floating banner (or auto-triggered) once analysis completes.
+        .fullScreenCover(isPresented: $showConfirmEntry, onDismiss: {
+            foodEntryRepository.pendingEntry = nil
+            Task { await loadData() }
+        }) {
+            if let entryData = foodEntryRepository.pendingEntry {
+                ConfirmEntryView(data: entryData, repository: foodEntryRepository, onSave: {
+                    showConfirmEntry = false
+                })
+            }
+        }
+        .onChange(of: foodEntryRepository.pendingEntry) { _, newEntry in
+            // Auto-show the confirm sheet when analysis finishes while user is
+            // on this screen. The banner also provides a manual tap path.
+            if newEntry != nil {
+                showConfirmEntry = true
+            }
+        }
         .navigationTitle("Overview")
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -278,6 +298,22 @@ struct FoodEntryView: View {
                 .transition(.move(edge: .top).combined(with: .opacity))
                 .animation(.spring(response: 0.4, dampingFraction: 0.75), value: foodEntryRepository.errorMessage)
                 .padding(.top, 8)
+            }
+        }
+        // MARK: - Background analysis banner (non-blocking)
+        .overlay(alignment: .bottom) {
+            let isAnalyzing = foodEntryRepository.isAnalyzingInBackground
+            let hasPending = foodEntryRepository.pendingEntry != nil && !showConfirmEntry
+            if isAnalyzing || hasPending {
+                AnalysisBannerView(
+                    stage: foodEntryRepository.backgroundAnalysisStage,
+                    isAnalyzing: isAnalyzing,
+                    hasPendingResult: hasPending,
+                    onReviewTap: {
+                        showConfirmEntry = true
+                    }
+                )
+                .padding(.bottom, 90) // Clear the tab bar
             }
         }
     }
