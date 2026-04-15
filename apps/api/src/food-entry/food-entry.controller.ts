@@ -66,6 +66,26 @@ app.post(
   },
 );
 
+app.post(
+  "/analyze-text",
+  async ({ body }): Promise<FoodAnalysisResult> => {
+    const prompt = body.prompt.trim();
+
+    if (!prompt) {
+      throw new ServerError("Please provide a meal description.");
+    }
+
+    return await FoodEntryAnalyzer.analyzeWithProgress([], prompt, (message) => {
+      console.log(`[Analysis Progress] ${message}`);
+    });
+  },
+  {
+    body: t.Object({
+      prompt: t.String({ minLength: 1, maxLength: 300 }),
+    }),
+  },
+);
+
 app.get(
   "/summarize",
   async ({ query, set }) => {

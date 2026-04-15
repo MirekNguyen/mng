@@ -172,13 +172,22 @@ final class FoodEntryRepository: ObservableObject {
                 }
             }
 
-            // Always use multipart /food-entry/analyze; prompt is an optional text field,
-            // images array may be empty for text-only analysis.
-            let newEntry: AnalyzedFoodData? = try await networkManager.postImages(
-                endpoint: "/food-entry/analyze",
-                parameters: prompt.map { ["prompt": $0] },
-                images: imagesToUpload
-            )
+            // Always use multipart /food-entry/analyze for image (+ optional text) requests.
+            // For text-only analysis, use the dedicated /food-entry/analyze-text JSON endpoint.
+            let newEntry: AnalyzedFoodData?
+            if isTextOnly, let trimmedPrompt = prompt {
+                struct TextPromptBody: Encodable { let prompt: String }
+                newEntry = try await networkManager.post(
+                    endpoint: "/food-entry/analyze-text",
+                    body: TextPromptBody(prompt: trimmedPrompt)
+                )
+            } else {
+                newEntry = try await networkManager.postImages(
+                    endpoint: "/food-entry/analyze",
+                    parameters: prompt.map { ["prompt": $0] },
+                    images: imagesToUpload
+                )
+            }
             
             // Cancel the message task once we have results
             messageTask.cancel()
