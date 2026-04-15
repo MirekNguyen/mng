@@ -11,12 +11,18 @@ struct ProfileStatsSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             // Section header
-            Text("Activity Stats")
-                .font(.system(size: 20, weight: .bold))
-                .foregroundColor(.white)
-                .padding(.horizontal, 20)
-                .padding(.top, 24)
-                .padding(.bottom, 20)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Activity Stats")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundColor(.white)
+
+                Text("Last 30 days")
+                    .font(.system(size: 13, weight: .regular))
+                    .foregroundColor(.white.opacity(0.45))
+            }
+            .padding(.horizontal, 20)
+            .padding(.top, 24)
+            .padding(.bottom, 20)
 
             content
                 .padding(.horizontal, 20)
