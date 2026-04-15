@@ -80,7 +80,7 @@ struct FoodListView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { showingAddFood = true }) {
-                        Image(systemName: "plus")
+                        Image(systemName: "plus.circle.fill")
                             .font(.title3)
                             .foregroundColor(.white)
                     }
