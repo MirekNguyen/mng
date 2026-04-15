@@ -13,7 +13,10 @@ final class StatsRepository: ObservableObject {
     }
     
     func fetchStats(startDate: Date, endDate: Date) async {
-        await MainActor.run { isLoading = true }
+        await MainActor.run {
+            isLoading = true
+            stats = nil
+        }
         
         do {
             let dateFormatter = ISO8601DateFormatter()

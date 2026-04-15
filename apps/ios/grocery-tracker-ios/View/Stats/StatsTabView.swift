@@ -6,6 +6,7 @@ struct StatsTabView: View {
     @State private var selectedPeriod: TimePeriod = .week
     @State private var selectedDate: String?
     @State private var selectedMacro: String?
+    @State private var selectedMacroAngle: Double?
     @State private var selectedMealType: String?
     
     var startDate: Date {
@@ -42,6 +43,7 @@ struct StatsTabView: View {
                     .onChange(of: selectedPeriod) { _, _ in
                         selectedDate = nil
                         selectedMacro = nil
+                        selectedMacroAngle = nil
                         selectedMealType = nil
                         Task {
                             await statsRepository.fetchStats(startDate: startDate, endDate: Date())
@@ -150,7 +152,25 @@ struct StatsTabView: View {
                                             .opacity(selectedMacro == nil ? 1.0 : (selectedMacro == macro.name ? 1.0 : 0.3))
                                         }
                                         .frame(height: 180)
-                                        .chartAngleSelection(value: $selectedMacro)
+                                        .chartAngleSelection(value: $selectedMacroAngle)
+                                        .onChange(of: selectedMacroAngle) { _, angle in
+                                            guard let angle else {
+                                                selectedMacro = nil
+                                                return
+                                            }
+                                            // Map the cumulative angle back to a macro name
+                                            let total = macroData.reduce(0.0) { $0 + $1.value }
+                                            guard total > 0 else { return }
+                                            var cumulative = 0.0
+                                            for macro in macroData {
+                                                cumulative += macro.value / total * 360
+                                                if angle <= cumulative {
+                                                    selectedMacro = macro.name
+                                                    return
+                                                }
+                                            }
+                                            selectedMacro = macroData.last?.name
+                                        }
                                         .onTapGesture { location in
                                             // Cycle through macros or deselect
                                             if let currentMacro = selectedMacro {
@@ -431,15 +451,13 @@ struct StatsTabView: View {
     
     private func formatDate(_ dateString: String) -> String {
         let components = dateString.split(separator: "-")
-        if components.count >= 2 {
-            return "\(components[1])/\(components[2])"
-        }
-        return dateString
+        guard components.count == 3 else { return dateString }
+        return "\(components[1])/\(components[2])"
     }
     
     private func formatFullDate(_ dateString: String) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-M-d"
+        formatter.dateFormat = "yyyy-MM-dd"
         if let date = formatter.date(from: dateString) {
             formatter.dateFormat = "MMM d"
             return formatter.string(from: date)

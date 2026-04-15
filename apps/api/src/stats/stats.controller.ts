@@ -23,8 +23,8 @@ const app = new Elysia({ prefix: "stats" });
 app.get(
   "/",
   async ({ query }): Promise<StatsResponse> => {
-    const startDate = DateTime.fromJSDate(query.startDate).toFormat("yyyy-M-dd");
-    const endDate = DateTime.fromJSDate(query.endDate).toFormat("yyyy-M-dd");
+    const startDate = DateTime.fromJSDate(query.startDate).toFormat("yyyy-MM-dd");
+    const endDate = DateTime.fromJSDate(query.endDate).toFormat("yyyy-MM-dd");
 
     const entries = await StatsRepository.getFoodEntriesByDateRange(startDate, endDate);
 
