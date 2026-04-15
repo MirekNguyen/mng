@@ -107,7 +107,7 @@ struct ImageUploadView: View {
                     .font(.title2.bold())
                     .foregroundColor(.primary)
                 
-                Text("Add a photo, type a description, or both — to help the AI analyse your meal accurately.")
+                Text("Add a photo, type a description, or both — to help the AI analyze your meal accurately.")
                     .font(.body)
                     .foregroundColor(.secondary)
                     .multilineTextAlignment(.center)
@@ -118,49 +118,47 @@ struct ImageUploadView: View {
     }
 
     private var imagePreviewGrid: some View {
-        ScrollView {
-            LazyVGrid(
-                columns: [
-                    GridItem(.flexible(), spacing: 12),
-                    GridItem(.flexible(), spacing: 12)
-                ],
-                spacing: 12
-            ) {
-                ForEach(Array(selectedImages.enumerated()), id: \.offset) { index, image in
-                    GeometryReader { geo in
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: geo.size.width, height: geo.size.width)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 12)
-                                    .stroke(Color(.systemGray5), lineWidth: 1)
-                            )
-                            .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
-                            .overlay(alignment: .topTrailing) {
-                                Text("\(index + 1)")
-                                    .font(.caption.bold())
-                                    .foregroundColor(.white)
-                                    .padding(6)
-                                    .background(
-                                        Circle()
-                                            .fill(Color.blue)
-                                            .shadow(color: .black.opacity(0.2), radius: 2)
-                                    )
-                                    .padding(8)
-                            }
-                    }
-                    .aspectRatio(1, contentMode: .fit)
-                    .transition(.asymmetric(
-                        insertion: .scale.combined(with: .opacity),
-                        removal: .opacity
-                    ))
+        LazyVGrid(
+            columns: [
+                GridItem(.flexible(), spacing: 12),
+                GridItem(.flexible(), spacing: 12)
+            ],
+            spacing: 12
+        ) {
+            ForEach(Array(selectedImages.enumerated()), id: \.offset) { index, image in
+                GeometryReader { geo in
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: geo.size.width, height: geo.size.width)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 12)
+                                .stroke(Color(.systemGray5), lineWidth: 1)
+                        )
+                        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
+                        .overlay(alignment: .topTrailing) {
+                            Text("\(index + 1)")
+                                .font(.caption.bold())
+                                .foregroundColor(.white)
+                                .padding(6)
+                                .background(
+                                    Circle()
+                                        .fill(Color.blue)
+                                        .shadow(color: .black.opacity(0.2), radius: 2)
+                                )
+                                .padding(8)
+                        }
                 }
+                .aspectRatio(1, contentMode: .fit)
+                .transition(.asymmetric(
+                    insertion: .scale.combined(with: .opacity),
+                    removal: .opacity
+                ))
             }
-            .padding(.horizontal, 20)
-            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedImages.count)
         }
+        .padding(.horizontal, 20)
+        .animation(.spring(response: 0.3, dampingFraction: 0.7), value: selectedImages.count)
     }
 
     private var canAnalyze: Bool {
