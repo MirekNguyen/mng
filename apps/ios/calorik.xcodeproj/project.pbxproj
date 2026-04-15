@@ -16,14 +16,14 @@
 			containerPortal = 7C2287D42EA30052009BA42D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 7C2287DB2EA30052009BA42D;
-			remoteInfo = "grocery-tracker-ios";
+			remoteInfo = "calorik";
 		};
 		7C2287F42EA30053009BA42D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 7C2287D42EA30052009BA42D /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 7C2287DB2EA30052009BA42D;
-			remoteInfo = "grocery-tracker-ios";
+			remoteInfo = "calorik";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -57,7 +57,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		7C1F64162EC7A30600BE2343 /* Exceptions for "grocery-tracker-ios" folder in "Calorik" target */ = {
+		7C1F64162EC7A30600BE2343 /* Exceptions for "calorik" folder in "Calorik" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				View/Overview/ReceiptCardRow.swift,
@@ -67,22 +67,22 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		7C2287DE2EA30052009BA42D /* grocery-tracker-ios */ = {
+		7C2287DE2EA30052009BA42D /* calorik */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				7C1F64162EC7A30600BE2343 /* Exceptions for "grocery-tracker-ios" folder in "Calorik" target */,
+				7C1F64162EC7A30600BE2343 /* Exceptions for "calorik" folder in "Calorik" target */,
 			);
-			path = "grocery-tracker-ios";
+			path = "calorik";
 			sourceTree = "<group>";
 		};
-		7C2287EC2EA30053009BA42D /* grocery-tracker-iosTests */ = {
+		7C2287EC2EA30053009BA42D /* calorikTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "grocery-tracker-iosTests";
+			path = "calorikTests";
 			sourceTree = "<group>";
 		};
-		7C2287F62EA30053009BA42D /* grocery-tracker-iosUITests */ = {
+		7C2287F62EA30053009BA42D /* calorikUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "grocery-tracker-iosUITests";
+			path = "calorikUITests";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -112,7 +112,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1F9B9A730E68DB3FE7885026 /* grocery-tracker-ios */ = {
+		1F9B9A730E68DB3FE7885026 /* calorik */ = {
 			isa = PBXGroup;
 			children = (
 				FB0476E2C9CEB8DC6B5EC2E8 /* View */,
@@ -120,7 +120,7 @@
 				52418218FED0BF87596E695B /* Components */,
 				278C28C158610EE2FE95DB63 /* Network */,
 			);
-			path = "grocery-tracker-ios";
+			path = "calorik";
 			sourceTree = "<group>";
 		};
 		278C28C158610EE2FE95DB63 /* Network */ = {
@@ -150,12 +150,12 @@
 			path = Stats;
 			sourceTree = "<group>";
 		};
-		661CAE7C71B20EE269DD6544 /* grocery-tracker-ios */ = {
+		661CAE7C71B20EE269DD6544 /* calorik */ = {
 			isa = PBXGroup;
 			children = (
 				87692A62BAFB63FCCD2A180B /* View */,
 			);
-			path = "grocery-tracker-ios";
+			path = "calorik";
 			sourceTree = "<group>";
 		};
 		68B9B5F70455CD9F73632155 /* FoodEntry */ = {
@@ -177,11 +177,11 @@
 		7C2287D32EA30052009BA42D = {
 			isa = PBXGroup;
 			children = (
-				7C2287DE2EA30052009BA42D /* grocery-tracker-ios */,
-				7C2287EC2EA30053009BA42D /* grocery-tracker-iosTests */,
-				7C2287F62EA30053009BA42D /* grocery-tracker-iosUITests */,
+				7C2287DE2EA30052009BA42D /* calorik */,
+				7C2287EC2EA30053009BA42D /* calorikTests */,
+				7C2287F62EA30053009BA42D /* calorikUITests */,
 				7C2287DD2EA30052009BA42D /* Products */,
-				661CAE7C71B20EE269DD6544 /* grocery-tracker-ios */,
+				661CAE7C71B20EE269DD6544 /* calorik */,
 			);
 			sourceTree = "<group>";
 		};
@@ -191,7 +191,7 @@
 				7C2287DC2EA30052009BA42D /* Calorik.app */,
 				7C2287E92EA30053009BA42D /* Calorik-iosTests.xctest */,
 				7C2287F32EA30053009BA42D /* Calorik-iosUITests.xctest */,
-				1F9B9A730E68DB3FE7885026 /* grocery-tracker-ios */,
+				1F9B9A730E68DB3FE7885026 /* calorik */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -291,10 +291,10 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				7C2287DE2EA30052009BA42D /* grocery-tracker-ios */,
+				7C2287DE2EA30052009BA42D /* calorik */,
 			);
 			name = Calorik;
-			productName = "grocery-tracker-ios";
+			productName = "calorik";
 			productReference = 7C2287DC2EA30052009BA42D /* Calorik.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -312,10 +312,10 @@
 				7C2287EB2EA30053009BA42D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				7C2287EC2EA30053009BA42D /* grocery-tracker-iosTests */,
+				7C2287EC2EA30053009BA42D /* calorikTests */,
 			);
 			name = "Calorik-iosTests";
-			productName = "grocery-tracker-iosTests";
+			productName = "calorikTests";
 			productReference = 7C2287E92EA30053009BA42D /* Calorik-iosTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
@@ -333,10 +333,10 @@
 				7C2287F52EA30053009BA42D /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				7C2287F62EA30053009BA42D /* grocery-tracker-iosUITests */,
+				7C2287F62EA30053009BA42D /* calorikUITests */,
 			);
 			name = "Calorik-iosUITests";
-			productName = "grocery-tracker-iosUITests";
+			productName = "calorikUITests";
 			productReference = 7C2287F32EA30053009BA42D /* Calorik-iosUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
@@ -363,7 +363,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 7C2287D72EA30052009BA42D /* Build configuration list for PBXProject "grocery-tracker-ios" */;
+			buildConfigurationList = 7C2287D72EA30052009BA42D /* Build configuration list for PBXProject "calorik" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -716,7 +716,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "grocery-tracker-ios";
+				TEST_TARGET_NAME = "calorik";
 			};
 			name = Debug;
 		};
@@ -738,14 +738,14 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "grocery-tracker-ios";
+				TEST_TARGET_NAME = "calorik";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7C2287D72EA30052009BA42D /* Build configuration list for PBXProject "grocery-tracker-ios" */ = {
+		7C2287D72EA30052009BA42D /* Build configuration list for PBXProject "calorik" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7C2287FB2EA30053009BA42D /* Debug */,

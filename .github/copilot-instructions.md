@@ -109,7 +109,7 @@ You are a senior full-stack architect working in a **Bun + TypeScript Monorepo**
     * Keep related functionality together in focused, single-purpose files
 * **Architecture:** Repository pattern with `@Published` properties for ObservableObject classes
 * **Networking:** 
-    * `NetworkManager2` for generic HTTP operations (see [NetworkManager2.swift](apps/ios/grocery-tracker-ios/Network/NetworkManager2.swift))
+    * `NetworkManager2` for generic HTTP operations (see [NetworkManager2.swift](apps/ios/calorik/Network/NetworkManager2.swift))
     * Repository classes per domain (e.g., `FoodEntryRepository`, `StatsRepository`)
     * Use async/await with `MainActor.run` for UI updates
 * **Syntax:** Use PascalCase for Types/Structs and camelCase for properties.

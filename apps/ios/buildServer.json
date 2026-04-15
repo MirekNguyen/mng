@@ -12,8 +12,8 @@
 	"argv": [
 		"/opt/homebrew/bin/xcode-build-server"
 	],
-	"workspace": "/Users/mireknguyen/.local/projects/personal/mng/apps/ios/grocery-tracker-ios.xcodeproj/project.xcworkspace",
-	"build_root": "/Users/mireknguyen/Library/Developer/Xcode/DerivedData/grocery-tracker-ios-fmjdpsfklzsfysdeaymrzwwefuig",
+	"workspace": "/Users/mireknguyen/.local/projects/personal/mng/apps/ios/calorik.xcodeproj/project.xcworkspace",
+	"build_root": "/Users/mireknguyen/Library/Developer/Xcode/DerivedData/calorik-fmjdpsfklzsfysdeaymrzwwefuig",
 	"scheme": "Calorik",
 	"kind": "xcode"
 }

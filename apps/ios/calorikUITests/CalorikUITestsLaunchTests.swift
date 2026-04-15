@@ -1,13 +1,13 @@
 //
-//  grocery_tracker_iosUITestsLaunchTests.swift
-//  grocery-tracker-iosUITests
+//  CalorikUITestsLaunchTests.swift
+//  calorikUITests
 //
 //  Created by Mirek Nguyen on 18.10.2025.
 //
 
 import XCTest
 
-final class grocery_tracker_iosUITestsLaunchTests: XCTestCase {
+final class CalorikUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
