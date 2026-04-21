@@ -16,13 +16,15 @@ struct MainTabView: View {
     @State private var selectedTab: Int = 0
     @State private var showOnboarding: Bool = false
 
+    private var isAnalyzing: Bool { foodEntryRepository.isAnalyzingInBackground }
+    private var hasPending: Bool { foodEntryRepository.pendingEntry != nil }
+    private var showAccessory: Bool { isAnalyzing || hasPending }
+
     var body: some View {
         TabView(selection: $selectedTab) {
             NavigationStack {
                 ZStack {
-                    // GradientBackgroundView()
                     FoodEntryView()
-                        // .navigationTitle("Food Entries")
                         .foregroundColor(Styles.Colors.primaryText)
                 }
                 .background(
@@ -48,8 +50,18 @@ struct MainTabView: View {
                 .tag(3)
 
         }
-        .tint(.white)
-        .toolbarBackground(Color.red, for: .tabBar)
+        .tint(.accentColor)
+        .tabViewBottomAccessory(isEnabled: showAccessory) {
+            AnalysisBannerView(
+                stage: foodEntryRepository.backgroundAnalysisStage,
+                isAnalyzing: isAnalyzing,
+                hasPendingResult: hasPending,
+                onReviewTap: {
+                    selectedTab = 0
+                    foodEntryRepository.shouldShowConfirmEntry = true
+                }
+            )
+        }
         .environmentObject(networkManager)
         .environmentObject(groceryRepository)
         .environmentObject(foodEntryRepository)

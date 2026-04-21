@@ -146,14 +146,7 @@ struct MacroDetailSheet: View {
         }
         .padding(.vertical, 24)
         .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(.ultraThinMaterial)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(macroType.color.opacity(0.3), lineWidth: 1)
-        )
+        .glassCard(cornerRadius: 20)
         .padding(.horizontal, 20)
     }
     
@@ -201,10 +194,7 @@ struct MacroDetailSheet: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 20)
             }
-            .background(
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(.ultraThinMaterial)
-            )
+            .glassCard(cornerRadius: 20)
             .padding(.horizontal, 20)
         }
     }
@@ -232,10 +222,7 @@ struct MacroDetailSheet: View {
                 }
                 .padding(.bottom, 20)
             }
-            .background(
-                RoundedRectangle(cornerRadius: 20)
-                    .fill(.ultraThinMaterial)
-            )
+            .glassCard(cornerRadius: 20)
             .padding(.horizontal, 20)
         }
     }
@@ -277,10 +264,7 @@ struct MacroDetailSheet: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 20)
-            .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(.ultraThinMaterial)
-            )
+            .glassCard()
 
             if entries.count > 0 {
                 VStack(spacing: 8) {
@@ -293,10 +277,7 @@ struct MacroDetailSheet: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 20)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(.ultraThinMaterial)
-                )
+                .glassCard()
             }
         }
         .padding(.horizontal, 20)

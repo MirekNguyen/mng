@@ -70,13 +70,13 @@ struct StatsTabView: View {
                                                 x: .value("Date", day.date),
                                                 y: .value("Calories", day.calories)
                                             )
-                                            .foregroundStyle(.orange.gradient)
+                                            .foregroundStyle(Color.accentColor.gradient)
                                             .cornerRadius(4)
                                             .opacity(selectedDate == nil ? 1.0 : (selectedDate == day.date ? 1.0 : 0.5))
                                             
                                             if let selectedDate, selectedDate == day.date {
                                                 RuleMark(x: .value("Date", day.date))
-                                                    .foregroundStyle(.orange.opacity(0.5))
+                                                    .foregroundStyle(Color.accentColor.opacity(0.5))
                                                     .lineStyle(StrokeStyle(lineWidth: 2))
                                                     .annotation(
                                                         position: .top,
@@ -92,11 +92,7 @@ struct StatsTabView: View {
                                                                 .foregroundColor(.secondary)
                                                         }
                                                         .padding(8)
-                                                        .background(
-                                                            RoundedRectangle(cornerRadius: 8)
-                                                                .fill(.ultraThinMaterial)
-                                                                .shadow(radius: 2)
-                                                        )
+                                                        .glassCard(cornerRadius: 8)
                                                     }
                                             }
                                         }
@@ -119,14 +115,7 @@ struct StatsTabView: View {
                                         .sensoryFeedback(.selection, trigger: selectedDate)
                                     }
                                     .padding(20)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .fill(.ultraThinMaterial)
-                                    )
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-                                    )
+                                    .glassCard()
                                 }
                                 
                                 // Macros Breakdown Chart
@@ -231,14 +220,7 @@ struct StatsTabView: View {
                                     .padding(.top, 8)
                                 }
                                 .padding(20)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .fill(.ultraThinMaterial)
-                                )
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-                                )
+                                .glassCard()
                                 
                                 // Daily Protein Trend
                                 if !stats.dailyBreakdown.isEmpty {
@@ -293,11 +275,7 @@ struct StatsTabView: View {
                                                             }
                                                         }
                                                         .padding(8)
-                                                        .background(
-                                                            RoundedRectangle(cornerRadius: 8)
-                                                                .fill(.ultraThinMaterial)
-                                                                .shadow(radius: 2)
-                                                        )
+                                                        .glassCard(cornerRadius: 8)
                                                     }
                                             }
                                         }
@@ -320,14 +298,7 @@ struct StatsTabView: View {
                                         .sensoryFeedback(.selection, trigger: selectedDate)
                                     }
                                     .padding(20)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .fill(.ultraThinMaterial)
-                                    )
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-                                    )
+                                    .glassCard()
                                 }
                                 
                                 // Meal Distribution
@@ -379,11 +350,7 @@ struct StatsTabView: View {
                                                             }
                                                         }
                                                         .padding(8)
-                                                        .background(
-                                                            RoundedRectangle(cornerRadius: 8)
-                                                                .fill(.ultraThinMaterial)
-                                                                .shadow(radius: 2)
-                                                        )
+                                                        .glassCard(cornerRadius: 8)
                                                     }
                                             }
                                         }
@@ -404,14 +371,7 @@ struct StatsTabView: View {
                                         .sensoryFeedback(.selection, trigger: selectedMealType)
                                     }
                                     .padding(20)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .fill(.ultraThinMaterial)
-                                    )
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 16)
-                                            .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-                                    )
+                                    .glassCard()
                                 }
                                 
                             } else {
@@ -496,14 +456,7 @@ struct StatCard: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 16)
-                .fill(.ultraThinMaterial)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-        )
+        .glassCard()
     }
 }
 

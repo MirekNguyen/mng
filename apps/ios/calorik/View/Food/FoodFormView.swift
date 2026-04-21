@@ -75,14 +75,7 @@ struct FoodFormView: View {
                             .padding(.leading, 20)
                         FormTextEditor(label: "Description", text: $description, placeholder: "Optional description")
                     }
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(.ultraThinMaterial)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-                    )
+                    .glassCard()
                 }
                 
                 // Nutrition Section
@@ -106,14 +99,7 @@ struct FoodFormView: View {
                             .padding(.leading, 20)
                         FormField(label: "Caffeine (mg)", text: $caffeine, placeholder: "0 (optional)", keyboardType: .decimalPad)
                     }
-                    .background(
-                        RoundedRectangle(cornerRadius: 16)
-                            .fill(.ultraThinMaterial)
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-                    )
+                    .glassCard()
                 }
                 
                 // Save Button
@@ -147,8 +133,7 @@ struct FoodFormView: View {
             .padding(.horizontal, 20)
         }
         .scrollContentBackground(.hidden)
-        .background(.ultraThinMaterial)
-        .scrollDismissesKeyboard(.interactively)
+        .background(.ultraThinMaterial)        .scrollDismissesKeyboard(.interactively)
         .navigationTitle(mode.isCreate ? "Add Food" : "Edit Food")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

@@ -15,10 +15,7 @@ struct FoodDetailView: View {
                         .font(.body.weight(.semibold))
                         .foregroundStyle(.secondary)
                         .frame(width: 44, height: 44)
-                        .background(
-                            Circle()
-                                .fill(.ultraThinMaterial)
-                        )
+                        .glassCircle()
                 }
                 
                 Spacer()
@@ -42,10 +39,7 @@ struct FoodDetailView: View {
                         .font(.body.weight(.semibold))
                         .foregroundStyle(.secondary)
                         .frame(width: 44, height: 44)
-                        .background(
-                            Circle()
-                                .fill(.ultraThinMaterial)
-                        )
+                        .glassCircle()
                 }
             }
             .padding(.horizontal, 20)
@@ -109,14 +103,7 @@ struct FoodDetailView: View {
                                 .padding(.leading, 20)
                             MacroDetailRow(label: "Fat", value: String(format: "%.1f g", food.fat), color: .red)
                         }
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(.ultraThinMaterial)
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-                        )
+                        .glassCard()
                         .padding(.horizontal, 20)
                     }
                     
@@ -141,14 +128,7 @@ struct FoodDetailView: View {
                                     InfoDetailRow(label: "Description", value: description)
                                 }
                             }
-                            .background(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(.ultraThinMaterial)
-                            )
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-                            )
+                            .glassCard()
                             .padding(.horizontal, 20)
                         }
                     }

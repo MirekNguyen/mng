@@ -78,7 +78,7 @@ struct CompleteProfileView: View {
                     Button("Cancel") {
                         dismiss()
                     }
-                    .foregroundColor(.orange)
+                    .foregroundColor(.accentColor)
                 }
             }
         }
@@ -88,7 +88,7 @@ struct CompleteProfileView: View {
         VStack(spacing: 12) {
             Image(systemName: "person.circle.fill")
                 .font(.system(size: 60))
-                .foregroundColor(.orange)
+                .foregroundColor(.accentColor)
             
             Text("Let's personalize your experience")
                 .font(.system(size: 18, weight: .semibold))
@@ -102,11 +102,7 @@ struct CompleteProfileView: View {
         }
         .padding(.vertical, 20)
         .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 4)
-        )
+        .glassSectionCard()
     }
     
     private var basicInfoSection: some View {
@@ -125,11 +121,7 @@ struct CompleteProfileView: View {
             }
         }
         .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 4)
-        )
+        .glassSectionCard()
     }
     
     private var bodyMetricsSection: some View {
@@ -143,11 +135,7 @@ struct CompleteProfileView: View {
             }
         }
         .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 4)
-        )
+        .glassSectionCard()
     }
     
     private var goalsSection: some View {
@@ -161,11 +149,7 @@ struct CompleteProfileView: View {
             }
         }
         .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 4)
-        )
+        .glassSectionCard()
     }
     
     private var saveButton: some View {
@@ -183,7 +167,7 @@ struct CompleteProfileView: View {
             .padding(.vertical, 16)
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(Color.orange)
+                    .fill(Color.accentColor)
             )
             .foregroundColor(.white)
         }
@@ -200,7 +184,7 @@ struct CompleteProfileView: View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.system(size: 16))
-                .foregroundColor(.orange)
+                .foregroundColor(.accentColor)
                 .frame(width: 24)
             
             VStack(alignment: .leading, spacing: 4) {
@@ -225,7 +209,7 @@ struct CompleteProfileView: View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.system(size: 16))
-                .foregroundColor(.orange)
+                .foregroundColor(.accentColor)
                 .frame(width: 24)
             
             VStack(alignment: .leading, spacing: 4) {

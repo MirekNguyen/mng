@@ -29,14 +29,7 @@ struct ReceiptCardRow: View {
             }
         }
         .padding(Styles.Spacing.m)
-        .background(
-            RoundedRectangle(cornerRadius: Styles.CornerRadius.card)
-                .fill(.ultraThinMaterial)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: Styles.CornerRadius.card)
-                .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-        )
+        .glassCard()
         .padding(.vertical, 5)
     }
 

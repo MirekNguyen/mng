@@ -1,15 +1,28 @@
-# Agent Instructions
+# AGENTS.md
 
-## Environment
+## Shell & Runtime
 
-- **Runtime:** Bun
-- **Shell:** fish (`/opt/homebrew/bin/fish`)
-- **Package manager:** bun (`bun add`, `bun remove` — never npm/yarn/pnpm)
-- **Build system:** Turborepo
-- **Linter:** oxlint (plugins: unicorn, typescript, oxc)
-- **Formatter:** oxfmt
-- **Language:** TypeScript (strict mode, `noEmit`, `target: esnext`, `moduleResolution: bundler`)
-- **Dev server:** `bun run dev` (runs `bun run --watch src/index.ts`)
+- Shell: fish (`/opt/homebrew/bin/fish`)
+- Runtime: Bun (never Node.js). Bun auto-loads `.env` — do not use dotenv.
+- Package manager: bun (`bun add`, `bun remove` — never npm/yarn/pnpm)
+- Build system: Turborepo
+- Linter: oxlint (plugins: unicorn, typescript, oxc)
+- Formatter: oxfmt
+- Language: TypeScript (strict mode, `noEmit`, `target: esnext`, `moduleResolution: bundler`)
+
+## Commands
+
+```sh
+bun run dev                 # start dev server (in app directory)
+bun run build               # build (via turbo at root)
+bun run lint                # lint (via turbo at root)
+bun run lint:fix            # auto-fix lint issues
+bun run format              # check formatting
+bun run format:fix          # auto-fix formatting
+bun add <package>           # add dependency
+bun add -D <package>        # add dev dependency
+bun remove <package>        # remove dependency
+```
 
 ## Monorepo Structure
 
@@ -62,6 +75,7 @@ export type FoodEntry = z.infer<typeof selectFoodEntrySchema>;
 - Never use type casting (`as Type`). Use type guards or existence checks.
 - Use `| undefined` instead of optional `?` when the value is required but might be missing at runtime.
 - Use named exports. Never use `export default` (except config files or framework requirements).
+- Use `import type` for type-only imports (`verbatimModuleSyntax`).
 
 ## File Naming
 
@@ -119,7 +133,8 @@ Never use `.service.ts`. Use `.repository.ts` for data access and `.calculator.t
 - Flatten nested types — extract meaningful structures into named types.
 - Start booleans with `is`, `can`, `has`, or `should`. No negative boolean names.
 - No magic one-liners. No generic variable names like `t` or `data`. Be descriptive.
-- Keep files small and focused. One concern per file.
+- Keep files small and focused. One concern per file. **Max 250 lines per file.**
+- Keep functions minimal and single-purpose — easy to read, easy to refactor.
 
 ## Naming Conventions
 
@@ -135,19 +150,52 @@ Split imports into three blocks separated by newlines:
 2. Shared packages (`@mng/database`, `@mng/http`, `@mng/logger`)
 3. Internal project imports (relative paths)
 
-## Package Manager Commands
+## Separation of Concerns
 
-```sh
-bun add <package>           # add dependency
-bun add -D <package>        # add dev dependency
-bun remove <package>        # remove dependency
-bun run dev                 # start dev server (in app directory)
-bun run build               # build (via turbo at root)
-bun run lint                # lint (via turbo at root)
-bun run lint:fix            # auto-fix lint issues
-bun run format              # check formatting
-bun run format:fix          # auto-fix formatting
-```
+- **Always separate the data layer from the application layer.** API calls, database queries, and data transformations belong in dedicated repository/calculator files — never inline in controllers or components.
+- Build modules to be **reusable and single-responsibility**. No god-files that fetch, transform, and render all at once.
+- Organize by concern: data access (`.repository.ts`), business logic (`.calculator.ts`), routing (`.controller.ts`). Each layer should be independently testable.
+
+## UI/UX Standards
+
+- **Single styling source**: All UI must use ShadCN components and its CSS variables/tokens (`globals.css`). Never create custom one-off styled components or inline ad-hoc color/spacing values. If a pattern repeats, extract a ShadCN-based component. Tailwind classes should reference the ShadCN theme (`bg-primary`, `text-muted-foreground`, etc.), not raw color values.
+- **Visual consistency**: Use a fixed set of spacing (`p-4`, `p-6`, `gap-4`, `gap-6`), border radius (`rounded-lg` or ShadCN's `--radius` token), and shadow (`shadow-sm`, `shadow-md`) values across the entire app. Do not mix arbitrary values.
+- **UI/UX best practices**: Use proper size hierarchy for interactive elements (ShadCN Button `size="sm"` / `"default"` / `"lg"` depending on context), consistent icon sizing, adequate touch targets (min 44px), clear visual hierarchy with font weight/size contrast, sufficient whitespace between sections, and logical grouping of related elements.
+- **Every UI change must be reviewed** for consistency before considering it done.
+- All layouts must be **mobile-first and responsive**.
+
+## Agent Skills
+
+**You MUST load the appropriate skill before doing any UI work.** Do not write UI code from memory alone — always load the skill first so you have the full design guidelines in context.
+
+### Required skill usage
+
+| Task | Skill to load |
+|------|--------------|
+| Building any new page, component, or UI feature | `frontend-design` |
+| After building or modifying UI (quality gate) | `audit` or `critique` |
+| Final pass before considering UI work done | `polish` |
+| Fixing layout, spacing, or visual rhythm issues | `arrange` |
+| Bringing UI back in line with design system | `normalize` |
+| Adding animation or micro-interactions | `animate` |
+| Simplifying or decluttering a view | `distill` |
+| Making a design more visually impactful | `bolder` |
+| Toning down an overstimulating design | `quieter` |
+| Adding color to monochromatic UI | `colorize` |
+| Improving typography | `typeset` |
+| Improving UX copy, labels, or error messages | `clarify` |
+| Making responsive / mobile-friendly | `adapt` |
+| Handling edge cases, error states, i18n | `harden` |
+| Extracting reusable components or tokens | `extract` |
+| Adding delight, personality, micro-interactions | `delight` |
+| Designing onboarding or empty states | `onboard` |
+
+### Rules
+
+- **Always load `frontend-design`** before writing any new UI code. No exceptions.
+- **Always run `audit` or `critique`** after completing any UI change — this is a mandatory quality gate.
+- Load skills **proactively** — do not wait for the user to ask.
+- When multiple skills apply (e.g. building a new component then reviewing it), load them sequentially: `frontend-design` first, then `audit`/`critique` after.
 
 ## Testing
 

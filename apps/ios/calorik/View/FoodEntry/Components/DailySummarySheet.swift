@@ -51,7 +51,7 @@ struct DailySummarySheet: View {
         VStack(spacing: 16) {
             ProgressView()
                 .scaleEffect(1.2)
-                .tint(.orange)
+                .tint(.accentColor)
             
             Text("Analyzing your day...")
                 .font(.system(size: 16, weight: .medium))
@@ -65,7 +65,7 @@ struct DailySummarySheet: View {
         VStack(spacing: 16) {
             Image(systemName: "exclamationmark.triangle.fill")
                 .font(.system(size: 48))
-                .foregroundColor(.orange)
+                .foregroundColor(.accentColor)
             
             Text(message)
                 .font(.system(size: 16, weight: .medium))
@@ -81,7 +81,7 @@ struct DailySummarySheet: View {
             HStack(spacing: 12) {
                 Image(systemName: "sparkles")
                     .font(.system(size: 22))
-                    .foregroundColor(.orange)
+                    .foregroundColor(.accentColor)
                 
                 Text(formattedDate)
                     .font(.system(size: 18, weight: .semibold))
@@ -94,7 +94,7 @@ struct DailySummarySheet: View {
                     if !section.title.isEmpty {
                         Text(section.title)
                             .font(.system(size: 17, weight: .bold))
-                            .foregroundColor(.orange)
+                            .foregroundColor(.accentColor)
                     }
                     
                     Text(section.content)
@@ -105,10 +105,7 @@ struct DailySummarySheet: View {
             }
         }
         .padding(24)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(.ultraThinMaterial)
-        )
+        .glassCard(cornerRadius: 20)
     }
     
     private struct Section {

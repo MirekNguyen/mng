@@ -15,10 +15,7 @@ struct FoodEntryDetailView: View {
                         .font(.body.weight(.semibold))
                         .foregroundStyle(.secondary)
                         .frame(width: 44, height: 44)
-                        .background(
-                            Circle()
-                                .fill(.ultraThinMaterial)
-                        )
+                        .glassCircle()
                 }
 
                 Spacer()
@@ -42,10 +39,7 @@ struct FoodEntryDetailView: View {
                         .font(.body.weight(.semibold))
                         .foregroundStyle(.secondary)
                         .frame(width: 44, height: 44)
-                        .background(
-                            Circle()
-                                .fill(.ultraThinMaterial)
-                        )
+                        .glassCircle()
                 }
             }
             .padding(.horizontal, 20)
@@ -122,14 +116,7 @@ struct FoodEntryDetailView: View {
                                 label: "Fat", value: String(format: "%.1f g", foodEntry.fat),
                                 color: .red)
                         }
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(.ultraThinMaterial)
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-                        )
+                        .glassCard()
                         .padding(.horizontal, 20)
                     }
 
@@ -146,14 +133,7 @@ struct FoodEntryDetailView: View {
                                 .padding(.leading, 20)
                             DetailRow(label: "Date", value: foodEntry.entryDate)
                         }
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(.ultraThinMaterial)
-                        )
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 16)
-                                .stroke(Color.primary.opacity(0.1), lineWidth: 0.5)
-                        )
+                        .glassCard()
                         .padding(.horizontal, 20)
                     }
 
@@ -230,9 +210,6 @@ struct InfoPill: View {
         .foregroundColor(.secondary)
         .padding(.horizontal, 12)
         .padding(.vertical, 6)
-        .background(
-            Capsule()
-                .fill(.ultraThinMaterial)
-        )
+        .glassCard(cornerRadius: 20)
     }
 }

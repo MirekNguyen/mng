@@ -32,7 +32,7 @@ struct FoodItemRow: View {
 
                 HStack(spacing: 4) {
                     Circle()
-                        .fill(Color.orange)
+                        .fill(Color.accentColor)
                         .frame(width: 8, height: 8)
 
                     Text(protein)

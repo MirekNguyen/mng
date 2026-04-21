@@ -93,18 +93,18 @@ struct EditProfileView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Cancel") { dismiss() }
-                        .foregroundColor(.orange)
+                        .foregroundColor(.accentColor)
                         .disabled(isSaving)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: saveProfile) {
                         if isSaving {
                             ProgressView()
-                                .tint(.orange)
+                                .tint(.accentColor)
                         } else {
                             Text("Save")
                                 .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(.orange)
+                                .foregroundColor(.accentColor)
                         }
                     }
                     .disabled(isSaving)
@@ -124,11 +124,7 @@ struct EditProfileView: View {
         }
         .padding(.vertical, 28)
         .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 4)
-        )
+        .glassSectionCard()
     }
 
     @ViewBuilder
@@ -145,7 +141,7 @@ struct EditProfileView: View {
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 100, height: 100)
                             .clipShape(Circle())
-                            .shadow(color: .orange.opacity(0.3), radius: 10, x: 0, y: 4)
+                            .shadow(color: Color.accentColor.opacity(0.3), radius: 10, x: 0, y: 4)
                     default:
                         initialsCircle
                     }
@@ -156,7 +152,7 @@ struct EditProfileView: View {
 
             // Camera badge
             Circle()
-                .fill(Color.orange)
+                .fill(Color.accentColor)
                 .frame(width: 30, height: 30)
                 .overlay(
                     Image(systemName: "camera.fill")
@@ -178,18 +174,9 @@ struct EditProfileView: View {
 
         return ZStack {
             Circle()
-                .fill(
-                    AngularGradient(
-                        colors: [
-                            Color(red: 1.0, green: 0.7, blue: 0.3),
-                            Color(red: 1.0, green: 0.6, blue: 0.2),
-                            Color(red: 1.0, green: 0.65, blue: 0.25)
-                        ],
-                        center: .center
-                    )
-                )
+                .fill(Color.accentColor)
                 .frame(width: 100, height: 100)
-                .shadow(color: .orange.opacity(0.3), radius: 10, x: 0, y: 4)
+                .shadow(color: Color.accentColor.opacity(0.3), radius: 10, x: 0, y: 4)
 
             Text(initials)
                 .font(.system(size: 38, weight: .bold, design: .rounded))
@@ -241,7 +228,7 @@ struct EditProfileView: View {
             .padding(.vertical, 16)
             .background(
                 RoundedRectangle(cornerRadius: 16)
-                    .fill(isSaving ? Color.orange.opacity(0.5) : Color.orange)
+                    .fill(isSaving ? Color.accentColor.opacity(0.5) : Color.accentColor)
             )
             .foregroundColor(.white)
         }
@@ -261,11 +248,7 @@ struct EditProfileView: View {
             Spacer()
         }
         .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.15), radius: 12, x: 0, y: 4)
-        )
+        .glassSectionCard()
     }
 
     // MARK: - Reusable Components
@@ -284,11 +267,7 @@ struct EditProfileView: View {
             }
         }
         .padding(20)
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 4)
-        )
+        .glassSectionCard()
     }
 
     private func inputField(
@@ -301,7 +280,7 @@ struct EditProfileView: View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.system(size: 16))
-                .foregroundColor(.orange)
+                .foregroundColor(.accentColor)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 4) {
@@ -313,7 +292,7 @@ struct EditProfileView: View {
                     .font(.system(size: 16, weight: .medium))
                     .foregroundColor(.white)
                     .keyboardType(keyboardType)
-                    .accentColor(.orange)
+                    .tint(.accentColor)
             }
         }
         .padding(14)
@@ -331,7 +310,7 @@ struct EditProfileView: View {
         HStack(spacing: 12) {
             Image(systemName: icon)
                 .font(.system(size: 16))
-                .foregroundColor(.orange)
+                .foregroundColor(.accentColor)
                 .frame(width: 24)
 
             VStack(alignment: .leading, spacing: 4) {

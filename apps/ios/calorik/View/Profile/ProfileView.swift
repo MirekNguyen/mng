@@ -22,7 +22,7 @@ struct ProfileView: View {
                 if repository.isLoading {
                     ProgressView()
                         .scaleEffect(1.5)
-                        .tint(.orange)
+                        .tint(.accentColor)
                 } else if let profile = repository.profile {
                     profileContent(profile: profile)
                 } else {
@@ -37,7 +37,7 @@ struct ProfileView: View {
                         Button(action: { showEditProfile = true }) {
                             Image(systemName: "pencil")
                                 .font(.system(size: 15, weight: .medium))
-                                .foregroundColor(.orange)
+                                .foregroundColor(.accentColor)
                         }
                     }
                 }
@@ -96,7 +96,7 @@ struct ProfileView: View {
         VStack(spacing: 12) {
             Image(systemName: "exclamationmark.triangle.fill")
                 .font(.system(size: 32))
-                .foregroundColor(.orange)
+                .foregroundColor(.accentColor)
             
             VStack(spacing: 6) {
                 Text("Complete Your Profile")
@@ -118,17 +118,13 @@ struct ProfileView: View {
                     .padding(.vertical, 10)
                     .background(
                         RoundedRectangle(cornerRadius: 12)
-                            .fill(Color.orange)
+                            .fill(Color.accentColor)
                     )
             }
         }
         .padding(.vertical, 28)
         .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 4)
-        )
+        .glassSectionCard()
     }
     
     private func profileHeader(profile: UserProfile) -> some View {
@@ -142,7 +138,7 @@ struct ProfileView: View {
                                 .fill(Color.gray.opacity(0.3))
                                 .frame(width: 100, height: 100)
                             ProgressView()
-                                .tint(.orange)
+                                .tint(.accentColor)
                         }
                     case .success(let image):
                         image
@@ -150,7 +146,7 @@ struct ProfileView: View {
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 100, height: 100)
                             .clipShape(Circle())
-                            .shadow(color: .orange.opacity(0.3), radius: 10, x: 0, y: 4)
+                            .shadow(color: Color.accentColor.opacity(0.3), radius: 10, x: 0, y: 4)
                     case .failure:
                         avatarInitials(profile: profile)
                     @unknown default:
@@ -173,28 +169,15 @@ struct ProfileView: View {
         }
         .padding(.vertical, 32)
         .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 4)
-        )
+        .glassSectionCard()
     }
     
     private func avatarInitials(profile: UserProfile) -> some View {
         ZStack {
             Circle()
-                .fill(
-                    AngularGradient(
-                        colors: [
-                            Color(red: 1.0, green: 0.7, blue: 0.3),
-                            Color(red: 1.0, green: 0.6, blue: 0.2),
-                            Color(red: 1.0, green: 0.65, blue: 0.25)
-                        ],
-                        center: .center
-                    )
-                )
+                .fill(Color.accentColor)
                 .frame(width: 100, height: 100)
-                .shadow(color: .orange.opacity(0.3), radius: 10, x: 0, y: 4)
+                .shadow(color: Color.accentColor.opacity(0.3), radius: 10, x: 0, y: 4)
             
             Text(profile.name.prefix(2).uppercased())
                 .font(.system(size: 42, weight: .bold, design: .rounded))
@@ -247,23 +230,46 @@ struct ProfileView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 24)
         }
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 4)
-        )
+        .glassSectionCard()
     }
     
     private func metricRow(label: String, value: String, icon: String) -> some View {
         HStack(spacing: 16) {
             Image(systemName: icon)
                 .font(.system(size: 18))
-                .foregroundColor(.orange)
+                .foregroundColor(.accentColor)
                 .frame(width: 24)
             
             Text(label)
                 .font(.system(size: 16, weight: .medium))
                 .foregroundColor(.white)
+            
+            Spacer()
+            
+            Text(value)
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.white.opacity(0.7))
+        }
+        .padding(.vertical, 14)
+    }
+    
+    private func metricRowWithTip(label: String, value: String, icon: String, tip: String) -> some View {
+        HStack(spacing: 16) {
+            Image(systemName: icon)
+                .font(.system(size: 18))
+                .foregroundColor(.accentColor)
+                .frame(width: 24)
+            
+            HStack(spacing: 4) {
+                Text(label)
+                    .font(.system(size: 16, weight: .medium))
+                    .foregroundColor(.white)
+                
+                Image(systemName: "info.circle")
+                    .font(.system(size: 12))
+                    .foregroundColor(.white.opacity(0.4))
+                    .help(tip)
+            }
             
             Spacer()
             
@@ -305,11 +311,7 @@ struct ProfileView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 24)
         }
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 4)
-        )
+        .glassSectionCard()
     }
     
     private func metabolismSection(profile: UserProfile) -> some View {
@@ -323,31 +325,33 @@ struct ProfileView: View {
             
             VStack(spacing: 0) {
                 if let bmr = profile.bmr {
-                    metricRow(label: "BMR", value: "\(Int(bmr)) kcal/day", icon: "heart.fill")
+                    metricRowWithTip(
+                        label: "BMR", value: "\(Int(bmr)) kcal/day", icon: "heart.fill",
+                        tip: "Basal Metabolic Rate — calories your body burns at rest to maintain basic functions like breathing and circulation."
+                    )
                     if profile.tdee != nil {
                         Divider().opacity(0.15).padding(.leading, 60)
                     }
                 }
                 
                 if let tdee = profile.tdee {
-                    metricRow(label: "TDEE", value: "\(Int(tdee)) kcal/day", icon: "flame.fill")
+                    metricRowWithTip(
+                        label: "TDEE", value: "\(Int(tdee)) kcal/day", icon: "flame.fill",
+                        tip: "Total Daily Energy Expenditure — your BMR plus calories burned through daily activity and exercise."
+                    )
                 }
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 24)
         }
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 4)
-        )
+        .glassSectionCard()
     }
     
     private var errorView: some View {
         VStack(spacing: 16) {
             Image(systemName: "person.crop.circle.badge.exclamationmark")
                 .font(.system(size: 64))
-                .foregroundColor(.orange)
+                .foregroundColor(.accentColor)
             
             Text("Failed to load profile")
                 .font(.system(size: 18, weight: .semibold))
@@ -367,7 +371,7 @@ struct ProfileView: View {
                     .foregroundColor(.white)
                     .padding(.horizontal, 32)
                     .padding(.vertical, 12)
-                    .background(Color.orange)
+                    .background(Color.accentColor)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
             }
         }

@@ -8,10 +8,9 @@ final class FoodEntryRepository: ObservableObject {
     @Published var pendingEntry: AnalyzedFoodData?
     @Published var analysisStage: AnalysisStage = .idle
 
-    /// `true` while analysis is running in the background (sheet dismissed).
     @Published var isAnalyzingInBackground: Bool = false
-    /// Progress stage reported while running in the background.
     @Published var backgroundAnalysisStage: AnalysisStage = .idle
+    @Published var shouldShowConfirmEntry: Bool = false
 
     private var backgroundTask: Task<Void, Never>?
 
@@ -87,14 +86,6 @@ final class FoodEntryRepository: ObservableObject {
 
     // MARK: - Analysis
 
-    /// Starts meal analysis. When `background` is `true` the analysis runs as a
-    /// detached task so the caller can dismiss its sheet immediately — the user
-    /// can keep using the app while the work completes.
-    ///
-    /// Progress is reflected on:
-    ///   • `analysisStage`          – used by `ImageUploadView` while the sheet is still open
-    ///   • `backgroundAnalysisStage` / `isAnalyzingInBackground` – used by `FoodEntryView`
-    ///     to show the floating indicator after the sheet is gone
     func analyzeImages(images: [UIImage], prompt: String? = nil, background: Bool = false) async {
         let hasImages = !images.isEmpty
         let hasPrompt = prompt != nil && !(prompt!.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
@@ -106,7 +97,6 @@ final class FoodEntryRepository: ObservableObject {
         }
 
         if background {
-            // Fire-and-forget: caller dismisses its sheet immediately.
             await MainActor.run {
                 self.isAnalyzingInBackground = true
                 self.backgroundAnalysisStage = .preparing
@@ -133,7 +123,6 @@ final class FoodEntryRepository: ObservableObject {
                 })
             }
         } else {
-            // Foreground (blocking): show progress overlay inside the sheet.
             await MainActor.run {
                 self.analysisStage = .preparing
                 self.errorMessage = nil
@@ -165,10 +154,8 @@ final class FoodEntryRepository: ObservableObject {
         onComplete: @escaping (AnalyzedFoodData?) async -> Void,
         onError: @escaping (String) async -> Void
     ) async {
-        // Simulate a brief delay for preparing (compress images)
-        try? await Task.sleep(nanoseconds: 500_000_000) // 0.5 seconds
+        try? await Task.sleep(nanoseconds: 500_000_000)
 
-        // 1. Convert [UIImage] to [ImageUploadData]
         let imagesToUpload: [ImageUploadData] = images.compactMap { image in
             guard let imageData = image.jpegData(compressionQuality: 0.8) else { return nil }
             return ImageUploadData(
@@ -186,16 +173,14 @@ final class FoodEntryRepository: ObservableObject {
         do {
             let isTextOnly = imagesToUpload.isEmpty
 
-            // Update stage: uploading with progress simulation (skip for text-only)
             if !isTextOnly {
                 await stageSetter(.uploading(progress: 0.0))
                 for progress in stride(from: 0.0, through: 1.0, by: 0.2) {
                     await stageSetter(.uploading(progress: progress))
-                    try? await Task.sleep(nanoseconds: 300_000_000) // 0.3 seconds
+                    try? await Task.sleep(nanoseconds: 300_000_000)
                 }
             }
 
-            // Update stage: analyzing with detailed messages
             let analysisMessages: [String] = isTextOnly ? [
                 "Reading your description...",
                 "Looking up nutritional data...",
@@ -210,10 +195,8 @@ final class FoodEntryRepository: ObservableObject {
                 "Finalizing analysis..."
             ]
 
-            // Start analysis phase with initial progress
             await stageSetter(.analyzing(message: analysisMessages[0], progress: 0.0))
 
-            // Cycle through progress messages in a child task
             let messageTask = Task {
                 let total = analysisMessages.count
                 for (index, message) in analysisMessages.enumerated() {
@@ -225,7 +208,6 @@ final class FoodEntryRepository: ObservableObject {
                 }
             }
 
-            // Make the network call
             let newEntry: AnalyzedFoodData?
             if isTextOnly, let trimmedPrompt = prompt {
                 struct TextPromptBody: Encodable { let prompt: String }
@@ -242,11 +224,9 @@ final class FoodEntryRepository: ObservableObject {
             }
 
             messageTask.cancel()
-            print("✅ Analysis successful. Server response:", newEntry ?? "Server returned null")
 
-            // Show completed briefly, then hand result to caller
             await stageSetter(.completed)
-            try? await Task.sleep(nanoseconds: 600_000_000) // 0.6 seconds
+            try? await Task.sleep(nanoseconds: 600_000_000)
 
             if let newEntry = newEntry {
                 await onComplete(newEntry)

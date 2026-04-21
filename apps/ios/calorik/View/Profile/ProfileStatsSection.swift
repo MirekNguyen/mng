@@ -28,11 +28,7 @@ struct ProfileStatsSection: View {
                 .padding(.horizontal, 20)
                 .padding(.bottom, 24)
         }
-        .background(
-            RoundedRectangle(cornerRadius: 24)
-                .fill(.ultraThinMaterial)
-                .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 4)
-        )
+        .glassSectionCard()
         .task {
             // Always fetch with the 30-day window regardless of any pre-existing stats
             // that may have been loaded by the Stats tab with a different time window.
@@ -75,13 +71,13 @@ struct ProfileStatsSection: View {
                 value: "\(stats.entryCount)",
                 label: "Entries Logged",
                 icon: "fork.knife",
-                color: .orange
+                color: .accentColor
             )
             profileStatTile(
                 value: "\(Int(stats.averageCalories))",
                 label: "Avg Daily kcal",
                 icon: "flame.fill",
-                color: Color(red: 1.0, green: 0.5, blue: 0.2)
+                color: Color.accentColor.opacity(0.8)
             )
             profileStatTile(
                 value: String(format: "%.0fg", stats.averageProtein),

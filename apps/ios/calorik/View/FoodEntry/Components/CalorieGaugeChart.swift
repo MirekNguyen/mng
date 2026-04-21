@@ -14,15 +14,15 @@ struct CalorieGaugeView: View {
     }
 
     var progressColor: Color {
-        .orange
+        .accentColor
     }
 
     var progressGradient: AngularGradient {
         AngularGradient(
             gradient: Gradient(colors: [
-                Color(red: 1.0, green: 0.7, blue: 0.3),
-                Color(red: 1.0, green: 0.6, blue: 0.2),
-                Color(red: 1.0, green: 0.65, blue: 0.25)
+                .accentColor.opacity(0.7),
+                .accentColor,
+                .accentColor.opacity(0.8)
             ]),
             center: .center,
             startAngle: .degrees(-90),
@@ -34,31 +34,31 @@ struct CalorieGaugeView: View {
         VStack(spacing: 20) {
             ZStack {
                 Circle()
-                    .stroke(Color.gray.opacity(0.1), lineWidth: 24)
-                    .frame(width: 220, height: 220)
+                    .stroke(Color.gray.opacity(0.1), lineWidth: 20)
+                    .frame(width: 170, height: 170)
 
                 Circle()
                     .trim(from: 0, to: animatedProgress)
-                    .stroke(progressGradient, style: StrokeStyle(lineWidth: 24, lineCap: .round))
-                    .frame(width: 220, height: 220)
+                    .stroke(progressGradient, style: StrokeStyle(lineWidth: 20, lineCap: .round))
+                    .frame(width: 170, height: 170)
                     .rotationEffect(.degrees(-90))
                     .shadow(color: progressColor.opacity(0.3), radius: 10, x: 0, y: 5)
 
                 VStack(spacing: 2) {
                     HStack(alignment: .firstTextBaseline, spacing: 3) {
                         Text("\(Int(currentCalories))")
-                            .font(.system(size: 50, weight: .bold, design: .rounded))
+                            .font(.system(size: 40, weight: .bold, design: .rounded))
                             .foregroundColor(.primary)
                             .monospacedDigit()
                         
                         Text("kcal")
-                            .font(.system(size: 16, weight: .semibold))
+                            .font(.system(size: 14, weight: .semibold))
                             .foregroundColor(.secondary)
                             .offset(y: -2)
                     }
 
                     Text("of \(Int(targetCalories))")
-                        .font(.system(size: 15, weight: .medium))
+                        .font(.system(size: 13, weight: .medium))
                         .foregroundColor(.secondary.opacity(0.8))
                 }
             }
@@ -75,7 +75,7 @@ struct CalorieGaugeView: View {
 
             dateNavigationView
         }
-        .padding(.vertical, 20)
+        .padding(.vertical, 12)
         .onAppear {
             animatedProgress = 0.0
             withAnimation(.spring(response: 0.8, dampingFraction: 0.75)) {
