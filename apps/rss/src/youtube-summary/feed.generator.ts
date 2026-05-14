@@ -21,6 +21,7 @@ const escapeXml = (str: string): string =>
 export const generateFeed = async (
 	channelName: string,
 	videos: FeedVideo[],
+	iconUrl?: string,
 ): Promise<string> => {
 	const now = new Date().toUTCString();
 	const items: string[] = [];
@@ -45,6 +46,14 @@ export const generateFeed = async (
   </item>`);
 	}
 
+	const imageBlock = iconUrl
+		? `  <image>
+    <url>${iconUrl}</url>
+    <title>${escapeXml(channelName)}</title>
+    <link>https://www.youtube.com/</link>
+  </image>`
+		: "";
+
 	return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
      xmlns:content="http://purl.org/rss/1.0/modules/content/"
@@ -56,6 +65,7 @@ export const generateFeed = async (
   <lastBuildDate>${now}</lastBuildDate>
   <generator>Bun RSS Generator</generator>
   <language>en</language>
+${imageBlock}
 ${items.join("\n")}
 </channel>
 </rss>`;
