@@ -4,6 +4,7 @@ import { logger } from "@mng/logger/logger";
 
 import { fetchChannelVideos } from "../youtube-summary/channel-feed.parser";
 import { generateFeed } from "../youtube-summary/feed.generator";
+import { isRegularVideo } from "../youtube/video-type.resolver";
 
 program
 	.requiredOption("-c, --channel <string>", "YouTube channel ID")
@@ -18,8 +19,9 @@ const options = program.opts<{
 
 logger.info(`Channel: ${options.channel}`);
 
-const videos = await fetchChannelVideos(options.channel);
-logger.info(`Found ${videos.length} videos`);
+const allVideos = await fetchChannelVideos(options.channel);
+const videos = allVideos.filter((video) => isRegularVideo(video.durationSeconds));
+logger.info(`Found ${allVideos.length} videos, ${videos.length} after filtering`);
 
 if (videos.length === 0) {
 	logger.info("No videos found, skipping feed generation");

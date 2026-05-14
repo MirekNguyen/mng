@@ -7,6 +7,7 @@ type VideoEntry = {
 	videoUrl: string;
 	thumbnailUrl: string;
 	publishedAt: Date;
+	durationSeconds: number;
 };
 
 const parseAtomFeed = (xml: string): VideoEntry[] => {
@@ -20,6 +21,10 @@ const parseAtomFeed = (xml: string): VideoEntry[] => {
 		const title = entry.match(/<title>(.*?)<\/title>/)?.[1] ?? "";
 		const channelName = entry.match(/<name>(.*?)<\/name>/)?.[1] ?? "";
 		const published = entry.match(/<published>(.*?)<\/published>/)?.[1] ?? "";
+		const durationSeconds = Number.parseInt(
+			entry.match(/<yt:duration seconds='(\d+)'/)?.[1] ?? "0",
+			10,
+		);
 
 		if (videoId) {
 			entries.push({
@@ -29,6 +34,7 @@ const parseAtomFeed = (xml: string): VideoEntry[] => {
 				videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
 				thumbnailUrl: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
 				publishedAt: new Date(published),
+				durationSeconds,
 			});
 		}
 	}
