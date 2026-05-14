@@ -50,7 +50,7 @@ export const generateFeed = async (
      xmlns:content="http://purl.org/rss/1.0/modules/content/"
      xmlns:media="http://search.yahoo.com/mrss/">
 <channel>
-  <title>${escapeXml(channelName)} - YouTube</title>
+  <title>${escapeXml(channelName)}</title>
   <link>https://www.youtube.com/</link>
   <description>YouTube feed for ${escapeXml(channelName)} with AI summaries</description>
   <lastBuildDate>${now}</lastBuildDate>
