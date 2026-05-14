@@ -1,4 +1,3 @@
-import { Feed } from "feed";
 import { logger } from "@mng/logger/logger";
 
 import { getOrCreateSummary } from "./video-summary.repository";
@@ -11,20 +10,20 @@ type FeedVideo = {
 	thumbnailUrl: string;
 };
 
+const escapeXml = (str: string): string =>
+	str
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&apos;");
+
 export const generateFeed = async (
 	channelName: string,
 	videos: FeedVideo[],
 ): Promise<string> => {
-	const feed = new Feed({
-		title: `${channelName} - YouTube`,
-		description: `YouTube feed for ${channelName} with AI summaries`,
-		id: `https://youtube.com/${channelName}`,
-		link: "https://www.youtube.com/",
-		language: "en",
-		updated: new Date(),
-		generator: "Bun RSS Generator",
-		copyright: "",
-	});
+	const now = new Date().toUTCString();
+	const items: string[] = [];
 
 	for (const video of videos) {
 		logger.info(`Processing: ${video.title}`);
@@ -34,18 +33,32 @@ export const generateFeed = async (
 			continue;
 		}
 
-		feed.addItem({
-			title: video.title,
-			id: video.videoUrl,
-			link: video.videoUrl,
-			image: video.thumbnailUrl,
-			description: `<img src="${video.thumbnailUrl}" alt="${video.title}" />`,
-			content: `<p><img src="${video.thumbnailUrl}" alt="${video.title}" /></p>${summary}`,
-			date: new Date(),
-		});
+		items.push(`  <item>
+    <title>${escapeXml(video.title)}</title>
+    <link>${video.videoUrl}</link>
+    <guid isPermaLink="false">${video.videoUrl}</guid>
+    <pubDate>${now}</pubDate>
+    <description><![CDATA[<img src="${video.thumbnailUrl}" alt="${escapeXml(video.title)}" />]]></description>
+    <content:encoded><![CDATA[<p><img src="${video.thumbnailUrl}" alt="${escapeXml(video.title)}" /></p>${summary}]]></content:encoded>
+    <media:thumbnail url="${video.thumbnailUrl}" />
+    <enclosure url="${video.thumbnailUrl}" length="0" type="image/jpeg"/>
+  </item>`);
 	}
 
-	return feed.rss2();
+	return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/"
+     xmlns:media="http://search.yahoo.com/mrss/">
+<channel>
+  <title>${escapeXml(channelName)} - YouTube</title>
+  <link>https://www.youtube.com/</link>
+  <description>YouTube feed for ${escapeXml(channelName)} with AI summaries</description>
+  <lastBuildDate>${now}</lastBuildDate>
+  <generator>Bun RSS Generator</generator>
+  <language>en</language>
+${items.join("\n")}
+</channel>
+</rss>`;
 };
 
 export type { FeedVideo };
