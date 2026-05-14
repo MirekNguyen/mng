@@ -11,29 +11,23 @@ type VideoEntry = {
 
 const parseAtomFeed = (xml: string): VideoEntry[] => {
 	const entries: VideoEntry[] = [];
-
 	const entryRegex = /<entry>([\s\S]*?)<\/entry>/g;
 	let entryMatch: RegExpExecArray | null = null;
 
 	while ((entryMatch = entryRegex.exec(xml)) !== null) {
 		const entry = entryMatch[1];
-
 		const videoId = entry.match(/<yt:videoId>(.*?)<\/yt:videoId>/)?.[1] ?? "";
 		const title = entry.match(/<title>(.*?)<\/title>/)?.[1] ?? "";
-		const channelName =
-			entry.match(/<name>(.*?)<\/name>/)?.[1] ?? "";
-		const published =
-			entry.match(/<published>(.*?)<\/published>/)?.[1] ?? "";
-		const thumbnailUrl = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
-		const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+		const channelName = entry.match(/<name>(.*?)<\/name>/)?.[1] ?? "";
+		const published = entry.match(/<published>(.*?)<\/published>/)?.[1] ?? "";
 
 		if (videoId) {
 			entries.push({
 				videoId,
 				title,
 				channelName,
-				videoUrl,
-				thumbnailUrl,
+				videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
+				thumbnailUrl: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
 				publishedAt: new Date(published),
 			});
 		}
@@ -42,9 +36,8 @@ const parseAtomFeed = (xml: string): VideoEntry[] => {
 	return entries;
 };
 
-export const fetchChannelVideos = async (
-	feedUrl: string,
-): Promise<VideoEntry[]> => {
+export const fetchChannelVideos = async (channelId: string): Promise<VideoEntry[]> => {
+	const feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
 	const response = await fetch(feedUrl);
 
 	if (!response.ok) {
@@ -53,20 +46,11 @@ export const fetchChannelVideos = async (
 	}
 
 	const xml = await response.text();
-	return parseAtomFeed(xml);
-};
+	const videos = parseAtomFeed(xml);
 
-export const fetchAllChannelVideos = async (
-	feedUrls: string[],
-): Promise<VideoEntry[]> => {
-	const results = await Promise.all(feedUrls.map(fetchChannelVideos));
-	const allVideos = results.flat();
+	videos.sort((a, b) => b.publishedAt.getTime() - a.publishedAt.getTime());
 
-	allVideos.sort(
-		(a, b) => b.publishedAt.getTime() - a.publishedAt.getTime(),
-	);
-
-	return allVideos;
+	return videos;
 };
 
 export type { VideoEntry };
