@@ -16,7 +16,7 @@ const options = program.opts<{
 	output: string;
 }>();
 
-const playlist = await YouTube.getPlaylist(options.playlistId, { limit: 15 });
+const playlist = await YouTube.getPlaylist(options.playlistId, { limit: 3 });
 
 const getMinutes = (duration: number): number => duration / 1000 / 60;
 const isShort = (duration: number): boolean => getMinutes(duration) <= 1;
