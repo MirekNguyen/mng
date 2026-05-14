@@ -5,6 +5,9 @@ import { logger } from "@mng/logger/logger";
 import type { FeedVideo } from "./feed.generator";
 import { generateSummary } from "./video.summarizer";
 
+const replaceVideoUrl = (summary: string, videoUrl: string): string =>
+	summary.replace(/VIDEO_URL/g, videoUrl);
+
 export const getOrCreateSummary = async (video: FeedVideo): Promise<string | undefined> => {
 	const existing = await db
 		.select()
@@ -14,7 +17,7 @@ export const getOrCreateSummary = async (video: FeedVideo): Promise<string | und
 
 	if (existing.length > 0) {
 		logger.info(`Cache hit: ${video.title}`);
-		return existing[0].summary;
+		return replaceVideoUrl(existing[0].summary, video.videoUrl);
 	}
 
 	logger.info(`Generating summary: ${video.title}`);
@@ -34,5 +37,5 @@ export const getOrCreateSummary = async (video: FeedVideo): Promise<string | und
 		summary,
 	});
 
-	return summary;
+	return replaceVideoUrl(summary, video.videoUrl);
 };
