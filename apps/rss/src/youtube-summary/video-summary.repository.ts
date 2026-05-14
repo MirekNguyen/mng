@@ -2,10 +2,10 @@ import { db, eq } from "@mng/database/db";
 import { videoSummaries } from "@mng/database/schema/rss.schema";
 import { logger } from "@mng/logger/logger";
 
-import type { VideoEntry } from "./channel-feed.parser";
+import type { FeedVideo } from "./feed.generator";
 import { generateSummary } from "./video.summarizer";
 
-export const getOrCreateSummary = async (video: VideoEntry): Promise<string | undefined> => {
+export const getOrCreateSummary = async (video: FeedVideo): Promise<string | undefined> => {
 	const existing = await db
 		.select()
 		.from(videoSummaries)

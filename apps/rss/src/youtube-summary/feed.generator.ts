@@ -1,12 +1,19 @@
 import { Feed } from "feed";
 import { logger } from "@mng/logger/logger";
 
-import type { VideoEntry } from "./channel-feed.parser";
 import { getOrCreateSummary } from "./video-summary.repository";
+
+type FeedVideo = {
+	videoId: string;
+	title: string;
+	channelName: string;
+	videoUrl: string;
+	thumbnailUrl: string;
+};
 
 export const generateFeed = async (
 	channelName: string,
-	videos: VideoEntry[],
+	videos: FeedVideo[],
 ): Promise<string> => {
 	const feed = new Feed({
 		title: `${channelName} - YouTube`,
@@ -14,7 +21,7 @@ export const generateFeed = async (
 		id: `https://youtube.com/${channelName}`,
 		link: "https://www.youtube.com/",
 		language: "en",
-		updated: videos[0]?.publishedAt ?? new Date(),
+		updated: new Date(),
 		generator: "Bun RSS Generator",
 		copyright: "",
 	});
@@ -32,9 +39,11 @@ export const generateFeed = async (
 			id: video.videoUrl,
 			link: video.videoUrl,
 			description: summary,
-			date: video.publishedAt,
+			date: new Date(),
 		});
 	}
 
 	return feed.rss2();
 };
+
+export type { FeedVideo };
