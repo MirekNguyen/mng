@@ -23,6 +23,10 @@ export const generateFeed = async (
 		logger.info(`Processing: ${video.title}`);
 		const summary = await getOrCreateSummary(video);
 
+		if (!summary) {
+			continue;
+		}
+
 		feed.addItem({
 			title: video.title,
 			id: video.videoUrl,

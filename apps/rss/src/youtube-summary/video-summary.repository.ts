@@ -5,7 +5,7 @@ import { logger } from "@mng/logger/logger";
 import type { VideoEntry } from "./channel-feed.parser";
 import { generateSummary } from "./video.summarizer";
 
-export const getOrCreateSummary = async (video: VideoEntry): Promise<string> => {
+export const getOrCreateSummary = async (video: VideoEntry): Promise<string | undefined> => {
 	const existing = await db
 		.select()
 		.from(videoSummaries)
@@ -19,6 +19,11 @@ export const getOrCreateSummary = async (video: VideoEntry): Promise<string> => 
 
 	logger.info(`Generating summary: ${video.title}`);
 	const summary = await generateSummary(video.videoUrl);
+
+	if (!summary) {
+		logger.warn(`Skipping: ${video.title} (summary generation failed)`);
+		return undefined;
+	}
 
 	await db.insert(videoSummaries).values({
 		videoId: video.videoId,
