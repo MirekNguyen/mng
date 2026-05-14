@@ -38,7 +38,8 @@ export const generateFeed = async (
 			title: video.title,
 			id: video.videoUrl,
 			link: video.videoUrl,
-			content: `<img src="${video.thumbnailUrl}" alt="${video.title}" />${summary}`,
+			image: video.thumbnailUrl,
+			content: summary,
 			date: new Date(),
 		});
 	}
