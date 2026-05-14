@@ -8,9 +8,12 @@
     "start": "bun run src/index.ts",
     "build": "echo 'No build step needed for Bun' && exit 0",
     "cli:youtube": "bun src/cli/youtube.cli.ts",
-    "cli:notification": "bun src/cli/notification.cli.ts"
+    "cli:notification": "bun src/cli/notification.cli.ts",
+    "cli:youtube-summary": "bun src/cli/youtube-summary.cli.ts"
   },
   "dependencies": {
+    "@google/genai": "^1.48.0",
+    "@mng/database": "*",
     "@mng/logger": "*",
     "commander": "^14.0.2",
     "elysia": "latest",
