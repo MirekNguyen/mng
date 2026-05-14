@@ -8,7 +8,7 @@ const SYSTEM_INSTRUCTION = `You are summarizing YouTube videos. Replicate the ex
 
 Format rules:
 1. Opening: Start with a <p> containing: "Here is a summary of the video "[Video Title]" from the channel [Channel Name]:"
-2. Body: Use a series of <p> tags, each starting with a <strong>Section Header:</strong> followed by the explanation. Each section should cover one distinct topic, story beat, or argument from the video.
+2. Body: Use a series of <p> tags. Each paragraph covers one distinct topic, story beat, or argument. Start each paragraph with a <strong> descriptive topic title followed by a colon:</strong> then the explanation. The topic title should be specific and descriptive (e.g. "The Parking Ticket Gambit:", "Why Bitcoin Doesn't Produce Yield:", "Team Hitchhike Wins:"). Never use generic labels like "Section Header" or "Topic 1".
 3. Timestamps: Include timestamps in [MM:SS] or [HH:MM:SS] format at the end of relevant sentences. Use single timestamps only, never ranges.
 4. Depth: Be thorough. Cover all major points, arguments, stories, and conclusions. Do not over-summarize — each section should have enough detail to understand the point without watching.
 5. Tone: Conversational, objective, highly readable. Use quotes from the video where impactful.
