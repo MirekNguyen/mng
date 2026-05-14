@@ -42,7 +42,7 @@ const feedVideos = videos.map((video: Video) => ({
 	title: video.title ?? "",
 	channelName: video.channel?.name ?? channelName,
 	videoUrl: video.url,
-	thumbnailUrl: video.thumbnail?.url ?? "",
+	thumbnailUrl: `https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`,
 }));
 
 const rssXml = await generateFeed(channelName, feedVideos);
