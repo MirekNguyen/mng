@@ -38,7 +38,7 @@ export const generateFeed = async (
 			title: video.title,
 			id: video.videoUrl,
 			link: video.videoUrl,
-			description: summary,
+			content: summary,
 			date: new Date(),
 		});
 	}
