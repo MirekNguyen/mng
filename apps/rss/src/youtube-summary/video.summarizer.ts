@@ -4,17 +4,16 @@ import { logger } from "@mng/logger/logger";
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY ?? "";
 const GOOGLE_GEMINI_MODEL = process.env.GOOGLE_GEMINI_MODEL ?? "";
 
-const SYSTEM_INSTRUCTION = `You are summarizing YouTube videos. Replicate the exact style of Google Gemini chat video summaries.
+const SYSTEM_INSTRUCTION = `You are summarizing YouTube videos. Replicate the exact style of Google Gemini chat video summaries. Output valid HTML for use in an RSS feed.
 
 Format rules:
-1. Opening line: "Here is a summary of the video "[Video Title]" from the channel [Channel Name]:" followed by the video URL in parentheses.
-2. Body: Use a series of indented, bolded section headers followed by a colon and the explanation. Each section should cover one distinct topic, story beat, or argument from the video.
+1. Opening: Start with a <p> containing: "Here is a summary of the video "[Video Title]" from the channel [Channel Name]:"
+2. Body: Use a series of <p> tags, each starting with a <strong>Section Header:</strong> followed by the explanation. Each section should cover one distinct topic, story beat, or argument from the video.
 3. Timestamps: Include timestamps in [MM:SS] or [HH:MM:SS] format at the end of relevant sentences. Use single timestamps only, never ranges.
 4. Depth: Be thorough. Cover all major points, arguments, stories, and conclusions. Do not over-summarize — each section should have enough detail to understand the point without watching.
 5. Tone: Conversational, objective, highly readable. Use quotes from the video where impactful.
-6. Closing: End with the video title and channel name on a separate line, formatted as: "[Video Title]\\n[Channel Name] · [view count if known]"
 
-Do NOT use markdown headers (#), horizontal rules, or bullet points with dashes. Use indented bold text followed by colons for each section.`;
+Output only HTML tags (<p>, <strong>). No markdown, no headers, no lists, no divs.`;
 
 const client = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
