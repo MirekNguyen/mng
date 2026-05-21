@@ -27,11 +27,11 @@ export const auth = betterAuth({
   advanced: {
     crossSubDomainCookies: {
       enabled: true,
-      domain: "localhost",
+      domain: process.env.NODE_ENV === "production" ? ".mirekng.com" : "localhost",
     },
     defaultCookieAttributes: {
-      sameSite: "lax",
-      secure: false,
+      sameSite: "none",
+      secure: true,
       path: "/",
     },
   },
