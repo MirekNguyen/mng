@@ -18,7 +18,7 @@ import { account } from "@mng/database/schema/auth.schema";
 
 const app = new Elysia()
   .use(cors({
-    origin: [process.env.APP_URL ?? "http://localhost:3001"],
+    origin: [process.env.APP_URL ?? "http://localhost:3001", "https://fitness.mirekng.com"],
     credentials: true,
   }))
   .mount(auth.handler)
