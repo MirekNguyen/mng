@@ -24,12 +24,14 @@ export const getSessionResult = async (): Promise<SessionResult> => {
   console.log("[session] cookies:", { tokenPlain: !!tokenPlain, tokenSecure: !!tokenSecure });
   if (!token) return { authenticated: false };
 
+  const cookieName = tokenPlain ? "better-auth.session_token" : "__Secure-better-auth.session_token";
   const response = await fetch(`${API_URL}/api/me`, {
     headers: {
-      cookie: `better-auth.session_token=${token}`,
+      cookie: `${cookieName}=${token}`,
     },
   });
 
+  console.log("[session] /api/me status:", response.status);
   if (!response.ok) return { authenticated: false };
 
   const result = await response.json();
