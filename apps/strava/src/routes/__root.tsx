@@ -77,7 +77,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
         <script dangerouslySetInnerHTML={{ __html: `(function(){var t=localStorage.getItem('theme');if(t==='dark'||(t!=='light'&&matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark');if(t)document.documentElement.setAttribute('data-theme',t)}else if(t==='light'){document.documentElement.setAttribute('data-theme','light')}})()` }} />
       </head>
-      <body>
+      <body className="pt-[env(safe-area-inset-top)]">
         {children}
         <TanStackDevtools
           config={{
