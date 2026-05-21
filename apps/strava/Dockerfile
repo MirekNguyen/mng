@@ -10,11 +10,11 @@ FROM oven/bun:1
 
 WORKDIR /app/apps/strava
 
-COPY --from=build /app/apps/strava/.output .output
+COPY --from=build /app/apps/strava/dist dist
 COPY --from=build /app/apps/strava/node_modules node_modules
 COPY --from=build /app/apps/strava/package.json package.json
 
 ENV PORT=3001
 EXPOSE 3001
 
-CMD ["bun", "run", ".output/server/index.mjs"]
+CMD ["bun", "run", "dist/server/server.js"]
