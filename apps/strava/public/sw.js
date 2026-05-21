@@ -1,4 +1,4 @@
-const CACHE_NAME = "calorik-v1";
+const CACHE_NAME = "fitness-v1";
 const OFFLINE_URL = "/";
 
 const PRECACHE_URLS = ["/"];

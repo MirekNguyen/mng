@@ -15,7 +15,7 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1, viewport-fit=cover',
       },
       {
-        title: 'Calorik',
+        title: 'Fitness',
       },
       {
         name: 'theme-color',
@@ -31,7 +31,7 @@ export const Route = createRootRoute({
       },
       {
         name: 'apple-mobile-web-app-title',
-        content: 'Calorik',
+        content: 'Fitness',
       },
     ],
     links: [
