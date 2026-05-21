@@ -1,100 +1,113 @@
 import SwiftUI
 
 struct AnalysisBannerView: View {
-    let stage: AnalysisStage
-    let isAnalyzing: Bool
-    let hasPendingResult: Bool
-    let onReviewTap: () -> Void
+    @ObservedObject var manager: BackgroundAnalysisManager
+    var onReview: () -> Void = {}
 
     var body: some View {
         Group {
-            if isAnalyzing {
+            if manager.isAnalyzing {
                 analyzingBanner
-            } else if hasPendingResult {
+            } else if manager.pendingResult != nil {
                 readyBanner
             }
         }
-        .padding(.horizontal, 4)
+        .animation(.easeInOut(duration: 0.3), value: manager.isAnalyzing)
+        .animation(.easeInOut(duration: 0.3), value: manager.pendingResult != nil)
     }
 
-    // MARK: - Analysing
+    // MARK: - Analyzing
 
     private var analyzingBanner: some View {
         HStack(spacing: 12) {
             ProgressView()
                 .progressViewStyle(.circular)
-                .tint(.white)
-                .scaleEffect(0.85)
+                .tint(.secondary)
+                .scaleEffect(0.8)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text("Analyzing meal…")
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(.white)
+                Text("Analyzing meal")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(.primary)
 
-                if case .analyzing(let message, _) = stage {
+                if case .analyzing(let message, _) = manager.stage {
                     Text(message)
                         .font(.system(size: 11))
-                        .foregroundStyle(.white.opacity(0.75))
+                        .foregroundStyle(.secondary)
                         .lineLimit(1)
-                        .contentTransition(.opacity)
+                        .contentTransition(.numericText())
                         .id(message)
                 } else {
-                    Text(stage.message)
+                    Text(manager.stage.message)
                         .font(.system(size: 11))
-                        .foregroundStyle(.white.opacity(0.75))
+                        .foregroundStyle(.secondary)
                         .lineLimit(1)
                 }
             }
 
             Spacer()
 
-            if case .uploading(let p) = stage {
-                ProgressView(value: p, total: 1.0)
-                    .progressViewStyle(.linear)
-                    .tint(.white)
-                    .frame(width: 60)
-                    .scaleEffect(x: 1, y: 1.5, anchor: .center)
-            } else if case .analyzing(_, let p) = stage {
-                ProgressView(value: p, total: 1.0)
-                    .progressViewStyle(.linear)
-                    .tint(.white)
-                    .frame(width: 60)
-                    .scaleEffect(x: 1, y: 1.5, anchor: .center)
-            }
+            progressIndicator
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
-        .background(.purple.opacity(0.85), in: .capsule)
+    }
+
+    @ViewBuilder
+    private var progressIndicator: some View {
+        if case .uploading(let p) = manager.stage {
+            CircularProgress(progress: p)
+        } else if case .analyzing(_, let p) = manager.stage {
+            CircularProgress(progress: p)
+        }
     }
 
     // MARK: - Ready
 
     private var readyBanner: some View {
-        Button(action: onReviewTap) {
+        Button(action: onReview) {
             HStack(spacing: 12) {
                 Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 22, weight: .semibold))
+                    .font(.system(size: 20))
                     .foregroundStyle(.green)
 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Meal analysis ready!")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(.white)
-                    Text("Tap to review and save")
+                    Text("Meal analyzed")
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundStyle(.primary)
+                    Text("Tap to review")
                         .font(.system(size: 11))
-                        .foregroundStyle(.white.opacity(0.75))
+                        .foregroundStyle(.secondary)
                 }
 
                 Spacer()
 
                 Image(systemName: "chevron.right")
-                    .font(.system(size: 12, weight: .semibold))
-                    .foregroundStyle(.white.opacity(0.6))
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(.tertiary)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
-            .background(.black.opacity(0.85), in: .capsule)
         }
         .buttonStyle(.plain)
+    }
+}
+
+// MARK: - Circular Progress
+
+private struct CircularProgress: View {
+    let progress: Double
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .stroke(Color.secondary.opacity(0.2), lineWidth: 2.5)
+            Circle()
+                .trim(from: 0, to: progress)
+                .stroke(Color.primary.opacity(0.6), style: StrokeStyle(lineWidth: 2.5, lineCap: .round))
+                .rotationEffect(.degrees(-90))
+                .animation(.easeOut(duration: 0.4), value: progress)
+        }
+        .frame(width: 22, height: 22)
     }
 }

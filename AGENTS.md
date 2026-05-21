@@ -203,3 +203,27 @@ No test infrastructure is currently set up. When tests are added:
 - Use `.toBe(value)` for simple types (boolean, string, number)
 - Use `.toStrictEqual(obj)` for objects
 - Write descriptions as: `it('should return ... when/if ...')`
+
+## Design Context (Calorik iOS App)
+
+### Users
+Casual health-conscious people who log meals when they remember, mainly watching calories without obsessing over every macro. Quick in, quick out. Not fitness bros, not dietitians. Normal people who want a gentle nudge to eat better.
+
+### Brand Personality
+**Clean, confident, effortless** — like Things 3 or Apple Health. Respects your time and intelligence. No hand-holding, no gamification, no guilt. Quiet competence.
+
+### Aesthetic Direction
+**Refined minimal.** iOS 26 Liquid Glass used sparingly and purposefully — not on every surface. System adaptive tinting (no hardcoded brand color). Editorial typography, generous whitespace, clear hierarchy. The app should feel like it barely tries, yet everything is in the right place.
+
+### Anti-References
+- MyFitnessPal (cluttered, ad-filled, overwhelming)
+- Overly gamified apps (badges, streaks, confetti)
+- Generic AI dashboards (purple gradients, hero metric templates, glowing accents)
+- Clinical health apps (sterile white, hospital vibes)
+
+### Design Principles
+1. **Less glass, more air** — Reserve glass for containers that need it. Let whitespace and typography do the heavy lifting.
+2. **The food list is the product** — Meal log should be reachable and prominent. Gauge and macros support it.
+3. **One tap, done** — Primary actions must be obvious and fast.
+4. **Quiet confidence** — No exclamation marks, no celebration animations, no motivational copy. Clear, calm information.
+5. **Earn every element** — If it doesn't help log food or check progress, remove it.

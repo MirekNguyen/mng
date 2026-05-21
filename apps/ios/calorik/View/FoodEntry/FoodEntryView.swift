@@ -17,6 +17,7 @@ struct FoodEntryView: View {
     @State private var pendingDeleteEntry: FoodEntry?
     @State private var showUndoSnackbar = false
     @State private var undoTask: Task<Void, Never>?
+    @State private var showCaffeineSheet = false
 
     var entries: [FoodEntry] {
         (foodEntryRepository.foodEntries ?? []).sorted {
@@ -38,6 +39,7 @@ struct FoodEntryView: View {
     var totalProtein: Double { entries.reduce(0) { $0 + $1.protein } }
     var totalCarbs: Double { entries.reduce(0) { $0 + $1.carbs } }
     var totalFat: Double { entries.reduce(0) { $0 + $1.fat } }
+    var totalCaffeine: Double { entries.reduce(0) { $0 + ($1.caffeine ?? 0) } }
 
     func loadData() async {
         await foodEntryRepository.getEntries(date: selectedDate)
@@ -66,9 +68,22 @@ struct FoodEntryView: View {
                             onTap: { selectedMacro = .fat })
                     }
 
+                    if totalCaffeine > 0 {
+                        CaffeineSummaryRow(amount: totalCaffeine, onTap: { showCaffeineSheet = true })
+                    }
+
                     HStack(spacing: 12) {
                         Button(action: { showPhotosSheet = true }) {
                             Label("Analyze", systemImage: "camera.fill")
+                                .font(.system(size: 14, weight: .semibold))
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 10)
+                        }
+                        .buttonStyle(.glass)
+                        .buttonBorderShape(.capsule)
+
+                        Button(action: { showCaffeineSheet = true }) {
+                            Label("Caffeine", systemImage: "cup.and.saucer.fill")
                                 .font(.system(size: 14, weight: .semibold))
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 10)
@@ -249,6 +264,13 @@ struct FoodEntryView: View {
             NavigationStack {
                 ProfileView(repository: userProfileRepository)
             }
+        }
+        .sheet(isPresented: $showCaffeineSheet) {
+            QuickCaffeineSheet(selectedDate: selectedDate) {
+                Task { await loadData() }
+            }
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
         }
         .fullScreenCover(isPresented: $showConfirmEntry, onDismiss: {
             foodEntryRepository.pendingEntry = nil

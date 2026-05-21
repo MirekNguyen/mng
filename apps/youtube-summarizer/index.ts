@@ -13,7 +13,7 @@ const generateText = async (): Promise<string | undefined> => {
 
   const ytVideo = {
     fileData: {
-      fileUri: 'https://www.youtube.com/watch?v=-Gtbsi51sts',
+      fileUri: 'https://www.youtube.com/watch?v=0BScF_gdj8g',
       mimeType: 'video/mp4',
     },
   };

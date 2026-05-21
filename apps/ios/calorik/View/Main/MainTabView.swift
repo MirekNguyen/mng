@@ -13,12 +13,12 @@ struct MainTabView: View {
     @StateObject private var userProfileRepository = UserProfileRepository(
         networkManager: NetworkManager2(baseURL: "https://api.mirekng.com/"))
 
+    @EnvironmentObject private var analysisManager: BackgroundAnalysisManager
+
     @State private var selectedTab: Int = 0
     @State private var showOnboarding: Bool = false
 
-    private var isAnalyzing: Bool { foodEntryRepository.isAnalyzingInBackground }
-    private var hasPending: Bool { foodEntryRepository.pendingEntry != nil }
-    private var showAccessory: Bool { isAnalyzing || hasPending }
+    private var showAccessory: Bool { analysisManager.isAnalyzing || analysisManager.pendingResult != nil }
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -52,15 +52,12 @@ struct MainTabView: View {
         }
         .tint(.accentColor)
         .tabViewBottomAccessory(isEnabled: showAccessory) {
-            AnalysisBannerView(
-                stage: foodEntryRepository.backgroundAnalysisStage,
-                isAnalyzing: isAnalyzing,
-                hasPendingResult: hasPending,
-                onReviewTap: {
-                    selectedTab = 0
-                    foodEntryRepository.shouldShowConfirmEntry = true
-                }
-            )
+            AnalysisBannerView(manager: analysisManager, onReview: {
+                selectedTab = 0
+                foodEntryRepository.shouldShowConfirmEntry = true
+                foodEntryRepository.pendingEntry = analysisManager.pendingResult
+                analysisManager.clearResult()
+            })
         }
         .environmentObject(networkManager)
         .environmentObject(groceryRepository)

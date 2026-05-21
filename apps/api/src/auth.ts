@@ -30,7 +30,7 @@ export const auth = betterAuth({
       domain: process.env.NODE_ENV === "production" ? ".mirekng.com" : "localhost",
     },
     defaultCookieAttributes: {
-      sameSite: "none",
+      sameSite: "lax",
       secure: true,
       path: "/",
     },

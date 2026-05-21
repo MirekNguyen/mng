@@ -270,15 +270,11 @@ struct ImageUploadView: View {
         let imagesToAnalyze = selectedImages
         let promptToSend = trimmedPrompt.isEmpty ? nil : trimmedPrompt
 
-        // Start background analysis — the sheet dismisses immediately so the
-        // user can continue using the app while the AI works.
-        Task {
-            await repository.analyzeImages(
-                images: imagesToAnalyze,
-                prompt: promptToSend,
-                background: true
-            )
-        }
+        // Start background-safe analysis via the dedicated manager.
+        BackgroundAnalysisManager.shared.analyzeImages(
+            images: imagesToAnalyze,
+            prompt: promptToSend
+        )
 
         // Dismiss right away (don't wait for analysis to finish).
         dismiss()
