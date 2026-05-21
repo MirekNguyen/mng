@@ -13,8 +13,9 @@ WORKDIR /app/apps/strava
 COPY --from=build /app/apps/strava/dist dist
 COPY --from=build /app/apps/strava/node_modules node_modules
 COPY --from=build /app/apps/strava/package.json package.json
+COPY --from=build /app/apps/strava/serve.ts serve.ts
 
 ENV PORT=3001
 EXPOSE 3001
 
-CMD ["bun", "run", "dist/server/server.js"]
+CMD ["bun", "serve.ts"]
