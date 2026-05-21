@@ -150,6 +150,115 @@ html {
   border-radius: 3px;
 }
 
+/* Motion: easing & keyframes */
+:root {
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-in {
+  animation: fade-in-up 400ms var(--ease-out-quart) both;
+}
+
+.animate-in-scale {
+  animation: scale-in 350ms var(--ease-out-quart) both;
+}
+
+.animate-in-right {
+  animation: slide-in-right 350ms var(--ease-out-quart) both;
+}
+
+.animate-in-left {
+  animation: slide-in-left 350ms var(--ease-out-quart) both;
+}
+
+.animate-fade {
+  animation: fade-in 300ms var(--ease-out-quart) both;
+}
+
+/* Stagger delays */
+.stagger-1 { animation-delay: 50ms; }
+.stagger-2 { animation-delay: 100ms; }
+.stagger-3 { animation-delay: 150ms; }
+.stagger-4 { animation-delay: 200ms; }
+.stagger-5 { animation-delay: 250ms; }
+.stagger-6 { animation-delay: 300ms; }
+.stagger-7 { animation-delay: 350ms; }
+.stagger-8 { animation-delay: 400ms; }
+
+/* Press feedback for interactive elements */
+.press-scale {
+  transition: transform 100ms var(--ease-out-quart);
+}
+.press-scale:active {
+  transform: scale(0.96);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-in,
+  .animate-in-scale,
+  .animate-in-right,
+  .animate-in-left,
+  .animate-fade {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  .press-scale:active {
+    transform: none;
+  }
+}
+
 @layer base {
   .maplibregl-popup-content {
     @apply bg-transparent! shadow-none! p-0! rounded-none!;

@@ -95,7 +95,7 @@ function ChatPage() {
       <div className="flex-1 overflow-y-auto overscroll-contain">
         <div className="max-w-[600px] mx-auto px-4 py-4">
           {messages.length === 0 && (
-            <div className="flex flex-col items-center justify-center pt-16 pb-8 text-center">
+            <div className="flex flex-col items-center justify-center pt-16 pb-8 text-center animate-in-scale">
               <div className="w-10 h-10 rounded-full bg-[var(--color-accent)]/10 flex items-center justify-center mb-4">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
@@ -121,7 +121,7 @@ function ChatPage() {
 
           <div className="space-y-4">
             {messages.map((message) => (
-              <div key={message.id} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              <div key={message.id} className={`flex ${message.role === 'user' ? 'justify-end animate-in-right' : 'justify-start animate-in-left'}`}>
                 <div className={`max-w-[80%] ${
                   message.role === 'user'
                     ? 'bg-[var(--color-accent)] text-white rounded-[18px] rounded-br-[4px] px-3.5 py-2'

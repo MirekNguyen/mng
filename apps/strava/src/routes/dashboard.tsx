@@ -103,12 +103,12 @@ function DashboardPage() {
 
       <main className="max-w-[600px] mx-auto px-5 pt-6 space-y-8">
         {/* Sport pills */}
-        <div className="flex gap-2">
+        <div className="flex gap-2 animate-in stagger-1">
           {sportOptions.map((sport) => (
             <button
               key={sport}
               onClick={() => setSelectedSport(sport)}
-              className={`px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors ${
+              className={`px-3.5 py-1.5 rounded-full text-sm font-medium press-scale transition-colors ${
                 selectedSport === sport
                   ? 'text-white'
                   : 'bg-[var(--color-surface-sunken)] text-[var(--color-ink-secondary)] hover:bg-[var(--color-border)]'
@@ -121,10 +121,10 @@ function DashboardPage() {
         </div>
 
         {/* Training Status Insight */}
-        {fitness && <TrainingInsight fitness={fitness} />}
+        {fitness && <div className="animate-in stagger-2"><TrainingInsight fitness={fitness} /></div>}
 
         {/* This week */}
-        <section>
+        <section className="animate-in stagger-3">
           <h2 className="text-lg font-semibold mb-4">This week</h2>
           <div className="grid grid-cols-3 gap-6">
             {isDistanceSport ? (
@@ -162,7 +162,7 @@ function DashboardPage() {
         </section>
 
         {/* 12-week chart */}
-        <section>
+        <section className="animate-in stagger-4">
           <p className="text-xs text-[var(--color-ink-tertiary)] mb-3">Past 12 weeks</p>
           <ChartContainer config={{ [isDistanceSport ? 'distance' : 'time']: { label: isDistanceSport ? 'Distance' : 'Time', color: sportColors[selectedSport] ?? 'var(--color-accent)' } }} className="h-36 w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -189,10 +189,12 @@ function DashboardPage() {
         </section>
 
         {/* AI Week Brief */}
-        <WeekBrief athleteStravaId={athleteStravaId} />
+        <div className="animate-in stagger-5">
+          <WeekBrief athleteStravaId={athleteStravaId} />
+        </div>
 
         {/* Recent activities */}
-        <section>
+        <section className="animate-in stagger-6">
           <div className="flex items-baseline justify-between mb-3">
             <h2 className="text-lg font-semibold">Activities</h2>
             <Link to="/activities" className="text-sm text-[var(--color-accent)] hover:underline">See all</Link>

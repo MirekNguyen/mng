@@ -80,7 +80,7 @@ function ActivitiesPage() {
               key={s}
               to="/activities"
               search={{ page: 1, sport: s }}
-              className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition-colors whitespace-nowrap ${
+              className={`rounded-full px-3.5 py-1.5 text-sm font-medium press-scale transition-colors whitespace-nowrap ${
                 sport === s
                   ? 'text-white'
                   : 'bg-[var(--color-surface-sunken)] text-[var(--color-ink-secondary)] hover:bg-[var(--color-border)]'
@@ -95,12 +95,12 @@ function ActivitiesPage() {
 
         {/* Activity list */}
         <div className="divide-y divide-[var(--color-border)]">
-          {filtered.map((activity: Activity) => (
+          {filtered.map((activity: Activity, i: number) => (
             <Link
               key={activity.id}
               to="/activities/$activityId"
               params={{ activityId: String(activity.stravaId) }}
-              className="flex items-center gap-4 py-3.5 hover:bg-[var(--color-surface-sunken)] -mx-2 px-2 rounded-lg transition-colors"
+              className={`flex items-center gap-4 py-3.5 hover:bg-[var(--color-surface-sunken)] -mx-2 px-2 rounded-lg transition-colors animate-in stagger-${Math.min(i + 1, 8)}`}
             >
               <SportIcon type={activity.type} size={22} className="flex-shrink-0 text-[var(--color-ink-secondary)]" />
               <div className="flex-1 min-w-0">
