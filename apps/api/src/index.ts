@@ -8,10 +8,43 @@ import { foodEntryController } from "./food-entry/food-entry.controller";
 import { propertyController } from "./property/property.controller";
 import { statsController } from "./stats/stats.controller";
 import { userController } from "./user/user.controller";
+import { stravaController } from "./strava/strava.controller";
+import { stravaAnalyticsController } from "./strava/strava-analytics.controller";
+import { stravaChatController } from "./strava/strava-chat.controller";
 import { ServerError } from "@mng/http/server.error";
+import { auth } from "./auth";
+import { db, eq, and } from "@mng/database/db";
+import { account } from "@mng/database/schema/auth.schema";
 
 const app = new Elysia()
-  .use(cors())
+  .use(cors({
+    origin: [process.env.APP_URL ?? "http://localhost:3001"],
+    credentials: true,
+  }))
+  .mount(auth.handler)
+  // Returns current user + strava connection status
+  .get("/api/me", async ({ headers }) => {
+    const session = await auth.api.getSession({ headers: new Headers(headers as Record<string, string>) });
+    if (!session?.user) return { user: null, stravaConnected: false, stravaAthleteId: null };
+
+    const stravaAccount = await db.select()
+      .from(account)
+      .where(and(eq(account.userId, session.user.id), eq(account.providerId, "strava")))
+      .limit(1);
+
+    const stravaAthleteId = stravaAccount.length > 0 ? Number(stravaAccount[0].accountId) : null;
+
+    return {
+      user: {
+        id: session.user.id,
+        name: session.user.name,
+        email: session.user.email,
+        image: session.user.image,
+      },
+      stravaConnected: stravaAthleteId !== null,
+      stravaAthleteId,
+    };
+  })
   .error({ ServerError })
   .onError(({ error }) => {
     const dbError = parseDatabaseError(error);
@@ -26,6 +59,9 @@ const app = new Elysia()
   .use(statsController)
   .use(userController)
   .use(emailController)
+  .use(stravaController)
+  .use(stravaAnalyticsController)
+  .use(stravaChatController)
   .listen(3000);
 
 console.log(`🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}`);

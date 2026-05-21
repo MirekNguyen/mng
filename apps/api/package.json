@@ -22,6 +22,7 @@
     "@mng/scraper": "*",
     "@types/luxon": "^3.7.1",
     "ai": "^5.0.113",
+    "better-auth": "^1.6.11",
     "elysia": "latest",
     "luxon": "^3.7.2",
     "resend": "^6.9.1",
