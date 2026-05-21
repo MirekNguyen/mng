@@ -1,4 +1,4 @@
-import { getCookie } from "@tanstack/react-start/server";
+import { getCookie, getWebRequest } from "@tanstack/react-start/server";
 
 const API_URL = process.env.API_URL ?? "http://localhost:3000";
 
@@ -16,6 +16,9 @@ export type SessionResult =
   | { authenticated: true; stravaConnected: true; data: SessionData };
 
 export const getSessionResult = async (): Promise<SessionResult> => {
+  const req = getWebRequest();
+  const cookieHeader = req?.headers?.get("cookie") ?? "NONE";
+  console.log("[session] raw cookie header:", cookieHeader);
   const tokenPlain = getCookie("better-auth.session_token");
   const tokenSecure = getCookie("__Secure-better-auth.session_token");
   const token = tokenPlain ?? tokenSecure;
