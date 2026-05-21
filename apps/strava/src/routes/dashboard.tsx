@@ -3,9 +3,9 @@ import { createServerFn } from '@tanstack/react-start'
 import { useState, useEffect } from 'react'
 import { getSession } from '#/lib/session.server'
 import { api } from '#/lib/api'
-import { formatDistance, formatDuration, formatPace, formatDate, sportIcon } from '#/lib/format'
+import { formatDistance, formatDuration, formatDate } from '#/lib/format'
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts'
-import { ChartContainer, ChartTooltipContent, type ChartConfig } from '#/components/ui/chart'
+import { ChartContainer, ChartTooltipContent } from '#/components/ui/chart'
 import { Card, CardContent } from '#/components/ui/card'
 import { Skeleton } from '#/components/ui/skeleton'
 import { BottomNav } from '#/components/bottom-nav'
@@ -242,35 +242,35 @@ const TrainingInsight = ({ fitness }: { fitness: FitnessStatus }) => {
   const tsb = fitness.currentTsb
   const ctl = fitness.currentCtl
 
-  let icon: string
+  let dotColor: string
   let message: string
   let bgColor: string
 
   if (tsb > 15) {
-    icon = '🟢'
+    dotColor = 'var(--color-success)'
     message = `Fresh — great day for intensity`
     bgColor = 'var(--color-success-subtle)'
   } else if (tsb >= 0) {
-    icon = '🟢'
+    dotColor = 'var(--color-success)'
     message = `Good form — train normally`
     bgColor = 'var(--color-success-subtle)'
   } else if (tsb >= -15) {
-    icon = '🟡'
+    dotColor = 'var(--color-warning)'
     message = `Absorbing load — fitness building`
     bgColor = 'var(--color-warning-subtle)'
   } else if (tsb >= -30) {
-    icon = '🟠'
+    dotColor = 'var(--color-accent)'
     message = `Fatigued — consider easy or rest`
     bgColor = 'var(--color-warning-subtle)'
   } else {
-    icon = '🔴'
+    dotColor = 'var(--color-heart)'
     message = `Deep fatigue — prioritize recovery`
     bgColor = 'var(--color-heart-subtle)'
   }
 
   return (
     <Link to="/fitness" className="flex items-center gap-2.5 rounded-lg px-3.5 py-2.5 transition-colors hover:opacity-90" style={{ backgroundColor: bgColor }}>
-      <span className="text-sm">{icon}</span>
+      <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: dotColor }} />
       <p className="text-[13px] text-[var(--color-ink)] flex-1">{message}</p>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-ink-tertiary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
     </Link>

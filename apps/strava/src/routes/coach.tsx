@@ -1,6 +1,6 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { getSession } from '#/lib/session.server'
 import { api } from '#/lib/api'
 import { AppHeader } from '#/components/app-header'

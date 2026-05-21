@@ -3,7 +3,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { lazy, Suspense, useState, useEffect, type ReactNode } from 'react'
 import { getSession } from '#/lib/session.server'
 import { api } from '#/lib/api'
-import { formatDistance, formatDuration, formatPace, formatDate, formatTime, sportIcon } from '#/lib/format'
+import { formatDistance, formatDuration, formatPace, formatDate, formatTime } from '#/lib/format'
 import { MediaGallery } from '#/components/media-gallery'
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts'
 
