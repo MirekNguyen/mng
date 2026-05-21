@@ -99,7 +99,7 @@ function DashboardPage() {
 
   return (
     <div className="min-h-screen pb-16">
-      <AppHeader title="Strava" athleteName={athleteName} athleteImage={athleteImage} />
+      <AppHeader title="Fitness" athleteName={athleteName} athleteImage={athleteImage} />
 
       <main className="max-w-[600px] mx-auto px-5 pt-6 space-y-8">
         {/* Sport pills */}
