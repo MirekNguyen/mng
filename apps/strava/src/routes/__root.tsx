@@ -12,13 +12,37 @@ export const Route = createRootRoute({
       },
       {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
+        content: 'width=device-width, initial-scale=1, viewport-fit=cover',
       },
       {
-        title: 'Strava Fitness',
+        title: 'Calorik',
+      },
+      {
+        name: 'theme-color',
+        content: '#fc4c02',
+      },
+      {
+        name: 'apple-mobile-web-app-capable',
+        content: 'yes',
+      },
+      {
+        name: 'apple-mobile-web-app-status-bar-style',
+        content: 'black-translucent',
+      },
+      {
+        name: 'apple-mobile-web-app-title',
+        content: 'Calorik',
       },
     ],
     links: [
+      {
+        rel: 'manifest',
+        href: '/manifest.json',
+      },
+      {
+        rel: 'apple-touch-icon',
+        href: '/logo192.png',
+      },
       {
         rel: 'preconnect',
         href: 'https://fonts.googleapis.com',
@@ -35,6 +59,11 @@ export const Route = createRootRoute({
       {
         rel: 'stylesheet',
         href: appCss,
+      },
+    ],
+    scripts: [
+      {
+        children: `if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }`,
       },
     ],
   }),
