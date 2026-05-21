@@ -156,7 +156,7 @@ function ChatPage() {
       </div>
 
       {/* Input bar */}
-      <div className="flex-shrink-0 border-t border-[var(--color-border)] bg-[var(--color-surface)] pb-14">
+      <div className="flex-shrink-0 border-t border-[var(--color-border)] bg-[var(--color-surface)] pb-[calc(3.5rem+env(safe-area-inset-bottom))]">
         <div className="max-w-[600px] mx-auto px-3 py-2">
           {imagePreview && (
             <div className="relative inline-block mb-2 ml-1">
