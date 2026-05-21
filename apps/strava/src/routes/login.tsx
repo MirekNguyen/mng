@@ -22,7 +22,7 @@ export const Route = createFileRoute("/login")({
 });
 
 const handleGitHub = () => {
-  authClient.signIn.social({ provider: "github", callbackURL: "/connect-strava" });
+  authClient.signIn.social({ provider: "github", callbackURL: `${window.location.origin}/connect-strava` });
 };
 
 function LoginPage() {
