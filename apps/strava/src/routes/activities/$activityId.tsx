@@ -523,7 +523,7 @@ function AiAnalysisSection({ athleteStravaId, activityStravaId }: { athleteStrav
 
   useEffect(() => {
     setStatus('loading')
-    fetch(`http://localhost:3000/strava/analytics/workout-analysis/${athleteStravaId}/${activityStravaId}`)
+    fetch(`${import.meta.env.VITE_API_URL ?? "http://localhost:3000"}/strava/analytics/workout-analysis/${athleteStravaId}/${activityStravaId}`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed')
         return res.json()

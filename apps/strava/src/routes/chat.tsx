@@ -42,7 +42,7 @@ function ChatPage() {
 
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({
-      api: `http://localhost:3000/strava/chat/${athleteStravaId}`,
+      api: `${import.meta.env.VITE_API_URL ?? "http://localhost:3000"}/strava/chat/${athleteStravaId}`,
     }),
   })
 
