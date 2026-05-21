@@ -16,7 +16,7 @@ export type SessionResult =
   | { authenticated: true; stravaConnected: true; data: SessionData };
 
 export const getSessionResult = async (): Promise<SessionResult> => {
-  const token = getCookie("better-auth.session_token");
+  const token = getCookie("better-auth.session_token") ?? getCookie("__Secure-better-auth.session_token");
   if (!token) return { authenticated: false };
 
   const response = await fetch(`${API_URL}/api/me`, {
