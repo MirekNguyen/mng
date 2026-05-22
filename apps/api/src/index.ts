@@ -16,23 +16,27 @@ import { auth } from "./auth";
 import { db, eq, and } from "@mng/database/db";
 import { account } from "@mng/database/schema/auth.schema";
 
-const APP_URL = process.env.APP_URL ?? "http://localhost:3001";
+const TRUSTED_ORIGINS = (process.env.TRUSTED_ORIGINS ?? process.env.APP_URL ?? "http://localhost:3001")
+  .split(",")
+  .map((u) => u.trim());
 
 const app = new Elysia()
   .use(cors({
-    origin: [process.env.APP_URL ?? "http://localhost:3001", "https://fitness.mirekng.com"],
+    origin: TRUSTED_ORIGINS,
     credentials: true,
   }))
   .mount(auth.handler)
   // Catch better-auth error redirects and forward back to the originating app.
-  // After OAuth provider redirects, referer/origin headers are unreliable,
-  // so we fall back to APP_URL (the primary frontend consuming this API).
-  .get("/", ({ query, set, headers }) => {
+  // We read the `auth_origin` cookie set by the client before starting OAuth.
+  // Falls back to first trusted origin if cookie is missing.
+  .get("/", ({ query, set, cookie }) => {
     const error = (query as Record<string, string>).error;
     if (error) {
-      const origin = headers.origin ?? headers.referer;
-      const baseUrl = origin && !origin.includes("github.com") ? origin : APP_URL;
+      const origin = cookie.auth_origin?.value;
+      const baseUrl = origin && TRUSTED_ORIGINS.includes(origin) ? origin : TRUSTED_ORIGINS[0];
       set.redirect = `${baseUrl}/login?error=${error}`;
+      // Clear the cookie
+      cookie.auth_origin?.remove();
       return;
     }
     return { status: "ok" };
