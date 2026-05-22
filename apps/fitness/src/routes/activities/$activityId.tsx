@@ -53,23 +53,32 @@ function ActivityDetailPage() {
     )
   }
 
-  const photos = activity.photos as { primary?: { urls?: Record<string, string> }; count?: number; all?: Array<{ urls?: Record<string, string> }> } | null
+  const photos = parseJsonb<{ primary?: { urls?: Record<string, string> }; count?: number; all?: Array<{ urls?: Record<string, string> }> }>(activity.photos)
   const allPhotos = photos?.all ?? (photos?.primary?.urls ? [{ urls: photos.primary.urls }] : [])
-  const kudos = activity.kudos as Array<{ firstname: string; lastname: string; profile: string }> | null
-  const comments = activity.comments as Array<{ athlete: { firstname: string; lastname: string; profile: string }; text: string; created_at: string }> | null
-  const splits = activity.splitsMetric as Array<{
+  const kudos = parseJsonb<Array<{ firstname: string; lastname: string; profile: string }>>(activity.kudos)
+  const comments = parseJsonb<Array<{ athlete: { firstname: string; lastname: string; profile: string }; text: string; created_at: string }>>(activity.comments)
+  // JSONB columns may be double-encoded (string containing JSON) — parse safely
+  const parseJsonb = <T,>(value: unknown): T | null => {
+    if (value === null || value === undefined) return null
+    if (typeof value === 'string') {
+      try { return JSON.parse(value) as T } catch { return null }
+    }
+    return value as T
+  }
+
+  const splits = parseJsonb<Array<{
     distance: number; elapsed_time: number; moving_time: number;
     elevation_difference: number; average_speed: number; average_heartrate?: number; split: number
-  }> | null
-  const laps = activity.laps as Array<{
+  }>>(activity.splitsMetric)
+  const laps = parseJsonb<Array<{
     name: string; distance: number; moving_time: number; elapsed_time: number;
     average_speed: number; average_heartrate?: number; total_elevation_gain: number; lap_index: number
-  }> | null
-  const segmentEfforts = activity.segmentEfforts as Array<{
+  }>>(activity.laps)
+  const segmentEfforts = parseJsonb<Array<{
     name: string; distance: number; elapsed_time: number; moving_time: number;
-    pr_rank: number | null; kom_rank: number | null;
+    pr_rank: number | null; kom_rank: number | null; start_index?: number; end_index?: number;
     segment: { average_grade: number; distance: number }
-  }> | null
+  }>>(activity.segmentEfforts)
 
   const router = useRouter()
 
