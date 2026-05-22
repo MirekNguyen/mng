@@ -25,7 +25,6 @@ const app = new Elysia()
     origin: TRUSTED_ORIGINS,
     credentials: true,
   }))
-  .mount(auth.handler)
   // Catch better-auth error redirects and forward back to the originating app.
   // We read the `auth_origin` cookie set by the client before starting OAuth.
   // Falls back to first trusted origin if cookie is missing.
@@ -35,12 +34,12 @@ const app = new Elysia()
       const origin = cookie.auth_origin?.value;
       const baseUrl = origin && TRUSTED_ORIGINS.includes(origin) ? origin : TRUSTED_ORIGINS[0];
       set.redirect = `${baseUrl}/login?error=${error}`;
-      // Clear the cookie
       cookie.auth_origin?.remove();
       return;
     }
     return { status: "ok" };
   })
+  .mount(auth.handler)
   // Returns current user + strava connection status
   .get("/api/me", async ({ headers }) => {
     const session = await auth.api.getSession({ headers: new Headers(headers as Record<string, string>) });
