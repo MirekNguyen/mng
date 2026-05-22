@@ -6,7 +6,9 @@ import type { FeedVideo } from "./feed.generator";
 import { generateSummary } from "./video.summarizer";
 
 const replaceVideoUrl = (summary: string, videoUrl: string): string =>
-	summary.replace(/VIDEO_URL/g, videoUrl);
+	summary
+		.replace(/VIDEO_URL/g, videoUrl)
+		.replace(/https:\/\/www\.youtube\.com\/watch\?v=[a-zA-Z0-9_-]+(&t=\d+s)/g, `${videoUrl}$1`);
 
 export const getOrCreateSummary = async (video: FeedVideo): Promise<string | undefined> => {
 	const existing = await db
