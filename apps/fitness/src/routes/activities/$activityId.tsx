@@ -1,4 +1,4 @@
-import { createFileRoute, redirect, Link } from '@tanstack/react-router'
+import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { lazy, Suspense, useState, useEffect, type ReactNode } from 'react'
 import { getSession } from '#/lib/session.server'
@@ -71,14 +71,16 @@ function ActivityDetailPage() {
     segment: { average_grade: number; distance: number }
   }> | null
 
+  const router = useRouter()
+
   return (
     <div className="min-h-screen pb-16">
       {/* Nav */}
       <nav className="sticky top-0 z-10 bg-[var(--color-surface)]/95 backdrop-blur-sm border-b border-[var(--color-border)]">
         <div className="max-w-[600px] mx-auto px-5 h-12 flex items-center justify-between">
-          <Link to="/activities" search={{ page: 1, sport: '' }} className="text-sm text-[var(--color-ink-secondary)] hover:text-[var(--color-ink)] transition-colors">
-            ← Activities
-          </Link>
+          <button onClick={() => router.history.back()} className="text-sm text-[var(--color-ink-secondary)] hover:text-[var(--color-ink)] transition-colors">
+            ← Back
+          </button>
           <span className="text-sm font-medium text-[var(--color-ink-secondary)]">{activity.type}</span>
         </div>
       </nav>
