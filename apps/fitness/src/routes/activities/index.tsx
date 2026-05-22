@@ -55,7 +55,7 @@ function ActivitiesPage() {
 
   return (
     <div className="min-h-screen pb-16">
-      <AppHeader title="Activities" athleteName={athleteName} athleteImage={athleteImage} />
+      <AppHeader title="Activities" athleteName={athleteName} athleteImage={athleteImage} showBack />
 
       <main className="max-w-[600px] mx-auto px-5 pt-6">
 
