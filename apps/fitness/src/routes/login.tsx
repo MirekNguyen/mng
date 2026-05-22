@@ -13,9 +13,12 @@ const checkAuth = createServerFn({ method: 'GET' }).handler(async () => {
 })
 
 export const Route = createFileRoute("/login")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    error: (search.error as string) ?? undefined,
-  }),
+  validateSearch: (search: Record<string, unknown>) => {
+    const raw = search.error;
+    // better-auth may pass multiple error params; grab the last (most descriptive) one
+    const error = Array.isArray(raw) ? raw[raw.length - 1] : raw;
+    return { error: (error as string) ?? undefined };
+  },
   beforeLoad: async () => {
     const status = await checkAuth()
     if (status === 'connect') throw redirect({ to: '/connect-strava' })
@@ -28,7 +31,7 @@ const handleGitHub = () => {
   authClient.signIn.social({
     provider: "github",
     callbackURL: `${window.location.origin}/connect-strava`,
-    errorCallbackURL: `${window.location.origin}/login?error=UNKNOWN`,
+    errorCallbackURL: `${window.location.origin}/login`,
   });
 };
 
@@ -37,9 +40,19 @@ const ERROR_MESSAGES: Record<string, string> = {
   UNKNOWN: "Sign-in failed. Your account may not be authorized.",
 };
 
+const resolveErrorMessage = (error: string): string => {
+  // Check known error codes first
+  if (ERROR_MESSAGES[error]) return ERROR_MESSAGES[error];
+  // better-auth sometimes passes URL-encoded messages with underscores
+  const decoded = decodeURIComponent(error).replaceAll("_", " ");
+  // If it looks like a sentence, use it directly
+  if (decoded.length > 10) return decoded;
+  return "Something went wrong. Please try again.";
+};
+
 function LoginPage() {
   const { error } = useSearch({ from: "/login" });
-  const errorMessage = error ? (ERROR_MESSAGES[error] ?? "Something went wrong. Please try again.") : undefined;
+  const errorMessage = error ? resolveErrorMessage(error) : undefined;
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
@@ -53,14 +66,6 @@ function LoginPage() {
           Fitness
         </a>
 
-        {errorMessage && (
-          <Card className="border-destructive/50 bg-destructive/5">
-            <CardContent className="pt-6 text-center text-sm text-destructive">
-              {errorMessage}
-            </CardContent>
-          </Card>
-        )}
-
         <Card>
           <CardHeader className="text-center">
             <CardTitle className="text-xl">Welcome back</CardTitle>
@@ -70,6 +75,11 @@ function LoginPage() {
           </CardHeader>
           <CardContent>
             <div className="grid gap-4">
+              {errorMessage && (
+                <p className="rounded-md bg-destructive/10 px-3 py-2 text-center text-sm text-destructive">
+                  {errorMessage}
+                </p>
+              )}
               <Button
                 variant="outline"
                 className="w-full"
