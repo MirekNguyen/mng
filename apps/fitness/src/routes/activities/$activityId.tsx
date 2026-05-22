@@ -42,6 +42,15 @@ export const Route = createFileRoute('/activities/$activityId')({
   component: ActivityDetailPage,
 })
 
+// JSONB columns may be double-encoded (string containing JSON) — parse safely
+const parseJsonb = <T,>(value: unknown): T | null => {
+  if (value === null || value === undefined) return null
+  if (typeof value === 'string') {
+    try { return JSON.parse(value) as T } catch { return null }
+  }
+  return value as T
+}
+
 function ActivityDetailPage() {
   const { activity, streams, athleteStravaId } = Route.useLoaderData()
 
@@ -57,14 +66,6 @@ function ActivityDetailPage() {
   const allPhotos = photos?.all ?? (photos?.primary?.urls ? [{ urls: photos.primary.urls }] : [])
   const kudos = parseJsonb<Array<{ firstname: string; lastname: string; profile: string }>>(activity.kudos)
   const comments = parseJsonb<Array<{ athlete: { firstname: string; lastname: string; profile: string }; text: string; created_at: string }>>(activity.comments)
-  // JSONB columns may be double-encoded (string containing JSON) — parse safely
-  const parseJsonb = <T,>(value: unknown): T | null => {
-    if (value === null || value === undefined) return null
-    if (typeof value === 'string') {
-      try { return JSON.parse(value) as T } catch { return null }
-    }
-    return value as T
-  }
 
   const splits = parseJsonb<Array<{
     distance: number; elapsed_time: number; moving_time: number;
