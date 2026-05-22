@@ -25,9 +25,11 @@ export const Route = createFileRoute("/login")({
 });
 
 const handleGitHub = () => {
-  // Set origin cookie so the API can redirect errors back to this app
-  document.cookie = `auth_origin=${window.location.origin}; domain=.mirekng.com; path=/; max-age=300; secure; samesite=lax`;
-  authClient.signIn.social({ provider: "github", callbackURL: `${window.location.origin}/connect-strava` });
+  authClient.signIn.social({
+    provider: "github",
+    callbackURL: `${window.location.origin}/connect-strava`,
+    errorCallbackURL: `${window.location.origin}/login?error=UNKNOWN`,
+  });
 };
 
 const ERROR_MESSAGES: Record<string, string> = {

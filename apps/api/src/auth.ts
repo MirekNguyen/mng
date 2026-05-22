@@ -9,12 +9,14 @@ import { StravaRepository } from "./strava/strava.repository";
 const STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID!;
 const STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET!;
 const API_URL = process.env.API_URL ?? "http://localhost:3000";
-const APP_URL = process.env.APP_URL ?? "http://localhost:3001";
+const TRUSTED_ORIGINS = (process.env.TRUSTED_ORIGINS ?? process.env.APP_URL ?? "http://localhost:3001")
+  .split(",")
+  .map((u) => u.trim());
 
 export const auth = betterAuth({
   baseURL: API_URL,
   basePath: "/api/auth",
-  trustedOrigins: [APP_URL],
+  trustedOrigins: TRUSTED_ORIGINS,
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
