@@ -24,11 +24,15 @@ const app = new Elysia()
     credentials: true,
   }))
   .mount(auth.handler)
-  // Catch better-auth error redirects and forward to the frontend
-  .get("/", ({ query, set }) => {
+  // Catch better-auth error redirects and forward back to the originating app.
+  // After OAuth provider redirects, referer/origin headers are unreliable,
+  // so we fall back to APP_URL (the primary frontend consuming this API).
+  .get("/", ({ query, set, headers }) => {
     const error = (query as Record<string, string>).error;
     if (error) {
-      set.redirect = `${APP_URL}/login?error=${error}`;
+      const origin = headers.origin ?? headers.referer;
+      const baseUrl = origin && !origin.includes("github.com") ? origin : APP_URL;
+      set.redirect = `${baseUrl}/login?error=${error}`;
       return;
     }
     return { status: "ok" };
