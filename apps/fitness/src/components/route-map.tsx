@@ -4,11 +4,19 @@ import type { LngLatBoundsLike } from 'maplibre-gl'
 
 import { Map, MapControls, MapMarker, MarkerContent, MarkerTooltip, MapRoute } from '#/components/ui/map.tsx'
 
+type SplitData = {
+  distance: number
+  elapsed_time: number
+  moving_time: number
+  elevation_difference: number
+  average_speed: number
+  average_heartrate?: number
+  split: number
+}
+
 type RouteMapProps = {
   encodedPolyline: string
-  distanceMeters?: number
-  averagePace?: string
-  elevationGain?: number
+  splits?: Array<SplitData> | null
 }
 
 // Calculate distance between two [lng, lat] points in meters (Haversine)
@@ -42,7 +50,15 @@ const getKmMarkers = (coordinates: Array<[number, number]>): Array<{ km: number;
   return markers
 }
 
-export const RouteMap = ({ encodedPolyline }: RouteMapProps) => {
+const formatPaceFromSpeed = (metersPerSecond: number): string => {
+  if (metersPerSecond <= 0) return '-'
+  const minPerKm = 1000 / metersPerSecond / 60
+  const mins = Math.floor(minPerKm)
+  const secs = Math.round((minPerKm - mins) * 60)
+  return `${mins}:${secs.toString().padStart(2, '0')}`
+}
+
+export const RouteMap = ({ encodedPolyline, splits }: RouteMapProps) => {
   const decoded: Array<[number, number]> = polyline.decode(encodedPolyline)
   if (decoded.length === 0) return null
 
@@ -77,16 +93,32 @@ export const RouteMap = ({ encodedPolyline }: RouteMapProps) => {
       />
 
       {/* Km markers */}
-      {kmMarkers.map(({ km, coord }) => (
-        <MapMarker key={km} longitude={coord[0]} latitude={coord[1]}>
-          <MarkerContent>
-            <div className="flex size-5 items-center justify-center rounded-full bg-[var(--color-surface)] border border-[var(--color-border)] shadow-sm">
-              <span className="text-[9px] font-semibold text-[var(--color-ink-secondary)]">{km}</span>
-            </div>
-          </MarkerContent>
-          <MarkerTooltip>{km} km</MarkerTooltip>
-        </MapMarker>
-      ))}
+      {kmMarkers.map(({ km, coord }) => {
+        const split = splits?.find((s) => s.split === km)
+        return (
+          <MapMarker key={km} longitude={coord[0]} latitude={coord[1]}>
+            <MarkerContent>
+              <div className="flex size-7 items-center justify-center rounded-full bg-[var(--color-surface)] border-2 border-[var(--color-border)] shadow-md font-semibold text-[11px] text-[var(--color-ink)]">
+                {km}
+              </div>
+            </MarkerContent>
+            <MarkerTooltip>
+              {split ? (
+                <div className="flex flex-col gap-1 py-0.5">
+                  <span className="font-semibold text-[var(--color-ink)]">{km} km</span>
+                  <div className="flex items-center gap-3 text-[11px] text-[var(--color-ink-secondary)]">
+                    <span>{formatPaceFromSpeed(split.average_speed)} /km</span>
+                    {split.average_heartrate && <span>{Math.round(split.average_heartrate)} bpm</span>}
+                    <span>{split.elevation_difference > 0 ? '+' : ''}{Math.round(split.elevation_difference)}m</span>
+                  </div>
+                </div>
+              ) : (
+                <span>{km} km</span>
+              )}
+            </MarkerTooltip>
+          </MapMarker>
+        )
+      })}
 
       {/* Start marker */}
       <MapMarker longitude={startCoord[0]} latitude={startCoord[1]}>
