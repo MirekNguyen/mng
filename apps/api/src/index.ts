@@ -16,12 +16,23 @@ import { auth } from "./auth";
 import { db, eq, and } from "@mng/database/db";
 import { account } from "@mng/database/schema/auth.schema";
 
+const APP_URL = process.env.APP_URL ?? "http://localhost:3001";
+
 const app = new Elysia()
   .use(cors({
     origin: [process.env.APP_URL ?? "http://localhost:3001", "https://fitness.mirekng.com"],
     credentials: true,
   }))
   .mount(auth.handler)
+  // Catch better-auth error redirects and forward to the frontend
+  .get("/", ({ query, set }) => {
+    const error = (query as Record<string, string>).error;
+    if (error) {
+      set.redirect = `${APP_URL}/login?error=${error}`;
+      return;
+    }
+    return { status: "ok" };
+  })
   // Returns current user + strava connection status
   .get("/api/me", async ({ headers }) => {
     const session = await auth.api.getSession({ headers: new Headers(headers as Record<string, string>) });
