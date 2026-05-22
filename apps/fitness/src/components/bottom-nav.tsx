@@ -50,25 +50,7 @@ const tabs = [
       </svg>
     ),
   },
-  {
-    to: '/activities' as const,
-    label: 'Activities',
-    icon: (active: boolean) => (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" strokeLinecap="round" strokeLinejoin="round">
-        {active ? (
-          <>
-            <circle cx="12" cy="5" r="2" fill="currentColor" />
-            <path d="M10 9h4l2 5-3 1.5V21M12 15.5L9 14l-2 7" fill="currentColor" stroke="currentColor" strokeWidth="1" />
-          </>
-        ) : (
-          <>
-            <circle cx="12" cy="5" r="2" stroke="currentColor" strokeWidth="1.5" />
-            <path d="M10 9h4l2 5-3 1.5V21M12 15.5L9 14l-2 7" stroke="currentColor" strokeWidth="1.5" />
-          </>
-        )}
-      </svg>
-    ),
-  },
+
   {
     to: '/chat' as const,
     label: 'Coach',
@@ -92,7 +74,7 @@ export const BottomNav = () => {
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[var(--color-surface)]/95 backdrop-blur-sm border-t border-[var(--color-border)] pb-[env(safe-area-inset-bottom)]">
       <div className="max-w-[600px] mx-auto flex items-center justify-around h-12">
         {tabs.map((tab) => {
-          const isActive = pathname === tab.to || (tab.to === '/activities' && pathname.startsWith('/activities'))
+          const isActive = pathname === tab.to || pathname.startsWith(tab.to + '/')
           return (
             <Link
               key={tab.to}
