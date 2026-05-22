@@ -1,6 +1,6 @@
 import { logger } from "@mng/logger/logger";
 import { db, eq } from "@mng/database/db";
-import { stravaActivities, stravaStreams } from "@mng/database/schema/strava.schema";
+import { stravaActivities, stravaStreams } from "@mng/database/schema/fitness.schema";
 import { StravaRepository } from "./strava.repository";
 
 const STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID!;

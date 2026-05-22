@@ -1,7 +1,7 @@
 import { generateObject } from "ai";
 import { google } from "@ai-sdk/google";
 import { z } from "zod";
-import type { StravaActivity } from "@mng/database/schema/strava.schema";
+import type { StravaActivity } from "@mng/database/schema/fitness.schema";
 import { formatDuration, formatPace } from "./format.utils";
 
 const model = google("gemini-3.1-pro-preview");

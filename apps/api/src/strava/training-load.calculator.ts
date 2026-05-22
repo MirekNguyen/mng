@@ -1,4 +1,4 @@
-import type { StravaActivity } from "@mng/database/schema/strava.schema";
+import type { StravaActivity } from "@mng/database/schema/fitness.schema";
 
 /**
  * Training Load / Fitness-Fatigue Model

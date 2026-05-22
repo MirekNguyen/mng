@@ -1,5 +1,5 @@
-import type { StravaActivity } from "@mng/database/schema/strava.schema";
-import type { StravaPersonalRecord } from "@mng/database/schema/strava.schema";
+import type { StravaActivity } from "@mng/database/schema/fitness.schema";
+import type { StravaPersonalRecord } from "@mng/database/schema/fitness.schema";
 
 /**
  * Race predictions using a holistic approach:

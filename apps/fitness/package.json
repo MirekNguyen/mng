@@ -1,5 +1,5 @@
 {
-  "name": "strava",
+  "name": "fitness",
   "private": true,
   "type": "module",
   "imports": {

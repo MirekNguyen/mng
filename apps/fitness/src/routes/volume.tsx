@@ -171,6 +171,7 @@ function VolumePage() {
                   unit=" km"
                 />
                 <Tooltip
+                  cursor={{ fill: 'var(--color-border)', opacity: 0.3 }}
                   content={<ChartTooltipContent config={volumeChartConfig} formatter={(v) => `${v} km`} />}
                 />
                 <Bar dataKey="distance" fill={SPORT_COLORS[selectedSport] ?? 'var(--color-accent)'} radius={[3, 3, 0, 0]} fillOpacity={0.85} />

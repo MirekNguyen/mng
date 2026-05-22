@@ -7,7 +7,7 @@ import { predictRaceTimes, calculateInjuryRisk, generateTrainingInsights } from 
 import { analyzeWorkout } from "./workout-analysis.analyzer";
 import { generateWeeklyBrief, generatePerformancePrediction } from "./athlete-intelligence.analyzer";
 import { db, eq, desc, gte } from "@mng/database/db";
-import { stravaActivities } from "@mng/database/schema/strava.schema";
+import { stravaActivities } from "@mng/database/schema/fitness.schema";
 
 // In-memory cache for weekly brief (keyed by athlete + latest activity)
 const weeklyBriefCache = new Map<string, string>();

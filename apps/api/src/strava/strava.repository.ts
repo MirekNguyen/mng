@@ -5,13 +5,13 @@ import {
   stravaStreams,
   stravaPersonalRecords,
   stravaWebhookEvents,
-} from "@mng/database/schema/strava.schema";
+} from "@mng/database/schema/fitness.schema";
 import type {
   CreateStravaAthlete,
   StravaAthlete,
   StravaActivity,
   StravaStream,
-} from "@mng/database/schema/strava.schema";
+} from "@mng/database/schema/fitness.schema";
 
 export const StravaRepository = {
   async upsertAthlete(data: Omit<CreateStravaAthlete, "id" | "createdAt" | "updatedAt">): Promise<StravaAthlete> {

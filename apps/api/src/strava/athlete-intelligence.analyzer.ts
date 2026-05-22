@@ -1,6 +1,6 @@
 import { streamText } from "ai";
 import { google } from "@ai-sdk/google";
-import type { StravaActivity, StravaPersonalRecord } from "@mng/database/schema/strava.schema";
+import type { StravaActivity, StravaPersonalRecord } from "@mng/database/schema/fitness.schema";
 import { formatDuration, formatPace } from "./format.utils";
 import type { FitnessData } from "./training-load.calculator";
 import type { InjuryRisk } from "./predictions.calculator";

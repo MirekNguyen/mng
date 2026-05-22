@@ -4,7 +4,7 @@ import {
   doublePrecision,
   integer,
   jsonb,
-  pgTable,
+  pgSchema,
   serial,
   text,
   timestamp,
@@ -13,8 +13,10 @@ import {
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
 
+export const fitnessSchema = pgSchema("fitness");
+
 // Strava athlete (OAuth tokens + profile)
-export const stravaAthletes = pgTable("strava_athletes", {
+export const stravaAthletes = fitnessSchema.table("strava_athletes", {
   id: serial("id").primaryKey(),
   stravaId: integer("strava_id").notNull().unique(),
   firstName: varchar("first_name", { length: 100 }),
@@ -36,7 +38,7 @@ export type StravaAthlete = z.infer<typeof selectStravaAthleteSchema>;
 export type CreateStravaAthlete = z.infer<typeof insertStravaAthleteSchema>;
 
 // Strava activities (full detailed data)
-export const stravaActivities = pgTable("strava_activities", {
+export const stravaActivities = fitnessSchema.table("strava_activities", {
   id: serial("id").primaryKey(),
   stravaId: bigint("strava_id", { mode: "number" }).notNull().unique(),
   athleteStravaId: bigint("athlete_strava_id", { mode: "number" }).notNull(),
@@ -110,7 +112,7 @@ export type StravaActivity = z.infer<typeof selectStravaActivitySchema>;
 export type CreateStravaActivity = z.infer<typeof insertStravaActivitySchema>;
 
 // Activity streams (time-series data: HR, pace, elevation, power, cadence)
-export const stravaStreams = pgTable("strava_streams", {
+export const stravaStreams = fitnessSchema.table("strava_streams", {
   id: serial("id").primaryKey(),
   activityStravaId: bigint("activity_strava_id", { mode: "number" }).notNull().unique(),
   time: jsonb("time"), // integer[] seconds from start
@@ -131,7 +133,7 @@ export const selectStravaStreamSchema = createSelectSchema(stravaStreams);
 export type StravaStream = z.infer<typeof selectStravaStreamSchema>;
 
 // Personal records (best efforts per distance)
-export const stravaPersonalRecords = pgTable("strava_personal_records", {
+export const stravaPersonalRecords = fitnessSchema.table("strava_personal_records", {
   id: serial("id").primaryKey(),
   athleteStravaId: integer("athlete_strava_id").notNull(),
   activityStravaId: bigint("activity_strava_id", { mode: "number" }).notNull(),
@@ -147,7 +149,7 @@ export const selectStravaPersonalRecordSchema = createSelectSchema(stravaPersona
 export type StravaPersonalRecord = z.infer<typeof selectStravaPersonalRecordSchema>;
 
 // Webhook subscription tracking
-export const stravaWebhookEvents = pgTable("strava_webhook_events", {
+export const stravaWebhookEvents = fitnessSchema.table("strava_webhook_events", {
   id: serial("id").primaryKey(),
   objectType: varchar("object_type", { length: 20 }).notNull(),
   objectId: bigint("object_id", { mode: "number" }).notNull(),
@@ -159,7 +161,7 @@ export const stravaWebhookEvents = pgTable("strava_webhook_events", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const stravaSchema = {
+export const fitnessTables = {
   stravaAthletes,
   stravaActivities,
   stravaStreams,
