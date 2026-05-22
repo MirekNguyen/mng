@@ -1,4 +1,4 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
+import { createFileRoute, redirect, useSearch } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { Button } from "#/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "#/components/ui/card";
@@ -13,6 +13,9 @@ const checkAuth = createServerFn({ method: 'GET' }).handler(async () => {
 })
 
 export const Route = createFileRoute("/login")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    error: (search.error as string) ?? undefined,
+  }),
   beforeLoad: async () => {
     const status = await checkAuth()
     if (status === 'connect') throw redirect({ to: '/connect-strava' })
@@ -25,7 +28,15 @@ const handleGitHub = () => {
   authClient.signIn.social({ provider: "github", callbackURL: `${window.location.origin}/connect-strava` });
 };
 
+const ERROR_MESSAGES: Record<string, string> = {
+  FORBIDDEN: "Your account is not on the allowlist. Contact the admin for access.",
+  UNKNOWN: "Sign-in failed. Your account may not be authorized.",
+};
+
 function LoginPage() {
+  const { error } = useSearch({ from: "/login" });
+  const errorMessage = error ? (ERROR_MESSAGES[error] ?? "Something went wrong. Please try again.") : undefined;
+
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10">
       <div className="flex w-full max-w-sm flex-col gap-6">
@@ -37,6 +48,15 @@ function LoginPage() {
           </div>
           Fitness
         </a>
+
+        {errorMessage && (
+          <Card className="border-destructive/50 bg-destructive/5">
+            <CardContent className="pt-6 text-center text-sm text-destructive">
+              {errorMessage}
+            </CardContent>
+          </Card>
+        )}
+
         <Card>
           <CardHeader className="text-center">
             <CardTitle className="text-xl">Welcome back</CardTitle>

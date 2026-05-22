@@ -13,7 +13,12 @@ const checkSession = createServerFn({ method: 'GET' }).handler(async () => {
 })
 
 export const Route = createFileRoute('/connect-strava')({
-  beforeLoad: async () => {
+  validateSearch: (search: Record<string, unknown>) => ({
+    error: (search.error as string) ?? undefined,
+  }),
+  beforeLoad: async ({ search }) => {
+    // If better-auth redirected here with an error (e.g. allowlist rejection), send to login with error
+    if (search.error) throw redirect({ to: '/login', search: { error: search.error } })
     const result = await checkSession()
     if (result.status === 'unauthenticated') throw redirect({ to: '/login' })
     if (result.status === 'connected') throw redirect({ to: '/dashboard' })
