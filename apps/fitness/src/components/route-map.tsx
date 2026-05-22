@@ -98,22 +98,25 @@ export const RouteMap = ({ encodedPolyline, splits }: RouteMapProps) => {
         return (
           <MapMarker key={km} longitude={coord[0]} latitude={coord[1]}>
             <MarkerContent>
-              <div className="flex size-7 items-center justify-center rounded-full bg-[var(--color-surface)] border-2 border-[var(--color-border)] shadow-md font-semibold text-[11px] text-[var(--color-ink)]">
+              <div className="flex size-7 items-center justify-center rounded-full bg-white shadow-md font-semibold text-[11px] text-neutral-900">
                 {km}
               </div>
             </MarkerContent>
-            <MarkerTooltip>
+            <MarkerTooltip className="bg-white text-neutral-900 dark:bg-neutral-900 dark:text-neutral-100 rounded-lg px-3 py-2 shadow-lg border border-neutral-200 dark:border-neutral-700">
               {split ? (
-                <div className="flex flex-col gap-1 py-0.5">
-                  <span className="font-semibold text-[var(--color-ink)]">{km} km</span>
-                  <div className="flex items-center gap-3 text-[11px] text-[var(--color-ink-secondary)]">
-                    <span>{formatPaceFromSpeed(split.average_speed)} /km</span>
-                    {split.average_heartrate && <span>{Math.round(split.average_heartrate)} bpm</span>}
-                    <span>{split.elevation_difference > 0 ? '+' : ''}{Math.round(split.elevation_difference)}m</span>
+                <div className="flex flex-col gap-1">
+                  <span className="font-semibold text-xs">Km {km}</span>
+                  <div className="grid grid-cols-3 gap-x-4 gap-y-0.5 text-[11px]">
+                    <span className="text-neutral-500 dark:text-neutral-400">Pace</span>
+                    <span className="text-neutral-500 dark:text-neutral-400">HR</span>
+                    <span className="text-neutral-500 dark:text-neutral-400">Elev</span>
+                    <span className="font-medium">{formatPaceFromSpeed(split.average_speed)}</span>
+                    <span className="font-medium">{split.average_heartrate ? Math.round(split.average_heartrate) : '-'}</span>
+                    <span className="font-medium">{split.elevation_difference > 0 ? '+' : ''}{Math.round(split.elevation_difference)}m</span>
                   </div>
                 </div>
               ) : (
-                <span>{km} km</span>
+                <span className="text-xs font-medium">{km} km</span>
               )}
             </MarkerTooltip>
           </MapMarker>
