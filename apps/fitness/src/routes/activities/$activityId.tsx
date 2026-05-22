@@ -124,7 +124,7 @@ function ActivityDetailPage() {
         {(activity.mapPolyline ?? activity.mapSummaryPolyline) && (
           <div className="mt-4 overflow-hidden h-80">
             <Suspense fallback={<div className="w-full h-full bg-[var(--color-surface-sunken)] flex items-center justify-center text-sm text-[var(--color-ink-tertiary)]">Loading map...</div>}>
-              <RouteMapLazy encodedPolyline={activity.mapPolyline ?? activity.mapSummaryPolyline} splits={splits} />
+              <RouteMapLazy encodedPolyline={activity.mapPolyline ?? activity.mapSummaryPolyline} splits={splits} segments={segmentEfforts} />
             </Suspense>
           </div>
         )}

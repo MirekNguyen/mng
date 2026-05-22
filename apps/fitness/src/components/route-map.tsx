@@ -14,9 +14,22 @@ type SplitData = {
   split: number
 }
 
+type SegmentEffort = {
+  name: string
+  distance: number
+  elapsed_time: number
+  moving_time: number
+  pr_rank: number | null
+  kom_rank: number | null
+  start_index?: number
+  end_index?: number
+  segment: { average_grade: number; distance: number }
+}
+
 type RouteMapProps = {
   encodedPolyline: string
   splits?: Array<SplitData> | null
+  segments?: Array<SegmentEffort> | null
 }
 
 // Calculate distance between two [lng, lat] points in meters (Haversine)
@@ -50,6 +63,32 @@ const getKmMarkers = (coordinates: Array<[number, number]>): Array<{ km: number;
   return markers
 }
 
+// Match segments to km markers using start_index (polyline coordinate index)
+const getSegmentsForKm = (
+  km: number,
+  segments: Array<SegmentEffort> | null | undefined,
+  coordinates: Array<[number, number]>,
+): Array<SegmentEffort> => {
+  if (!segments || segments.length === 0) return []
+
+  // Build cumulative distance array per coordinate index
+  const cumulativeDistances: Array<number> = [0]
+  for (let i = 1; i < coordinates.length; i++) {
+    cumulativeDistances.push(cumulativeDistances[i - 1] + haversine(coordinates[i - 1], coordinates[i]))
+  }
+
+  const kmStartMeters = (km - 1) * 1000
+  const kmEndMeters = km * 1000
+
+  return segments.filter((seg) => {
+    if (seg.start_index !== undefined) {
+      const segStartDist = cumulativeDistances[Math.min(seg.start_index, cumulativeDistances.length - 1)]
+      return segStartDist >= kmStartMeters && segStartDist < kmEndMeters
+    }
+    return false
+  })
+}
+
 const formatPaceFromSpeed = (metersPerSecond: number): string => {
   if (metersPerSecond <= 0) return '-'
   const minPerKm = 1000 / metersPerSecond / 60
@@ -58,7 +97,7 @@ const formatPaceFromSpeed = (metersPerSecond: number): string => {
   return `${mins}:${secs.toString().padStart(2, '0')}`
 }
 
-export const RouteMap = ({ encodedPolyline, splits }: RouteMapProps) => {
+export const RouteMap = ({ encodedPolyline, splits, segments }: RouteMapProps) => {
   const decoded: Array<[number, number]> = polyline.decode(encodedPolyline)
   if (decoded.length === 0) return null
 
@@ -95,29 +134,54 @@ export const RouteMap = ({ encodedPolyline, splits }: RouteMapProps) => {
       {/* Km markers */}
       {kmMarkers.map(({ km, coord }) => {
         const split = splits?.find((s) => s.split === km)
+        const kmSegments = getSegmentsForKm(km, segments, coordinates)
+
         return (
           <MapMarker key={km} longitude={coord[0]} latitude={coord[1]}>
             <MarkerContent>
-              <div className="flex size-7 items-center justify-center rounded-full bg-white shadow-md font-semibold text-[11px] text-neutral-900">
+              <div className="flex size-7 items-center justify-center rounded-full bg-white shadow-md font-semibold text-[11px] text-neutral-900 transition-transform hover:scale-110">
                 {km}
               </div>
             </MarkerContent>
-            <MarkerTooltip className="bg-white text-neutral-900 dark:bg-neutral-900 dark:text-neutral-100 rounded-lg px-3 py-2 shadow-lg border border-neutral-200 dark:border-neutral-700">
-              {split ? (
-                <div className="flex flex-col gap-1">
-                  <span className="font-semibold text-xs">Km {km}</span>
-                  <div className="grid grid-cols-3 gap-x-4 gap-y-0.5 text-[11px]">
-                    <span className="text-neutral-500 dark:text-neutral-400">Pace</span>
-                    <span className="text-neutral-500 dark:text-neutral-400">HR</span>
-                    <span className="text-neutral-500 dark:text-neutral-400">Elev</span>
-                    <span className="font-medium">{formatPaceFromSpeed(split.average_speed)}</span>
-                    <span className="font-medium">{split.average_heartrate ? Math.round(split.average_heartrate) : '-'}</span>
-                    <span className="font-medium">{split.elevation_difference > 0 ? '+' : ''}{Math.round(split.elevation_difference)}m</span>
-                  </div>
+            <MarkerTooltip className="!bg-white !text-neutral-900 dark:!bg-neutral-900 dark:!text-neutral-100 !rounded-xl !px-3.5 !py-2.5 !shadow-xl !border !border-neutral-200/80 dark:!border-neutral-700/80 min-w-[140px]">
+              <div className="flex flex-col gap-1.5">
+                {/* Header */}
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="font-bold text-[13px] tracking-tight">Km {km}</span>
+                  {split && (
+                    <span className="text-[11px] font-semibold text-[#fc4c02]">{formatPaceFromSpeed(split.average_speed)} /km</span>
+                  )}
                 </div>
-              ) : (
-                <span className="text-xs font-medium">{km} km</span>
-              )}
+
+                {/* Stats row */}
+                {split && (
+                  <div className="flex items-center gap-3 text-[11px] text-neutral-500 dark:text-neutral-400">
+                    {split.average_heartrate && (
+                      <span className="flex items-center gap-0.5">
+                        <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" className="text-red-400"><path d="M8 14s-5.5-3.5-5.5-7.5C2.5 4 4 2.5 5.5 2.5c1 0 2 .5 2.5 1.5.5-1 1.5-1.5 2.5-1.5 1.5 0 3 1.5 3 4C13.5 10.5 8 14 8 14z"/></svg>
+                        {Math.round(split.average_heartrate)}
+                      </span>
+                    )}
+                    <span className="flex items-center gap-0.5">
+                      <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-neutral-400"><path d="M2 12l4-6 3 4 5-7"/></svg>
+                      {split.elevation_difference > 0 ? '+' : ''}{Math.round(split.elevation_difference)}m
+                    </span>
+                  </div>
+                )}
+
+                {/* Segments */}
+                {kmSegments.length > 0 && (
+                  <div className="border-t border-neutral-200 dark:border-neutral-700 pt-1.5 mt-0.5">
+                    {kmSegments.map((seg, i) => (
+                      <div key={i} className="flex items-center gap-1.5 text-[10px]">
+                        <span className="text-neutral-400 dark:text-neutral-500">&#9873;</span>
+                        <span className="text-neutral-600 dark:text-neutral-300 truncate max-w-[140px]">{seg.name}</span>
+                        {seg.pr_rank && <span className="text-amber-500 font-semibold">PR{seg.pr_rank}</span>}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </MarkerTooltip>
           </MapMarker>
         )
