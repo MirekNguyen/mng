@@ -11,12 +11,14 @@ import { userController } from "./user/user.controller";
 import { stravaController } from "./strava/strava.controller";
 import { stravaAnalyticsController } from "./strava/strava-analytics.controller";
 import { stravaChatController } from "./strava/strava-chat.controller";
+import { revolutController } from "./revolut/revolut.controller";
+import { RevolutRepository } from "./revolut/revolut.repository";
 import { ServerError } from "@mng/http/server.error";
 import { auth } from "./auth";
 import { db, eq, and } from "@mng/database/db";
 import { account } from "@mng/database/schema/auth.schema";
 
-const TRUSTED_ORIGINS = (process.env.TRUSTED_ORIGINS ?? process.env.APP_URL ?? "http://localhost:3001")
+const TRUSTED_ORIGINS = (process.env.TRUSTED_ORIGINS ?? process.env.APP_URL ?? "http://localhost:3001,http://localhost:3002")
   .split(",")
   .map((u) => u.trim());
 
@@ -39,6 +41,8 @@ const app = new Elysia()
 
     const stravaAthleteId = stravaAccount.length > 0 ? Number(stravaAccount[0].accountId) : null;
 
+    const revolutAuthData = await RevolutRepository.getAuth(session.user.id);
+
     return {
       user: {
         id: session.user.id,
@@ -48,6 +52,7 @@ const app = new Elysia()
       },
       stravaConnected: stravaAthleteId !== null,
       stravaAthleteId,
+      revolutConnected: !!revolutAuthData,
     };
   })
   .error({ ServerError })
@@ -67,6 +72,7 @@ const app = new Elysia()
   .use(stravaController)
   .use(stravaAnalyticsController)
   .use(stravaChatController)
+  .use(revolutController)
   .listen(3000);
 
 console.log(`🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}`);
