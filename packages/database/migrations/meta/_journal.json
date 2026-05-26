@@ -50,6 +50,13 @@
       "when": 1779394334456,
       "tag": "0006_quick_reptil",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1745685295106,
+      "tag": "0007_flat_crystal",
+      "breakpoints": true
     }
   ]
 }
