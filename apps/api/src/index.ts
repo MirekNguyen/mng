@@ -14,6 +14,7 @@ import { stravaChatController } from "./strava/strava-chat.controller";
 import { revolutController } from "./revolut/revolut.controller";
 import { bankingController } from "./banking/banking.controller";
 import { ServerError } from "@mng/http/server.error";
+import { seedAdmin } from "./auth/seed";
 import { auth } from "./auth";
 import { db, eq, and } from "@mng/database/db";
 import { account } from "@mng/database/schema/auth.schema";
@@ -77,6 +78,8 @@ const app = new Elysia()
   .use(stravaChatController)
   .use(bankingController)
   .use(revolutController)
-  .listen(3000);
+await seedAdmin();
+
+app.listen(3000);
 
 console.log(`🦊 Elysia is running at http://${app.server?.hostname}:${app.server?.port}`);
