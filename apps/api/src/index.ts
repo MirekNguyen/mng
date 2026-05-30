@@ -12,11 +12,12 @@ import { stravaController } from "./strava/strava.controller";
 import { stravaAnalyticsController } from "./strava/strava-analytics.controller";
 import { stravaChatController } from "./strava/strava-chat.controller";
 import { revolutController } from "./revolut/revolut.controller";
-import { RevolutRepository } from "./revolut/revolut.repository";
+import { bankingController } from "./banking/banking.controller";
 import { ServerError } from "@mng/http/server.error";
 import { auth } from "./auth";
 import { db, eq, and } from "@mng/database/db";
 import { account } from "@mng/database/schema/auth.schema";
+import { getBankingProvider } from "./banking/registry";
 
 const TRUSTED_ORIGINS = (process.env.TRUSTED_ORIGINS ?? process.env.APP_URL ?? "http://localhost:3001,http://localhost:3002")
   .split(",")
@@ -41,7 +42,8 @@ const app = new Elysia()
 
     const stravaAthleteId = stravaAccount.length > 0 ? Number(stravaAccount[0].accountId) : null;
 
-    const revolutAuthData = await RevolutRepository.getAuth(session.user.id);
+    const bankingProvider = getBankingProvider();
+    const bankingConnected = await bankingProvider.isConnected(session.user.id);
 
     return {
       user: {
@@ -52,7 +54,8 @@ const app = new Elysia()
       },
       stravaConnected: stravaAthleteId !== null,
       stravaAthleteId,
-      revolutConnected: !!revolutAuthData,
+      bankingConnected,
+      bankingProvider: bankingProvider.name,
     };
   })
   .error({ ServerError })
@@ -72,6 +75,7 @@ const app = new Elysia()
   .use(stravaController)
   .use(stravaAnalyticsController)
   .use(stravaChatController)
+  .use(bankingController)
   .use(revolutController)
   .listen(3000);
 

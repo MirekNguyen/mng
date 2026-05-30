@@ -7,7 +7,7 @@ type FetchOptions = {
 };
 
 const request = async (path: string, options: FetchOptions = {}) => {
-  const res = await fetch(`${API_BASE}/revolut${path}`, {
+  const res = await fetch(`${API_BASE}/banking${path}`, {
     method: options.method ?? "GET",
     headers: {
       "Content-Type": "application/json",
