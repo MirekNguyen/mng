@@ -100,10 +100,23 @@ export const calculateVolumeTrends = (activities: StravaActivity[]): VolumeTrend
     monthlyMap.set(month, mo);
   }
 
+  // Ensure current (partial) week always appears, even with zero activities
+  const currentWeekStart = getWeekStart(new Date());
+  if (!weeklyMap.has(currentWeekStart)) {
+    weeklyMap.set(currentWeekStart, {
+      weekStart: currentWeekStart,
+      distance: 0,
+      movingTime: 0,
+      elevationGain: 0,
+      activityCount: 0,
+      sports: {},
+    });
+  }
+
   const weekly = [...weeklyMap.values()].sort((a, b) => a.weekStart.localeCompare(b.weekStart));
   const monthly = [...monthlyMap.values()].sort((a, b) => a.month.localeCompare(b.month));
 
-  const weekCount = Math.max(weekly.length, 1);
+  const weekCount = weekly.length;
 
   return {
     weekly,
