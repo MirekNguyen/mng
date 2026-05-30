@@ -9,7 +9,7 @@ import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianG
 
 const RouteMapLazy = lazy(() => import('#/components/route-map').then((m) => ({ default: m.RouteMap })))
 
-const getActivityData = createServerFn({ method: 'GET' })
+const getActivityData = createServerFn({ method: 'POST' })
   .inputValidator((data: { activityStravaId: number }) => data)
   .handler(async ({ data }) => {
     const session = await getSession()

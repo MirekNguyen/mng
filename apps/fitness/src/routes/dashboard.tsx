@@ -1,6 +1,6 @@
-import { createFileRoute, redirect, Link } from '@tanstack/react-router'
+import { createFileRoute, redirect, Link, useRouter } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { getSession } from '#/lib/session.server'
 import { api } from '#/lib/api'
 import { formatDistance, formatDuration, formatDate } from '#/lib/format'
@@ -41,7 +41,7 @@ type WeeklyVolume = {
   sports: Record<string, { distance: number; movingTime: number; elevationGain: number; count: number }>
 }
 
-const getDashboardData = createServerFn({ method: 'GET' }).handler(async () => {
+const getDashboardData = createServerFn({ method: 'POST' }).handler(async () => {
   const session = await getSession()
   if (!session) return null
 
@@ -72,11 +72,25 @@ export const Route = createFileRoute('/dashboard')({
 })
 
 function DashboardPage() {
+  const router = useRouter()
   const { activities, volume, athleteName, athleteStravaId, athleteImage, fitness } = Route.useLoaderData()
+  const [refreshing, setRefreshing] = useState(false)
   const [selectedSport, setSelectedSport] = useState<string>('Run')
+
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true)
+    await router.invalidate()
+    setRefreshing(false)
+  }, [router])
 
   const currentWeek = volume.weekly[volume.weekly.length - 1]
   const currentWeekSport = currentWeek?.sports[selectedSport]
+
+  const today = new Date()
+  const dayOfWeek = today.getDay()
+  const isEarlyWeek = dayOfWeek >= 1 && dayOfWeek <= 3
+  const noActivityThisWeek = !currentWeekSport || currentWeekSport.count === 0
+  const showEarlyWeekMessage = noActivityThisWeek && isEarlyWeek
 
   const isDistanceSport = selectedSport !== 'WeightTraining'
   const last12Weeks = volume.weekly.slice(-12)
@@ -102,6 +116,24 @@ function DashboardPage() {
       <AppHeader title="Fitness" athleteName={athleteName} athleteImage={athleteImage} />
 
       <main className="max-w-[600px] mx-auto px-5 pt-6 space-y-8">
+        {/* Refresh */}
+        <div className="flex justify-end -mt-2">
+          <button
+            onClick={handleRefresh}
+            disabled={refreshing}
+            className="flex items-center gap-1.5 text-xs text-[var(--color-ink-tertiary)] hover:text-[var(--color-ink-secondary)] transition-colors disabled:opacity-50"
+            aria-label="Refresh data"
+          >
+            <svg
+              className={`size-3.5 ${refreshing ? 'animate-spin' : ''}`}
+              fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182M21.007 4.356v4.992" />
+            </svg>
+            {refreshing ? 'Refreshing...' : 'Refresh'}
+          </button>
+        </div>
+
         {/* Sport pills */}
         <div className="flex gap-2 animate-in stagger-1">
           {sportOptions.map((sport) => (
@@ -126,39 +158,45 @@ function DashboardPage() {
         {/* This week */}
         <section className="animate-in stagger-3">
           <h2 className="text-lg font-semibold mb-4">This week</h2>
-          <div className="grid grid-cols-3 gap-6">
-            {isDistanceSport ? (
-              <>
-                <div>
-                  <p className="text-xs text-[var(--color-ink-tertiary)]">Distance</p>
-                  <p className="text-xl font-semibold tracking-tight">{formatDistance(currentWeekSport?.distance ?? 0)}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-[var(--color-ink-tertiary)]">Time</p>
-                  <p className="text-xl font-semibold tracking-tight">{formatDuration(currentWeekSport?.movingTime ?? 0)}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-[var(--color-ink-tertiary)]">Elev Gain</p>
-                  <p className="text-xl font-semibold tracking-tight">{Math.round(currentWeekSport?.elevationGain ?? 0)} m</p>
-                </div>
-              </>
-            ) : (
-              <>
-                <div>
-                  <p className="text-xs text-[var(--color-ink-tertiary)]">Sessions</p>
-                  <p className="text-xl font-semibold tracking-tight">{currentWeekSport?.count ?? 0}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-[var(--color-ink-tertiary)]">Time</p>
-                  <p className="text-xl font-semibold tracking-tight">{formatDuration(currentWeekSport?.movingTime ?? 0)}</p>
-                </div>
-                <div>
-                  <p className="text-xs text-[var(--color-ink-tertiary)]">Avg Session</p>
-                  <p className="text-xl font-semibold tracking-tight">{currentWeekSport?.count ? formatDuration(Math.round((currentWeekSport.movingTime ?? 0) / currentWeekSport.count)) : '—'}</p>
-                </div>
-              </>
-            )}
-          </div>
+          {showEarlyWeekMessage ? (
+            <p className="text-sm text-[var(--color-ink-tertiary)]">
+              It's early in the week — no {sportLabels[selectedSport]?.toLowerCase() ?? selectedSport.toLowerCase()} recorded yet
+            </p>
+          ) : (
+            <div className="grid grid-cols-3 gap-6">
+              {isDistanceSport ? (
+                <>
+                  <div>
+                    <p className="text-xs text-[var(--color-ink-tertiary)]">Distance</p>
+                    <p className="text-xl font-semibold tracking-tight">{formatDistance(currentWeekSport?.distance ?? 0)}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-[var(--color-ink-tertiary)]">Time</p>
+                    <p className="text-xl font-semibold tracking-tight">{formatDuration(currentWeekSport?.movingTime ?? 0)}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-[var(--color-ink-tertiary)]">Elev Gain</p>
+                    <p className="text-xl font-semibold tracking-tight">{Math.round(currentWeekSport?.elevationGain ?? 0)} m</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <p className="text-xs text-[var(--color-ink-tertiary)]">Sessions</p>
+                    <p className="text-xl font-semibold tracking-tight">{currentWeekSport?.count ?? 0}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-[var(--color-ink-tertiary)]">Time</p>
+                    <p className="text-xl font-semibold tracking-tight">{formatDuration(currentWeekSport?.movingTime ?? 0)}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-[var(--color-ink-tertiary)]">Avg Session</p>
+                    <p className="text-xl font-semibold tracking-tight">{currentWeekSport?.count ? formatDuration(Math.round((currentWeekSport.movingTime ?? 0) / currentWeekSport.count)) : '—'}</p>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </section>
 
         {/* 12-week chart */}

@@ -9,7 +9,7 @@ import { ChartContainer, ChartTooltipContent, type ChartConfig } from '#/compone
 import { BottomNav } from '#/components/bottom-nav'
 import { AppHeader } from '#/components/app-header'
 
-const getVolumeData = createServerFn({ method: 'GET' }).handler(async () => {
+const getVolumeData = createServerFn({ method: 'POST' }).handler(async () => {
   const session = await getSession()
   if (!session) return null
 

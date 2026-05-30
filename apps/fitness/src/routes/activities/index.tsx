@@ -21,7 +21,7 @@ type Activity = {
   averageSpeed: number
 }
 
-const getActivities = createServerFn({ method: 'GET' })
+const getActivities = createServerFn({ method: 'POST' })
   .inputValidator((data: { limit: number; offset: number }) => data)
   .handler(async ({ data }) => {
     const session = await getSession()

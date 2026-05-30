@@ -14,7 +14,7 @@ type RacePrediction = { distance: string; predictedTime: number; predictedPace: 
 type TrainingInsight = { type: string; title: string; message: string }
 type InjuryRisk = { acwr: number; riskLevel: string; weeklyLoadChange: number; recommendation: string }
 
-const getFitnessData = createServerFn({ method: 'GET' }).handler(async () => {
+const getFitnessData = createServerFn({ method: 'POST' }).handler(async () => {
   const session = await getSession()
   if (!session) return null
 

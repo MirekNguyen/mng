@@ -1,6 +1,7 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { getSessionResult } from '#/lib/session.server'
+import { api } from '#/lib/api'
 import { authClient } from '#/lib/auth-client'
 import { Button } from '#/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/components/ui/card'
@@ -8,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '#/com
 const checkSession = createServerFn({ method: 'GET' }).handler(async () => {
   const result = await getSessionResult()
   if (!result.authenticated) return { status: 'unauthenticated' as const }
-  if (result.stravaConnected) return { status: 'connected' as const }
+  if (result.stravaConnected) return { status: 'connected' as const, athleteStravaId: result.data.athleteStravaId }
   return { status: 'needs_strava' as const, userName: result.userName }
 })
 
@@ -17,11 +18,13 @@ export const Route = createFileRoute('/connect-strava')({
     error: (search.error as string) ?? undefined,
   }),
   beforeLoad: async ({ search }) => {
-    // If better-auth redirected here with an error (e.g. allowlist rejection), send to login with error
     if (search.error) throw redirect({ to: '/login', search: { error: search.error } })
     const result = await checkSession()
     if (result.status === 'unauthenticated') throw redirect({ to: '/login' })
-    if (result.status === 'connected') throw redirect({ to: '/dashboard' })
+    if (result.status === 'connected') {
+      await api.sync(result.athleteStravaId)
+      throw redirect({ to: '/dashboard' })
+    }
     return result
   },
   loader: ({ context }) => context,
