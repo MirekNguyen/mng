@@ -11,7 +11,7 @@ export const seedAdmin = async (): Promise<void> => {
   }
 
   await auth.api.signUpEmail({
-    body: { email: "admin@mng.local", password: "admin", name: "Admin" },
+    body: { email: "admin@mng.local", password: "adminadmin", name: "Admin" },
   });
 
   await db.insert(allowedUsers).values({
