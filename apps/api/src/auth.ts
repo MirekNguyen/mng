@@ -26,6 +26,10 @@ export const auth = betterAuth({
       maxAge: 60 * 5,
     },
   },
+  emailAndPassword: {
+    enabled: true,
+    autoSignIn: true,
+  },
   advanced: {
     crossSubDomainCookies: {
       enabled: true,
@@ -61,6 +65,9 @@ export const auth = betterAuth({
         before: async (user) => {
           const email = user.email;
           if (!email) throw new APIError("FORBIDDEN", { message: "Access denied" });
+
+          // Bypass allowlist check for the built-in admin user
+          if (email === "admin@mng.local") return;
 
           // Check allowlist: match by exact email or pattern (e.g. *@github.user won't match unless explicitly added)
           const allowed = await db.select().from(allowedUsers).where(eq(allowedUsers.identifier, email)).limit(1);
