@@ -57,6 +57,17 @@ Mobile (`max-width: 450px`):
 | `--base-list-row-vertical-padding` | `.6875rem` |
 | `--base-list-row-horizontal-padding` | `.875rem` |
 
+
+### Inputs & Segments
+
+| Token | Value |
+|---|---|
+| `--segment-gap` | `.25rem` |
+| `--segment-padding` | `.25rem .75rem` |
+| `--segment-icon-gap` | `.375rem` |
+| `--small-segment-gap` | `.125rem` |
+| `--small-segment-padding` | `.3125rem .5rem` |
+
 ### Other Spacing
 
 | Token | Value |
@@ -124,6 +135,17 @@ Mobile (`max-width: 450px`):
 | `--bounce-transition-fn` | `cubic-bezier(.54, 1.12, .38, 1.11)` |
 
 ---
+
+
+## Button Sizing
+
+| Token | Padding | Height | Font Size | Gap |
+|---|---|---|---|---|
+| `--button-padding` | `.625rem .875rem` | `calc(2.25rem + 2px)` | `1rem` | `.5rem` |
+| `--button-small-padding` | `.4375rem .625rem` | `calc(1.75rem + 2px)` | `.875rem` | `.375rem` |
+| `--button-large-padding` | `.75rem 1.125rem` | `calc(2.625rem + 2px)` | `1.125rem` | `.625rem` |
+| `--button-icon-only-padding` | `.625rem` | | | |
+| `--button-icon-only-compact-padding` | `.4375rem` | | | |
 
 ## Colors
 
