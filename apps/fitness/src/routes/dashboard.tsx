@@ -1,6 +1,9 @@
 import { createFileRoute, redirect, Link, useRouter } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { useState, useEffect, useCallback } from 'react'
+
+import { AltArrowRight } from '@solar-icons/react'
+
 import { getSession } from '#/lib/session.server'
 import { api } from '#/lib/api'
 import { formatDistance, formatDuration, formatDate } from '#/lib/format'
@@ -310,7 +313,7 @@ const TrainingInsight = ({ fitness }: { fitness: FitnessStatus }) => {
     <Link to="/fitness" className="flex items-center gap-2.5 rounded-lg px-3.5 py-2.5 transition-colors hover:opacity-90" style={{ backgroundColor: bgColor }}>
       <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: dotColor }} />
       <p className="text-[13px] text-[var(--color-ink)] flex-1">{message}</p>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--color-ink-tertiary)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6" /></svg>
+      <AltArrowRight width="14" height="14" stroke="var(--color-ink-tertiary)" />
     </Link>
   )
 }

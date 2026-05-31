@@ -1,5 +1,7 @@
 import { useRouter } from '@tanstack/react-router'
 
+import { AltArrowLeft } from '@solar-icons/react'
+
 import { ThemeToggle } from '#/components/theme-toggle'
 import { ProfileMenu } from '#/components/profile-menu'
 
@@ -24,9 +26,7 @@ export const AppHeader = ({ title, athleteName, athleteImage, showBack }: AppHea
               className="flex items-center justify-center size-8 -ml-2 rounded-lg text-[var(--color-ink-secondary)] hover:text-[var(--color-ink)] hover:bg-[var(--color-surface-sunken)] transition-colors"
               aria-label="Go back"
             >
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.5 15L7.5 10L12.5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+              <AltArrowLeft className="size-5" />
             </button>
           )}
           <span className="text-base font-semibold">{title}</span>

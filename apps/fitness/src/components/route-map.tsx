@@ -2,6 +2,8 @@
 import polyline from '@mapbox/polyline'
 import type { LngLatBoundsLike } from 'maplibre-gl'
 
+import { Heart, GraphUp } from '@solar-icons/react'
+
 import { Map, MapControls, MapMarker, MarkerContent, MarkerTooltip, MapRoute } from '#/components/ui/map.tsx'
 
 type SplitData = {
@@ -158,12 +160,12 @@ export const RouteMap = ({ encodedPolyline, splits, segments }: RouteMapProps) =
                   <div className="flex items-center gap-3 text-[11px] text-neutral-500 dark:text-neutral-400">
                     {split.average_heartrate && (
                       <span className="flex items-center gap-0.5">
-                        <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" className="text-red-400"><path d="M8 14s-5.5-3.5-5.5-7.5C2.5 4 4 2.5 5.5 2.5c1 0 2 .5 2.5 1.5.5-1 1.5-1.5 2.5-1.5 1.5 0 3 1.5 3 4C13.5 10.5 8 14 8 14z"/></svg>
+                        <Heart width="10" height="10" className="text-red-400" />
                         {Math.round(split.average_heartrate)}
                       </span>
                     )}
                     <span className="flex items-center gap-0.5">
-                      <svg width="10" height="10" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-neutral-400"><path d="M2 12l4-6 3 4 5-7"/></svg>
+                      <GraphUp width="10" height="10" className="text-neutral-400" />
                       {split.elevation_difference > 0 ? '+' : ''}{Math.round(split.elevation_difference)}m
                     </span>
                   </div>

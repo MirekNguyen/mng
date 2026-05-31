@@ -1,5 +1,8 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
+
+import { ChatRoundDots, AddCircle, Plain } from '@solar-icons/react'
+
 import { getSession } from '#/lib/session.server'
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
@@ -97,9 +100,7 @@ function ChatPage() {
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center pt-16 pb-8 text-center animate-in-scale">
               <div className="w-10 h-10 rounded-full bg-[var(--color-accent)]/10 flex items-center justify-center mb-4">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                </svg>
+                <ChatRoundDots width="20" height="20" stroke="var(--color-accent)" />
               </div>
               <h1 className="text-lg font-semibold mb-1.5">Ask your coach</h1>
               <p className="text-[13px] text-[var(--color-ink-secondary)] max-w-[280px] mb-8">
@@ -182,11 +183,7 @@ function ChatPage() {
               onClick={() => fileInputRef.current?.click()}
               className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full text-[var(--color-ink-secondary)] hover:text-[var(--color-ink)] transition-colors mb-0.5"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="16" />
-                <line x1="8" y1="12" x2="16" y2="12" />
-              </svg>
+              <AddCircle width="20" height="20" />
             </button>
             <input
               value={input}
@@ -200,9 +197,7 @@ function ChatPage() {
               disabled={isLoading || (!input.trim() && !imageFile)}
               className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-[var(--color-accent)] text-white disabled:opacity-25 transition-opacity mb-0.5"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-              </svg>
+              <Plain width="14" height="14" />
             </button>
           </form>
         </div>

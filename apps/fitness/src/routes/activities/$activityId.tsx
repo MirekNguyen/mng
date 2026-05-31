@@ -1,6 +1,9 @@
 import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { lazy, Suspense, useState, useEffect, type ReactNode } from 'react'
+
+import { Like, ChatRoundDots } from '@solar-icons/react'
+
 import { getSession } from '#/lib/session.server'
 import { api } from '#/lib/api'
 import { formatDistance, formatDuration, formatPace, formatDate, formatTime } from '#/lib/format'
@@ -361,9 +364,7 @@ function KudosBar({ kudos, kudosCount, commentCount }: {
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
         >
-          <svg className="w-4 h-4 text-[var(--color-accent)]" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
-          </svg>
+          <Like className="w-4 h-4 text-[var(--color-accent)]" />
           <span className="text-sm text-[var(--color-ink-secondary)]">{totalKudos}</span>
 
           {/* Hover tooltip showing who gave kudos */}
@@ -391,9 +392,7 @@ function KudosBar({ kudos, kudosCount, commentCount }: {
       )}
       {commentCount > 0 && (
         <div className="flex items-center gap-2">
-          <svg className="w-4 h-4 text-[var(--color-ink-tertiary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 0 1-.923 1.785A5.969 5.969 0 0 0 6 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337Z" />
-          </svg>
+          <ChatRoundDots className="w-4 h-4 text-[var(--color-ink-tertiary)]" />
           <span className="text-sm text-[var(--color-ink-secondary)]">{commentCount}</span>
         </div>
       )}

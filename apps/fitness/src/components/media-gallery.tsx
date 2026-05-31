@@ -1,3 +1,4 @@
+import { Play, CloseCircle, RoundAltArrowLeft, RoundAltArrowRight } from '@solar-icons/react'
 import { useState, useCallback, useEffect } from 'react'
 
 type MediaItem = {
@@ -60,9 +61,7 @@ export const MediaGallery = ({ items }: MediaGalleryProps) => {
                 <video src={item.url} className="h-full w-auto object-cover" muted preload="metadata" />
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
                   <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-md">
-                    <svg className="w-4 h-4 text-[var(--color-ink)] ml-0.5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
+                    <Play className="w-4 h-4 text-[var(--color-ink)] ml-0.5" fill="currentColor" />
                   </div>
                 </div>
               </>
@@ -81,9 +80,7 @@ export const MediaGallery = ({ items }: MediaGalleryProps) => {
             onClick={closeLightbox}
             className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <CloseCircle className="w-5 h-5" />
           </button>
 
           {/* Nav arrows */}
@@ -93,17 +90,13 @@ export const MediaGallery = ({ items }: MediaGalleryProps) => {
                 onClick={(e) => { e.stopPropagation(); goPrev() }}
                 className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
+                <RoundAltArrowLeft className="w-5 h-5" />
               </button>
               <button
                 onClick={(e) => { e.stopPropagation(); goNext() }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
+                <RoundAltArrowRight className="w-5 h-5" />
               </button>
             </>
           )}
