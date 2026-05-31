@@ -66,9 +66,9 @@ function PredictionsPage() {
 
         {/* Injury Risk */}
         <section>
-          <h3 className="text-lg font-semibold mb-4">Injury Risk (ACWR)</h3>
+          <h3 className="text-[length:var(--section-title-font-size)] font-semibold mb-section">Injury Risk (ACWR)</h3>
           <div className={`rounded-lg border p-5 ${riskColors[data.injuryRisk.riskLevel as keyof typeof riskColors]}`}>
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-[0.75rem]">
               <div>
                 <p className="text-2xl font-bold">{data.injuryRisk.acwr}</p>
                 <p className="text-sm opacity-80">Acute:Chronic Workload Ratio</p>
@@ -102,7 +102,7 @@ function PredictionsPage() {
         {/* Race Predictions */}
         {data.racePredictions.length > 0 && (
           <section>
-            <h3 className="text-lg font-semibold mb-4">Race Time Estimates</h3>
+            <h3 className="text-[length:var(--section-title-font-size)] font-semibold mb-section">Race Time Estimates</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {data.racePredictions.map((pred: RacePrediction) => (
                 <div key={pred.distance} className="rounded-lg border border-zinc-800 bg-zinc-900 p-5">
@@ -128,7 +128,7 @@ function PredictionsPage() {
         {/* Training Insights */}
         {data.insights.length > 0 && (
           <section>
-            <h3 className="text-lg font-semibold mb-4">Training Insights</h3>
+            <h3 className="text-[length:var(--section-title-font-size)] font-semibold mb-section">Training Insights</h3>
             <div className="space-y-3">
               {data.insights.map((insight: Insight, i: number) => (
                 <div key={i} className={`rounded-lg border p-4 ${insightColors[insight.type]}`}>

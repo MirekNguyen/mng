@@ -145,7 +145,7 @@ export const RouteMap = ({ encodedPolyline, splits, segments }: RouteMapProps) =
                 {km}
               </div>
             </MarkerContent>
-            <MarkerTooltip className="!bg-white !text-neutral-900 dark:!bg-neutral-900 dark:!text-neutral-100 !rounded-xl !px-3.5 !py-2.5 !shadow-xl !border !border-neutral-200/80 dark:!border-neutral-700/80 min-w-[140px]">
+            <MarkerTooltip className="!bg-white !text-neutral-900 dark:!bg-neutral-900 dark:!text-neutral-100 !rounded-lg !px-3.5 !py-list-y !shadow-xl !border !border-neutral-200/80 dark:!border-neutral-700/80 min-w-[140px]">
               <div className="flex flex-col gap-1.5">
                 {/* Header */}
                 <div className="flex items-baseline justify-between gap-3">

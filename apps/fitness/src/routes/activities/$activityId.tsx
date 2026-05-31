@@ -178,10 +178,10 @@ function ActivityDetailPage() {
                   const paceSec = Math.round(pace % 60)
                   return (
                     <tr key={split.split} className="border-t border-[var(--color-border)]">
-                      <td className="py-2.5 text-[var(--color-ink-secondary)]">{split.split}</td>
-                      <td className="py-2.5 text-right font-mono text-sm">{paceMin}:{paceSec.toString().padStart(2, '0')}</td>
-                      <td className="py-2.5 text-right text-[var(--color-ink-secondary)]">{split.average_heartrate ? Math.round(split.average_heartrate) : '—'}</td>
-                      <td className="py-2.5 text-right text-[var(--color-ink-secondary)]">{split.elevation_difference > 0 ? '+' : ''}{Math.round(split.elevation_difference)}m</td>
+                      <td className="py-list-y text-[var(--color-ink-secondary)]">{split.split}</td>
+                      <td className="py-list-y text-right font-mono text-sm">{paceMin}:{paceSec.toString().padStart(2, '0')}</td>
+                      <td className="py-list-y text-right text-[var(--color-ink-secondary)]">{split.average_heartrate ? Math.round(split.average_heartrate) : '—'}</td>
+                      <td className="py-list-y text-right text-[var(--color-ink-secondary)]">{split.elevation_difference > 0 ? '+' : ''}{Math.round(split.elevation_difference)}m</td>
                     </tr>
                   )
                 })}
@@ -205,10 +205,10 @@ function ActivityDetailPage() {
               <tbody>
                 {laps.map((lap) => (
                   <tr key={lap.lap_index} className="border-t border-[var(--color-border)]">
-                    <td className="py-2.5 text-[var(--color-ink-secondary)]">{lap.name || `Lap ${lap.lap_index}`}</td>
-                    <td className="py-2.5 text-right">{formatDistance(lap.distance)}</td>
-                    <td className="py-2.5 text-right font-mono">{formatPace(lap.average_speed, activity.type)}</td>
-                    <td className="py-2.5 text-right text-[var(--color-ink-secondary)]">{lap.average_heartrate ? Math.round(lap.average_heartrate) : '—'}</td>
+                    <td className="py-list-y text-[var(--color-ink-secondary)]">{lap.name || `Lap ${lap.lap_index}`}</td>
+                    <td className="py-list-y text-right">{formatDistance(lap.distance)}</td>
+                    <td className="py-list-y text-right font-mono">{formatPace(lap.average_speed, activity.type)}</td>
+                    <td className="py-list-y text-right text-[var(--color-ink-secondary)]">{lap.average_heartrate ? Math.round(lap.average_heartrate) : '—'}</td>
                   </tr>
                 ))}
               </tbody>
@@ -324,7 +324,7 @@ function ActivityDetailPage() {
         {/* Comments */}
         {comments && comments.length > 0 && (
           <section className="py-5 border-t border-[var(--color-border)]">
-            <h2 className="text-base font-semibold mb-3">Comments</h2>
+            <h2 className="text-[length:var(--small-section-title-font-size)] font-semibold mb-[0.75rem]">Comments</h2>
             <div className="space-y-3">
               {comments.map((c, i) => (
                 <div key={i} className="flex gap-3">
@@ -560,7 +560,7 @@ function AiAnalysisSection({ athleteStravaId, activityStravaId }: { athleteStrav
 
   return (
     <section className="py-5 border-t border-[var(--color-border)]">
-      <h2 className="text-base font-semibold mb-3">AI Analysis</h2>
+      <h2 className="text-[length:var(--small-section-title-font-size)] font-semibold mb-[0.75rem]">AI Analysis</h2>
       <p className="text-sm text-[var(--color-ink-secondary)] leading-relaxed">{analysis.summary as string}</p>
       {analysis.recoveryRecommendation && (
         <p className="text-sm text-[var(--color-ink-tertiary)] mt-3 italic">{analysis.recoveryRecommendation as string}</p>

@@ -82,7 +82,7 @@ function FitnessPage() {
 
         {/* Fitness Chart */}
         <section>
-          <p className="text-xs text-[var(--color-ink-tertiary)] mb-3">60-day fitness trend</p>
+          <p className="text-xs text-[var(--color-ink-tertiary)] mb-[0.75rem]">60-day fitness trend</p>
           <ChartContainer config={fitnessChartConfig} className="h-52 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={days} margin={{ top: 5, right: 5, bottom: 5, left: -20 }}>
@@ -114,7 +114,7 @@ function FitnessPage() {
         {/* Injury Risk */}
         {injuryRisk && (
           <section className="py-5 border-t border-[var(--color-border)]">
-            <h2 className="text-base font-semibold mb-3">Injury Risk</h2>
+            <h2 className="text-[length:var(--small-section-title-font-size)] font-semibold mb-[0.75rem]">Injury Risk</h2>
             <div className="flex items-center gap-4">
               <div className="flex-1">
                 <div className="flex items-baseline gap-2">
@@ -131,10 +131,10 @@ function FitnessPage() {
         {/* Race Predictions */}
         {racePredictions && racePredictions.length > 0 && (
           <section className="py-5 border-t border-[var(--color-border)]">
-            <h2 className="text-base font-semibold mb-3">Race Predictions</h2>
+            <h2 className="text-[length:var(--small-section-title-font-size)] font-semibold mb-[0.75rem]">Race Predictions</h2>
             <div className="space-y-2">
               {racePredictions.map((pred) => (
-                <div key={pred.distance} className="flex items-center justify-between py-2.5 border-b border-[var(--color-accent-muted)] last:border-0">
+                <div key={pred.distance} className="flex items-center justify-between py-list-y border-b border-[var(--color-accent-muted)] last:border-0">
                   <div>
                     <p className="text-sm font-medium">{pred.distance}</p>
                     <p className="text-xs text-[var(--color-ink-tertiary)]">Based on {pred.basedOn}</p>
@@ -152,7 +152,7 @@ function FitnessPage() {
         {/* Training Insights */}
         {insights && insights.length > 0 && (
           <section className="py-5 border-t border-[var(--color-border)]">
-            <h2 className="text-base font-semibold mb-3">Insights</h2>
+            <h2 className="text-[length:var(--small-section-title-font-size)] font-semibold mb-[0.75rem]">Insights</h2>
             <div className="space-y-3">
               {insights.map((insight, i) => (
                 <div key={i} className="flex gap-3 p-3 rounded-lg" style={{ backgroundColor: insight.type === 'warning' ? 'var(--color-warning-subtle)' : insight.type === 'success' ? 'var(--color-success-subtle)' : 'var(--color-elevation-subtle)' }}>
@@ -237,7 +237,7 @@ const WeeklyAnalysis = ({ athleteStravaId }: { athleteStravaId: number }) => {
 
   return (
     <section className="py-5 border-t border-[var(--color-border)]">
-      <h2 className="text-base font-semibold mb-3">This Week</h2>
+      <h2 className="text-[length:var(--small-section-title-font-size)] font-semibold mb-[0.75rem]">This Week</h2>
       {isLoading && !content && (
         <div className="flex items-center gap-2 text-sm text-[var(--color-ink-tertiary)]">
           <span className="inline-block w-3 h-3 border-2 border-[var(--color-accent)] border-t-transparent rounded-full animate-spin" />

@@ -99,7 +99,7 @@ function ChatPage() {
         <div className="max-w-[var(--content-max-width)] mx-auto px-4 py-4">
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center pt-16 pb-8 text-center animate-in-scale">
-              <div className="w-10 h-10 rounded-full bg-[var(--color-accent)]/10 flex items-center justify-center mb-4">
+              <div className="w-10 h-10 rounded-full bg-[var(--color-accent)]/10 flex items-center justify-center mb-section">
                 <ChatRoundDots width="20" height="20" stroke="var(--color-accent)" />
               </div>
               <h1 className="text-lg font-semibold mb-1.5">Ask your coach</h1>
@@ -125,7 +125,7 @@ function ChatPage() {
               <div key={message.id} className={`flex ${message.role === 'user' ? 'justify-end animate-in-right' : 'justify-start animate-in-left'}`}>
                 <div className={`max-w-[80%] ${
                   message.role === 'user'
-                    ? 'bg-[var(--color-accent)] text-white rounded-[18px] rounded-br-[4px] px-3.5 py-2'
+                    ? 'bg-[var(--color-accent)] text-white rounded-[18px] rounded-br-[4px] px-input-x py-input-y'
                     : 'text-[var(--color-ink)]'
                 }`}>
                   {message.parts.map((part, i) => {
@@ -135,7 +135,7 @@ function ChatPage() {
                         : <MarkdownContent key={i} text={part.text} />
                     }
                     if (part.type === 'file') {
-                      return <img key={i} src={part.url} alt="" className="rounded-xl max-h-40 mb-1.5" />
+                      return <img key={i} src={part.url} alt="" className="rounded-lg max-h-40 mb-1.5" />
                     }
                     return null
                   })}
@@ -190,7 +190,7 @@ function ChatPage() {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Message..."
               disabled={isLoading}
-              className="flex-1 min-h-[36px] px-3.5 py-2 rounded-[18px] bg-[var(--color-surface-sunken)] text-[14px] text-[var(--color-ink)] placeholder:text-[var(--color-ink-faint)] outline-none focus:ring-1 focus:ring-[var(--color-accent)]/40 disabled:opacity-50"
+              className="flex-1 min-h-[36px] px-input-x py-input-y rounded-[18px] bg-[var(--color-surface-sunken)] text-[14px] text-[var(--color-ink)] placeholder:text-[var(--color-ink-faint)] outline-none focus:ring-1 focus:ring-[var(--color-accent)]/40 disabled:opacity-50"
             />
             <button
               type="submit"

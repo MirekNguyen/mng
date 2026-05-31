@@ -152,7 +152,7 @@ function VolumePage() {
 
         {/* Weekly bar chart */}
         <section>
-          <p className="text-xs text-[var(--color-ink-tertiary)] mb-3 uppercase tracking-wide">Weekly distance</p>
+          <p className="text-xs text-[var(--color-ink-tertiary)] mb-[0.75rem] uppercase tracking-wide">Weekly distance</p>
           <ChartContainer config={volumeChartConfig} className="h-48 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: -20 }}>
@@ -185,7 +185,7 @@ function VolumePage() {
           <SectionHeader label="Monthly" />
           <div className="divide-y divide-[var(--color-border)]">
             {filteredMonthly.map((month) => (
-              <div key={month.month} className="py-3.5 flex items-center justify-between">
+              <div key={month.month} className="py-list-y flex items-center justify-between">
                 <div>
                   <p className="text-sm font-medium">{formatMonthLabel(month.month)}</p>
                   <p className="text-xs text-[var(--color-ink-tertiary)] mt-0.5">{month.count} activities · ↑ {Math.round(month.elevationGain)}m</p>
@@ -214,7 +214,7 @@ function SectionHeader({ label }: { label: string }) {
 
 function StatRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between py-3.5">
+    <div className="flex items-center justify-between py-list-y">
       <span className="text-sm text-[var(--color-ink)]">{label}</span>
       <span className="text-sm font-semibold">{value}</span>
     </div>

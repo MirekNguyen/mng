@@ -65,7 +65,7 @@ function ZonesPage() {
 
         {data.paceZones.length > 0 && (
           <section>
-            <h3 className="text-lg font-semibold mb-4">Pace Zones</h3>
+            <h3 className="text-[length:var(--section-title-font-size)] font-semibold mb-section">Pace Zones</h3>
             <div className="space-y-3">
               {data.paceZones.map((zone: PaceZone) => (
                 <div key={zone.name} className="rounded-lg border border-zinc-800 bg-zinc-900 p-4">
@@ -93,7 +93,7 @@ function ZonesPage() {
 
         {data.heartRateZones.length > 0 && (
           <section>
-            <h3 className="text-lg font-semibold mb-4">Heart Rate Zones</h3>
+            <h3 className="text-[length:var(--section-title-font-size)] font-semibold mb-section">Heart Rate Zones</h3>
             <div className="space-y-3">
               {data.heartRateZones.map((zone: HrZone) => (
                 <div key={zone.name} className="rounded-lg border border-zinc-800 bg-zinc-900 p-4">

@@ -39,12 +39,12 @@ function CoachPage() {
         <p className="text-zinc-400">Personalized insights powered by AI analysis of your training data.</p>
 
         <section>
-          <h3 className="text-lg font-semibold mb-4">Weekly Training Brief</h3>
+          <h3 className="text-[length:var(--section-title-font-size)] font-semibold mb-section">Weekly Training Brief</h3>
           <StreamingCard url={weeklyBriefUrl} />
         </section>
 
         <section>
-          <h3 className="text-lg font-semibold mb-4">Performance Analysis</h3>
+          <h3 className="text-[length:var(--section-title-font-size)] font-semibold mb-section">Performance Analysis</h3>
           <StreamingCard url={aiPredictionsUrl} />
         </section>
       </main>
@@ -103,7 +103,7 @@ function StreamingCard({ url }: { url: string }) {
   return (
     <div className="rounded-lg border border-zinc-800 bg-zinc-900 p-6">
       {loading && (
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-section">
           <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
           <span className="text-sm text-zinc-400">Analyzing your training data...</span>
         </div>

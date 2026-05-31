@@ -100,7 +100,7 @@ function ActivitiesPage() {
               key={activity.id}
               to="/activities/$activityId"
               params={{ activityId: String(activity.stravaId) }}
-              className={`flex items-center gap-4 py-3.5 hover:bg-[var(--color-surface-sunken)] -mx-2 px-2 rounded-lg transition-colors animate-in stagger-${Math.min(i + 1, 8)}`}
+              className={`flex items-center gap-4 py-list-y hover:bg-[var(--color-surface-sunken)] -mx-2 px-2 rounded-lg transition-colors animate-in stagger-${Math.min(i + 1, 8)}`}
             >
               <SportIcon type={activity.type} size={22} className="flex-shrink-0 text-[var(--color-ink-secondary)]" />
               <div className="flex-1 min-w-0">

@@ -160,7 +160,7 @@ function DashboardPage() {
 
         {/* This week */}
         <section className="animate-in stagger-3">
-          <h2 className="text-lg font-semibold mb-4">This week</h2>
+          <h2 className="text-[length:var(--section-title-font-size)] font-semibold mb-section">This week</h2>
           {showEarlyWeekMessage ? (
             <p className="text-sm text-[var(--color-ink-tertiary)]">
               It's early in the week — no {sportLabels[selectedSport]?.toLowerCase() ?? selectedSport.toLowerCase()} recorded yet
@@ -204,7 +204,7 @@ function DashboardPage() {
 
         {/* 12-week chart */}
         <section className="animate-in stagger-4">
-          <p className="text-xs text-[var(--color-ink-tertiary)] mb-3">Past 12 weeks</p>
+          <p className="text-xs text-[var(--color-ink-tertiary)] mb-[0.75rem]">Past 12 weeks</p>
           <ChartContainer config={{ [isDistanceSport ? 'distance' : 'time']: { label: isDistanceSport ? 'Distance' : 'Time', color: sportColors[selectedSport] ?? 'var(--color-accent)' } }} className="h-36 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData} margin={{ top: 5, right: 5, bottom: 5, left: -20 }}>
@@ -236,7 +236,7 @@ function DashboardPage() {
 
         {/* Recent activities */}
         <section className="animate-in stagger-6">
-          <div className="flex items-baseline justify-between mb-3">
+          <div className="flex items-baseline justify-between mb-[0.75rem]">
             <h2 className="text-lg font-semibold">Activities</h2>
             <Link to="/activities" className="text-sm text-[var(--color-accent)] hover:underline">See all</Link>
           </div>
@@ -246,7 +246,7 @@ function DashboardPage() {
                 key={activity.id}
                 to="/activities/$activityId"
                 params={{ activityId: String(activity.stravaId) }}
-                className="flex items-center gap-4 py-3.5 hover:bg-[var(--color-surface-sunken)] -mx-2 px-2 rounded-lg transition-colors"
+                className="flex items-center gap-4 py-list-y hover:bg-[var(--color-surface-sunken)] -mx-2 px-2 rounded-lg transition-colors"
               >
                 <SportIcon type={activity.type} size={22} className="flex-shrink-0 text-[var(--color-ink-secondary)]" />
                 <div className="flex-1 min-w-0">
@@ -310,7 +310,7 @@ const TrainingInsight = ({ fitness }: { fitness: FitnessStatus }) => {
   }
 
   return (
-    <Link to="/fitness" className="flex items-center gap-2.5 rounded-lg px-3.5 py-2.5 transition-colors hover:opacity-90" style={{ backgroundColor: bgColor }}>
+    <Link to="/fitness" className="flex items-center gap-2.5 rounded-lg px-3.5 py-list-y transition-colors hover:opacity-90" style={{ backgroundColor: bgColor }}>
       <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: dotColor }} />
       <p className="text-[13px] text-[var(--color-ink)] flex-1">{message}</p>
       <AltArrowRight width="14" height="14" stroke="var(--color-ink-tertiary)" />
