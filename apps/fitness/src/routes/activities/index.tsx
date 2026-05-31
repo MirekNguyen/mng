@@ -57,7 +57,7 @@ function ActivitiesPage() {
     <div className="min-h-screen pb-16">
       <AppHeader title="Activities" athleteName={athleteName} athleteImage={athleteImage} showBack />
 
-      <main className="max-w-[600px] mx-auto px-5 pt-6">
+      <main className="max-w-[var(--content-max-width)] mx-auto px-5 pt-6">
 
         {/* Sport filter pills */}
         <div className="flex gap-2 mb-5 overflow-x-auto flex-nowrap">

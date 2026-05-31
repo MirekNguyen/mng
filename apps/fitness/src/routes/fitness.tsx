@@ -58,7 +58,7 @@ function FitnessPage() {
     <div className="min-h-screen pb-16">
       <AppHeader title="Fitness" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} />
 
-      <main className="max-w-[600px] mx-auto px-5 pt-6 space-y-8">
+      <main className="max-w-[var(--content-max-width)] mx-auto px-5 pt-6 space-y-8">
         <h1 className="text-lg font-semibold">Training Load</h1>
 
         {/* CTL / ATL / TSB */}

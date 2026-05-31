@@ -110,7 +110,7 @@ function VolumePage() {
     <div className="min-h-screen pb-16">
       <AppHeader title="Volume" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} />
 
-      <main className="max-w-[600px] mx-auto px-5 pt-6 space-y-6">
+      <main className="max-w-[var(--content-max-width)] mx-auto px-5 pt-6 space-y-6">
         {/* Sport tabs */}
         <div className="flex gap-2 overflow-x-auto">
           {sportOptions.map((sport) => (

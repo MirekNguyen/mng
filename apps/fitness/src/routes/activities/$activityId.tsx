@@ -90,7 +90,7 @@ function ActivityDetailPage() {
     <div className="min-h-screen pb-16">
       {/* Nav */}
       <nav className="sticky top-0 z-10 bg-[var(--color-surface)]/95 backdrop-blur-sm border-b border-[var(--color-border)]">
-        <div className="max-w-[600px] mx-auto px-5 h-12 flex items-center justify-between">
+        <div className="max-w-[var(--content-max-width)] mx-auto px-5 h-12 flex items-center justify-between">
           <button onClick={() => router.history.back()} className="text-sm text-[var(--color-ink-secondary)] hover:text-[var(--color-ink)] transition-colors">
             ← Back
           </button>
@@ -98,7 +98,7 @@ function ActivityDetailPage() {
         </div>
       </nav>
 
-      <main className="max-w-[600px] mx-auto">
+      <main className="max-w-[var(--content-max-width)] mx-auto">
         {/* Header */}
         <header className="pt-6 pb-4 px-5">
           <p className="text-[13px] text-[var(--color-ink-tertiary)]">

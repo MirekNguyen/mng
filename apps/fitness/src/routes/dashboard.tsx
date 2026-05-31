@@ -118,7 +118,7 @@ function DashboardPage() {
     <div className="min-h-screen pb-16">
       <AppHeader title="Fitness" athleteName={athleteName} athleteImage={athleteImage} />
 
-      <main className="max-w-[600px] mx-auto px-5 pt-6 space-y-8">
+      <main className="max-w-[var(--content-max-width)] mx-auto px-5 pt-6 space-y-8">
         {/* Refresh */}
         <div className="flex justify-end -mt-2">
           <button

@@ -96,7 +96,7 @@ function ChatPage() {
 
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto overscroll-contain">
-        <div className="max-w-[600px] mx-auto px-4 py-4">
+        <div className="max-w-[var(--content-max-width)] mx-auto px-4 py-4">
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center pt-16 pb-8 text-center animate-in-scale">
               <div className="w-10 h-10 rounded-full bg-[var(--color-accent)]/10 flex items-center justify-center mb-4">
@@ -158,7 +158,7 @@ function ChatPage() {
 
       {/* Input bar */}
       <div className="flex-shrink-0 border-t border-[var(--color-border)] bg-[var(--color-surface)] pb-[calc(3.5rem+env(safe-area-inset-bottom))]">
-        <div className="max-w-[600px] mx-auto px-3 py-2">
+        <div className="max-w-[var(--content-max-width)] mx-auto px-3 py-2">
           {imagePreview && (
             <div className="relative inline-block mb-2 ml-1">
               <img src={imagePreview} alt="" className="h-14 rounded-lg object-cover" />
