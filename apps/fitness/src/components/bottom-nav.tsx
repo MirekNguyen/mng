@@ -47,7 +47,7 @@ export const BottomNav = () => {
             <Link
               key={tab.to}
               to={tab.to}
-              className={`flex flex-col items-center gap-0.5 px-3 py-1 press-scale transition-colors ${
+              className={`flex flex-col items-center gap-0.5 p-[var(--small-segment-padding)] press-scale transition-colors ${
                 isActive ? 'text-[var(--color-accent)]' : 'text-[var(--color-ink-tertiary)]'
               }`}
             >
