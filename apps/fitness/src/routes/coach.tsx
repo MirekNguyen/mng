@@ -35,8 +35,8 @@ function CoachPage() {
     <div className="min-h-screen pb-16">
       <AppHeader title="AI Coach" athleteName={athleteName} athleteImage={athleteImage} />
       <main className="mx-auto max-w-5xl px-layout-x py-section space-y-[var(--section-spacing)]">
-        <h2 className="text-2xl font-bold">AI Coach</h2>
-        <p className="text-zinc-400">Personalized insights powered by AI analysis of your training data.</p>
+        <h2 className="text-[length:var(--section-title-font-size)] font-semibold">AI Coach</h2>
+        <p className="text-sm text-zinc-400">Personalized insights powered by AI analysis of your training data.</p>
 
         <section>
           <h3 className="text-[length:var(--section-title-font-size)] font-semibold mb-section">Weekly Training Brief</h3>
@@ -109,7 +109,7 @@ function StreamingCard({ url }: { url: string }) {
         </div>
       )}
       <div className="prose prose-invert prose-sm max-w-none">
-        <div className="whitespace-pre-wrap text-zinc-300 leading-relaxed">
+        <div className="whitespace-pre-wrap text-sm text-zinc-300 leading-relaxed">
           {content.split('\n').map((line, i) => {
             if (line.startsWith('## ')) {
               return <h3 key={i} className="text-white font-semibold text-base mt-4 mb-2">{line.replace('## ', '')}</h3>
@@ -117,7 +117,7 @@ function StreamingCard({ url }: { url: string }) {
             if (line.startsWith('- ')) {
               return <p key={i} className="ml-4 text-zinc-300">{line}</p>
             }
-            return <p key={i} className="text-zinc-300">{line}</p>
+            return <p key={i} className="text-sm text-zinc-300">{line}</p>
           })}
         </div>
       </div>

@@ -59,13 +59,13 @@ function FitnessPage() {
       <AppHeader title="Fitness" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} />
 
       <main className="max-w-[var(--max-width)] mx-auto px-layout-x pt-section space-y-[var(--section-spacing)]">
-        <h1 className="text-lg font-semibold">Training Load</h1>
+        <h1 className="text-[length:var(--section-title-font-size)] font-semibold">Training Load</h1>
 
         {/* CTL / ATL / TSB */}
         <div className="grid grid-cols-3 gap-6">
           <div>
             <p className="text-xs text-[var(--color-ink-tertiary)]">Fitness (CTL)</p>
-            <p className="text-2xl font-semibold tracking-tight text-blue-600">{data.currentCtl}</p>
+            <p className="text-2xl font-semibold tracking-tight text-[var(--color-sport-ride)]">{data.currentCtl}</p>
             <p className="text-xs text-[var(--color-ink-tertiary)] mt-0.5">{data.fitnessLevel}</p>
           </div>
           <div>
@@ -75,7 +75,7 @@ function FitnessPage() {
           </div>
           <div>
             <p className="text-xs text-[var(--color-ink-tertiary)]">Form (TSB)</p>
-            <p className={`text-2xl font-semibold tracking-tight ${data.currentTsb >= 0 ? 'text-green-600' : 'text-red-500'}`}>{data.currentTsb}</p>
+            <p className={`text-2xl font-semibold tracking-tight ${data.currentTsb >= 0 ? 'text-[var(--color-success)]' : 'text-[var(--color-heart)]'}`}>{data.currentTsb}</p>
             <p className="text-xs text-[var(--color-ink-tertiary)] mt-0.5">{data.formStatus}</p>
           </div>
         </div>
@@ -140,7 +140,7 @@ function FitnessPage() {
                     <p className="text-xs text-[var(--color-ink-tertiary)]">Based on {pred.basedOn}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-mono font-semibold text-[var(--color-accent)]">{formatDuration(pred.predictedTime)}</p>
+                    <p className="text-base font-mono font-semibold text-[var(--color-accent)]">{formatDuration(pred.predictedTime)}</p>
                     <p className="text-xs text-[var(--color-ink-tertiary)]">{formatPaceFromSec(pred.predictedPace)}/km</p>
                   </div>
                 </div>
@@ -245,7 +245,7 @@ const WeeklyAnalysis = ({ athleteStravaId }: { athleteStravaId: number }) => {
         </div>
       )}
       {content && (
-        <div className="prose-sm text-sm text-[var(--color-ink-secondary)] space-y-2 [&_h2]:text-sm [&_h2]:font-semibold [&_h2]:text-[var(--color-ink)] [&_h2]:mt-4 [&_h2]:mb-1 [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:space-y-1 [&_li]:text-sm [&_p]:leading-relaxed">
+        <div className="prose-sm text-sm text-[var(--color-ink-secondary)] space-y-2 [&_h2]:text-[length:var(--small-section-title-font-size)] [&_h2]:font-semibold [&_h2]:text-[var(--color-ink)] [&_h2]:mt-4 [&_h2]:mb-1 [&_ul]:list-disc [&_ul]:pl-4 [&_ul]:space-y-1 [&_li]:text-sm [&_p]:leading-relaxed">
           <FormattedMarkdown text={content} />
         </div>
       )}

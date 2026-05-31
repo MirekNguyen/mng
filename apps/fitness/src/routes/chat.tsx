@@ -102,8 +102,8 @@ function ChatPage() {
               <div className="w-10 h-10 rounded-full bg-[var(--color-accent)]/10 flex items-center justify-center mb-section">
                 <ChatRoundDots width="20" height="20" stroke="var(--color-accent)" />
               </div>
-              <h1 className="text-lg font-semibold mb-1.5">Ask your coach</h1>
-              <p className="text-xs text-[var(--color-ink-secondary)] max-w-[280px] mb-8">
+              <h1 className="text-[length:var(--section-title-font-size)] font-semibold mb-1.5">Ask your coach</h1>
+              <p className="text-sm text-[var(--color-ink-secondary)] max-w-[280px] mb-8">
                 I know your pace, HR, volume, PRs, and fitness trends. Ask me anything.
               </p>
               <div className="flex flex-wrap justify-center gap-2 max-w-[360px]">
@@ -214,7 +214,7 @@ const MarkdownContent = ({ text }: { text: string }) => {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
     if (line.startsWith('## ')) {
-      elements.push(<h3 key={i} className="text-xs font-semibold mt-2.5 mb-0.5 text-[var(--color-ink)]">{line.slice(3)}</h3>)
+      elements.push(<h3 key={i} className="text-base font-semibold mt-2.5 mb-0.5 text-[var(--color-ink)]">{line.slice(3)}</h3>)
     } else if (line.startsWith('- ') || line.startsWith('* ')) {
       const items: string[] = [line.slice(2)]
       while (i + 1 < lines.length && (lines[i + 1].startsWith('- ') || lines[i + 1].startsWith('* '))) {
@@ -222,12 +222,12 @@ const MarkdownContent = ({ text }: { text: string }) => {
         items.push(lines[i].slice(2))
       }
       elements.push(
-        <ul key={i} className="list-disc pl-3.5 space-y-0.5 text-xs text-[var(--color-ink)]">
+        <ul key={i} className="list-disc pl-3.5 space-y-0.5 text-sm text-[var(--color-ink)]">
           {items.map((item, j) => <li key={j} className="leading-relaxed">{renderInline(item)}</li>)}
         </ul>
       )
     } else if (line.trim()) {
-      elements.push(<p key={i} className="text-xs leading-relaxed text-[var(--color-ink)]">{renderInline(line)}</p>)
+      elements.push(<p key={i} className="text-sm leading-relaxed text-[var(--color-ink)]">{renderInline(line)}</p>)
     }
   }
 

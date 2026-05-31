@@ -104,7 +104,7 @@ function ActivityDetailPage() {
           <p className="text-xs text-[var(--color-ink-tertiary)]">
             {formatDate(activity.startDateLocal)} · {formatTime(activity.startDateLocal)}
           </p>
-          <h1 className="text-2xl font-bold tracking-tight mt-1 leading-tight">{activity.name}</h1>
+          <h1 className="text-[length:var(--section-title-font-size)] font-semibold tracking-tight mt-1 leading-tight">{activity.name}</h1>
           {activity.description && (
             <p className="text-[var(--color-ink-secondary)] mt-2 text-[0.9rem] leading-relaxed">{activity.description}</p>
           )}
@@ -246,18 +246,18 @@ function ActivityDetailPage() {
             )}
             <div className="grid grid-cols-2 gap-4 mt-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-[var(--color-ink-secondary)]">Avg Heart Rate</span>
+                <span className="text-xs text-[var(--color-ink-secondary)]">Avg Heart Rate</span>
                 <span className="text-sm font-semibold">{Math.round(activity.averageHeartrate)} bpm</span>
               </div>
               {activity.maxHeartrate && (
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-[var(--color-ink-secondary)]">Max Heart Rate</span>
+                  <span className="text-xs text-[var(--color-ink-secondary)]">Max Heart Rate</span>
                   <span className="text-sm font-semibold">{Math.round(activity.maxHeartrate)} bpm</span>
                 </div>
               )}
               {activity.sufferScore && (
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-[var(--color-ink-secondary)]">Relative Effort</span>
+                  <span className="text-xs text-[var(--color-ink-secondary)]">Relative Effort</span>
                   <span className="text-sm font-semibold">{activity.sufferScore}</span>
                 </div>
               )}
@@ -277,12 +277,12 @@ function ActivityDetailPage() {
             )}
             <div className="grid grid-cols-2 gap-4 mt-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-[var(--color-ink-secondary)]">Avg Pace</span>
+                <span className="text-xs text-[var(--color-ink-secondary)]">Avg Pace</span>
                 <span className="text-sm font-semibold">{formatPace(activity.averageSpeed, activity.type)}</span>
               </div>
               {activity.maxSpeed > 0 && (
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-[var(--color-ink-secondary)]">Max Pace</span>
+                  <span className="text-xs text-[var(--color-ink-secondary)]">Max Pace</span>
                   <span className="text-sm font-semibold">{formatPace(activity.maxSpeed, activity.type)}</span>
                 </div>
               )}
@@ -302,18 +302,18 @@ function ActivityDetailPage() {
             )}
             <div className="grid grid-cols-3 gap-4 mt-3">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-[var(--color-ink-secondary)]">Gain</span>
+                <span className="text-xs text-[var(--color-ink-secondary)]">Gain</span>
                 <span className="text-sm font-semibold">{Math.round(activity.totalElevationGain)} m</span>
               </div>
               {activity.elevHigh && (
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-[var(--color-ink-secondary)]">Max</span>
+                  <span className="text-xs text-[var(--color-ink-secondary)]">Max</span>
                   <span className="text-sm font-semibold">{Math.round(activity.elevHigh)} m</span>
                 </div>
               )}
               {activity.elevLow != null && (
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-[var(--color-ink-secondary)]">Min</span>
+                  <span className="text-xs text-[var(--color-ink-secondary)]">Min</span>
                   <span className="text-sm font-semibold">{Math.round(activity.elevLow)} m</span>
                 </div>
               )}

@@ -62,7 +62,7 @@ function PredictionsPage() {
     <div className="min-h-screen pb-16">
       <AppHeader title="Predictions" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} />
       <main className="mx-auto max-w-5xl px-layout-x py-section space-y-[var(--section-spacing)]">
-        <h2 className="text-2xl font-bold">Performance Predictions</h2>
+        <h2 className="text-[length:var(--section-title-font-size)] font-semibold">Performance Predictions</h2>
 
         {/* Injury Risk */}
         <section>
@@ -70,7 +70,7 @@ function PredictionsPage() {
           <div className={`rounded-lg border p-5 ${riskColors[data.injuryRisk.riskLevel as keyof typeof riskColors]}`}>
             <div className="flex items-center justify-between mb-[0.75rem]">
               <div>
-                <p className="text-2xl font-bold">{data.injuryRisk.acwr}</p>
+                <p className="text-[length:var(--section-title-font-size)] font-semibold">{data.injuryRisk.acwr}</p>
                 <p className="text-sm opacity-80">Acute:Chronic Workload Ratio</p>
               </div>
               <div className="text-right">
@@ -116,7 +116,7 @@ function PredictionsPage() {
                       {pred.confidence} confidence
                     </span>
                   </div>
-                  <p className="text-2xl font-bold">{formatDuration(pred.predictedTime)}</p>
+                  <p className="text-[length:var(--section-title-font-size)] font-semibold">{formatDuration(pred.predictedTime)}</p>
                   <p className="text-sm text-zinc-400 mt-1">{formatPace(pred.predictedPace)}</p>
                   <p className="text-xs text-zinc-500 mt-2">Based on: {pred.basedOn}</p>
                 </div>
@@ -132,7 +132,7 @@ function PredictionsPage() {
             <div className="space-y-3">
               {data.insights.map((insight: Insight, i: number) => (
                 <div key={i} className={`rounded-lg border p-4 ${insightColors[insight.type]}`}>
-                  <p className="font-medium mb-1">{insight.title}</p>
+                  <p className="text-sm font-medium mb-1 text-[var(--color-ink)]">{insight.title}</p>
                   <p className="text-sm text-zinc-300">{insight.message}</p>
                 </div>
               ))}

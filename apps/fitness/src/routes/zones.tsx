@@ -53,7 +53,7 @@ function ZonesPage() {
     <div className="min-h-screen pb-16">
       <AppHeader title="Zones" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} />
       <main className="mx-auto max-w-5xl px-layout-x py-section space-y-[var(--section-spacing)]">
-        <h2 className="text-2xl font-bold">Zone Analysis</h2>
+        <h2 className="text-[length:var(--section-title-font-size)] font-semibold">Zone Analysis</h2>
         <p className="text-zinc-400 text-sm">Based on running activities from the last 3 months</p>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -126,7 +126,7 @@ function StatCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface-raised)] p-4">
       <p className="text-xs text-[var(--color-ink-tertiary)] uppercase tracking-wide mb-1">{label}</p>
-      <p className="text-lg font-semibold">{value}</p>
+      <p className="text-[length:var(--section-title-font-size)] font-semibold">{value}</p>
     </div>
   )
 }

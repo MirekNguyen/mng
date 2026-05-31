@@ -29,7 +29,7 @@ export const AppHeader = ({ title, athleteName, athleteImage, showBack }: AppHea
               <AltArrowLeft className="size-5" />
             </button>
           )}
-          <span className="text-base font-semibold">{title}</span>
+          <span className="text-lg font-semibold">{title}</span>
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle />

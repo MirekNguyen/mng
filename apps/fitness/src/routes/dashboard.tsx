@@ -171,30 +171,30 @@ function DashboardPage() {
                 <>
                   <div>
                     <p className="text-xs text-[var(--color-ink-tertiary)]">Distance</p>
-                    <p className="text-xl font-semibold tracking-tight">{formatDistance(currentWeekSport?.distance ?? 0)}</p>
+                    <p className="text-lg font-semibold tracking-tight">{formatDistance(currentWeekSport?.distance ?? 0)}</p>
                   </div>
                   <div>
                     <p className="text-xs text-[var(--color-ink-tertiary)]">Time</p>
-                    <p className="text-xl font-semibold tracking-tight">{formatDuration(currentWeekSport?.movingTime ?? 0)}</p>
+                    <p className="text-lg font-semibold tracking-tight">{formatDuration(currentWeekSport?.movingTime ?? 0)}</p>
                   </div>
                   <div>
                     <p className="text-xs text-[var(--color-ink-tertiary)]">Elev Gain</p>
-                    <p className="text-xl font-semibold tracking-tight">{Math.round(currentWeekSport?.elevationGain ?? 0)} m</p>
+                    <p className="text-lg font-semibold tracking-tight">{Math.round(currentWeekSport?.elevationGain ?? 0)} m</p>
                   </div>
                 </>
               ) : (
                 <>
                   <div>
                     <p className="text-xs text-[var(--color-ink-tertiary)]">Sessions</p>
-                    <p className="text-xl font-semibold tracking-tight">{currentWeekSport?.count ?? 0}</p>
+                    <p className="text-lg font-semibold tracking-tight">{currentWeekSport?.count ?? 0}</p>
                   </div>
                   <div>
                     <p className="text-xs text-[var(--color-ink-tertiary)]">Time</p>
-                    <p className="text-xl font-semibold tracking-tight">{formatDuration(currentWeekSport?.movingTime ?? 0)}</p>
+                    <p className="text-lg font-semibold tracking-tight">{formatDuration(currentWeekSport?.movingTime ?? 0)}</p>
                   </div>
                   <div>
                     <p className="text-xs text-[var(--color-ink-tertiary)]">Avg Session</p>
-                    <p className="text-xl font-semibold tracking-tight">{currentWeekSport?.count ? formatDuration(Math.round((currentWeekSport.movingTime ?? 0) / currentWeekSport.count)) : '—'}</p>
+                    <p className="text-lg font-semibold tracking-tight">{currentWeekSport?.count ? formatDuration(Math.round((currentWeekSport.movingTime ?? 0) / currentWeekSport.count)) : '—'}</p>
                   </div>
                 </>
               )}
@@ -237,7 +237,7 @@ function DashboardPage() {
         {/* Recent activities */}
         <section className="animate-in stagger-6">
           <div className="flex items-baseline justify-between mb-[0.75rem]">
-            <h2 className="text-lg font-semibold">Activities</h2>
+            <h2 className="text-[length:var(--section-title-font-size)] font-semibold">Activities</h2>
             <Link to="/activities" className="text-sm text-[var(--color-accent)] hover:underline">See all</Link>
           </div>
           <div className="divide-y divide-[var(--color-border)]">
@@ -367,8 +367,8 @@ const WeekBrief = ({ athleteStravaId }: { athleteStravaId: number }) => {
   return (
     <Card>
       <CardContent className="">
-        <p className="text-xs leading-relaxed text-[var(--color-ink-secondary)]">{shortBrief}</p>
-        <Link to="/fitness" className="text-xxs text-[var(--color-accent)] font-medium mt-2 inline-block">
+        <p className="text-sm leading-relaxed text-[var(--color-ink-secondary)]">{shortBrief}</p>
+        <Link to="/fitness" className="text-xs text-[var(--color-accent)] font-medium mt-2 inline-block">
           Full analysis →
         </Link>
       </CardContent>
