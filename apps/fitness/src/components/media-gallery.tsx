@@ -49,7 +49,7 @@ export const MediaGallery = ({ items }: MediaGalleryProps) => {
   return (
     <>
       {/* Thumbnail strip */}
-      <div className="py-4 flex gap-1.5 overflow-x-auto scrollbar-none">
+      <div className="py-[var(--content-card-vertical-padding)] flex gap-1.5 overflow-x-auto scrollbar-none">
         {items.map((item, i) => (
           <button
             key={i}

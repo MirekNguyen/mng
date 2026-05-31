@@ -17,7 +17,7 @@ export const AppHeader = ({ title, athleteName, athleteImage, showBack }: AppHea
 
   return (
     <header className="sticky top-0 z-10 bg-[var(--color-surface)]/95 backdrop-blur-sm border-b border-[var(--color-border)]">
-      <div className="max-w-[var(--content-max-width)] mx-auto px-5 h-11 flex items-center justify-between">
+      <div className="max-w-[var(--max-width)] mx-auto px-layout-x h-11 flex items-center justify-between">
         <div className="flex items-center gap-2">
           {showBack && (
             <button

@@ -52,7 +52,7 @@ function ZonesPage() {
   return (
     <div className="min-h-screen pb-16">
       <AppHeader title="Zones" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} />
-      <main className="mx-auto max-w-5xl px-6 py-8 space-y-8">
+      <main className="mx-auto max-w-5xl px-layout-x py-section space-y-[var(--section-spacing)]">
         <h2 className="text-2xl font-bold">Zone Analysis</h2>
         <p className="text-zinc-400 text-sm">Based on running activities from the last 3 months</p>
 

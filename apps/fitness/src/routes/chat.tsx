@@ -96,14 +96,14 @@ function ChatPage() {
 
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto overscroll-contain">
-        <div className="max-w-[var(--content-max-width)] mx-auto px-4 py-4">
+        <div className="max-w-[var(--max-width)] mx-auto px-layout-x py-section">
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center pt-16 pb-8 text-center animate-in-scale">
               <div className="w-10 h-10 rounded-full bg-[var(--color-accent)]/10 flex items-center justify-center mb-section">
                 <ChatRoundDots width="20" height="20" stroke="var(--color-accent)" />
               </div>
               <h1 className="text-lg font-semibold mb-1.5">Ask your coach</h1>
-              <p className="text-[13px] text-[var(--color-ink-secondary)] max-w-[280px] mb-8">
+              <p className="text-xs text-[var(--color-ink-secondary)] max-w-[280px] mb-8">
                 I know your pace, HR, volume, PRs, and fitness trends. Ask me anything.
               </p>
               <div className="flex flex-wrap justify-center gap-2 max-w-[360px]">
@@ -111,7 +111,7 @@ function ChatPage() {
                   <button
                     key={s}
                     onClick={() => handleSuggestion(s)}
-                    className="px-3 py-1.5 text-[13px] rounded-full border border-[var(--color-border)] text-[var(--color-ink-secondary)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+                    className="px-3 py-1.5 text-xs rounded-full border border-[var(--color-border)] text-[var(--color-ink-secondary)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
                   >
                     {s}
                   </button>
@@ -120,7 +120,7 @@ function ChatPage() {
             </div>
           )}
 
-          <div className="space-y-4">
+          <div className="space-y-[var(--content-card-vertical-padding)]">
             {messages.map((message) => (
               <div key={message.id} className={`flex ${message.role === 'user' ? 'justify-end animate-in-right' : 'justify-start animate-in-left'}`}>
                 <div className={`max-w-[80%] ${
@@ -131,7 +131,7 @@ function ChatPage() {
                   {message.parts.map((part, i) => {
                     if (part.type === 'text') {
                       return message.role === 'user'
-                        ? <p key={i} className="text-[14px] leading-snug">{part.text}</p>
+                        ? <p key={i} className="text-sm leading-snug">{part.text}</p>
                         : <MarkdownContent key={i} text={part.text} />
                     }
                     if (part.type === 'file') {
@@ -158,13 +158,13 @@ function ChatPage() {
 
       {/* Input bar */}
       <div className="flex-shrink-0 border-t border-[var(--color-border)] bg-[var(--color-surface)] pb-[calc(3.5rem+env(safe-area-inset-bottom))]">
-        <div className="max-w-[var(--content-max-width)] mx-auto px-3 py-2">
+        <div className="max-w-[var(--max-width)] mx-auto px-layout-x py-[var(--content-card-vertical-padding)]">
           {imagePreview && (
             <div className="relative inline-block mb-2 ml-1">
               <img src={imagePreview} alt="" className="h-14 rounded-lg object-cover" />
               <button
                 onClick={removeImage}
-                className="absolute -top-1 -right-1 w-4.5 h-4.5 bg-[var(--color-ink)] text-white rounded-full text-[10px] flex items-center justify-center leading-none"
+                className="absolute -top-1 -right-1 w-4.5 h-4.5 bg-[var(--color-ink)] text-white rounded-full text-xxxs flex items-center justify-center leading-none"
               >
                 ×
               </button>
@@ -190,7 +190,7 @@ function ChatPage() {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Message..."
               disabled={isLoading}
-              className="flex-1 min-h-[36px] px-input-x py-input-y rounded-[18px] bg-[var(--color-surface-sunken)] text-[14px] text-[var(--color-ink)] placeholder:text-[var(--color-ink-faint)] outline-none focus:ring-1 focus:ring-[var(--color-accent)]/40 disabled:opacity-50"
+              className="flex-1 min-h-[36px] px-input-x py-input-y rounded-[18px] bg-[var(--color-surface-sunken)] text-sm text-[var(--color-ink)] placeholder:text-[var(--color-ink-faint)] outline-none focus:ring-1 focus:ring-[var(--color-accent)]/40 disabled:opacity-50"
             />
             <button
               type="submit"
@@ -214,7 +214,7 @@ const MarkdownContent = ({ text }: { text: string }) => {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i]
     if (line.startsWith('## ')) {
-      elements.push(<h3 key={i} className="text-[13px] font-semibold mt-2.5 mb-0.5 text-[var(--color-ink)]">{line.slice(3)}</h3>)
+      elements.push(<h3 key={i} className="text-xs font-semibold mt-2.5 mb-0.5 text-[var(--color-ink)]">{line.slice(3)}</h3>)
     } else if (line.startsWith('- ') || line.startsWith('* ')) {
       const items: string[] = [line.slice(2)]
       while (i + 1 < lines.length && (lines[i + 1].startsWith('- ') || lines[i + 1].startsWith('* '))) {
@@ -222,12 +222,12 @@ const MarkdownContent = ({ text }: { text: string }) => {
         items.push(lines[i].slice(2))
       }
       elements.push(
-        <ul key={i} className="list-disc pl-3.5 space-y-0.5 text-[13px] text-[var(--color-ink)]">
+        <ul key={i} className="list-disc pl-3.5 space-y-0.5 text-xs text-[var(--color-ink)]">
           {items.map((item, j) => <li key={j} className="leading-relaxed">{renderInline(item)}</li>)}
         </ul>
       )
     } else if (line.trim()) {
-      elements.push(<p key={i} className="text-[13px] leading-relaxed text-[var(--color-ink)]">{renderInline(line)}</p>)
+      elements.push(<p key={i} className="text-xs leading-relaxed text-[var(--color-ink)]">{renderInline(line)}</p>)
     }
   }
 

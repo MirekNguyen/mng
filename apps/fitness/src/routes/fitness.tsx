@@ -58,7 +58,7 @@ function FitnessPage() {
     <div className="min-h-screen pb-16">
       <AppHeader title="Fitness" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} />
 
-      <main className="max-w-[var(--content-max-width)] mx-auto px-5 pt-6 space-y-8">
+      <main className="max-w-[var(--max-width)] mx-auto px-layout-x pt-section space-y-[var(--section-spacing)]">
         <h1 className="text-lg font-semibold">Training Load</h1>
 
         {/* CTL / ATL / TSB */}
@@ -113,7 +113,7 @@ function FitnessPage() {
 
         {/* Injury Risk */}
         {injuryRisk && (
-          <section className="py-5 border-t border-[var(--color-border)]">
+          <section className="py-[var(--content-card-vertical-padding)] border-t border-[var(--color-border)]">
             <h2 className="text-[length:var(--small-section-title-font-size)] font-semibold mb-[0.75rem]">Injury Risk</h2>
             <div className="flex items-center gap-4">
               <div className="flex-1">
@@ -130,7 +130,7 @@ function FitnessPage() {
 
         {/* Race Predictions */}
         {racePredictions && racePredictions.length > 0 && (
-          <section className="py-5 border-t border-[var(--color-border)]">
+          <section className="py-[var(--content-card-vertical-padding)] border-t border-[var(--color-border)]">
             <h2 className="text-[length:var(--small-section-title-font-size)] font-semibold mb-[0.75rem]">Race Predictions</h2>
             <div className="space-y-2">
               {racePredictions.map((pred) => (
@@ -151,7 +151,7 @@ function FitnessPage() {
 
         {/* Training Insights */}
         {insights && insights.length > 0 && (
-          <section className="py-5 border-t border-[var(--color-border)]">
+          <section className="py-[var(--content-card-vertical-padding)] border-t border-[var(--color-border)]">
             <h2 className="text-[length:var(--small-section-title-font-size)] font-semibold mb-[0.75rem]">Insights</h2>
             <div className="space-y-3">
               {insights.map((insight, i) => (
@@ -236,7 +236,7 @@ const WeeklyAnalysis = ({ athleteStravaId }: { athleteStravaId: number }) => {
   if (!content && !isLoading) return null
 
   return (
-    <section className="py-5 border-t border-[var(--color-border)]">
+    <section className="py-[var(--content-card-vertical-padding)] border-t border-[var(--color-border)]">
       <h2 className="text-[length:var(--small-section-title-font-size)] font-semibold mb-[0.75rem]">This Week</h2>
       {isLoading && !content && (
         <div className="flex items-center gap-2 text-sm text-[var(--color-ink-tertiary)]">

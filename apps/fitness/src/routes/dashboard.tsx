@@ -118,7 +118,7 @@ function DashboardPage() {
     <div className="min-h-screen pb-16">
       <AppHeader title="Fitness" athleteName={athleteName} athleteImage={athleteImage} />
 
-      <main className="max-w-[var(--content-max-width)] mx-auto px-5 pt-6 space-y-8">
+      <main className="max-w-[var(--max-width)] mx-auto px-layout-x pt-section space-y-[var(--section-spacing)]">
         {/* Refresh */}
         <div className="flex justify-end -mt-2">
           <button
@@ -261,7 +261,7 @@ function DashboardPage() {
             ))}
           </div>
           {activities.length === 0 && (
-            <p className="text-sm text-[var(--color-ink-tertiary)] py-8 text-center">No activities synced yet.</p>
+            <p className="text-sm text-[var(--color-ink-tertiary)] py-section text-center">No activities synced yet.</p>
           )}
         </section>
       </main>
@@ -312,7 +312,7 @@ const TrainingInsight = ({ fitness }: { fitness: FitnessStatus }) => {
   return (
     <Link to="/fitness" className="flex items-center gap-2.5 rounded-lg px-3.5 py-list-y transition-colors hover:opacity-90" style={{ backgroundColor: bgColor }}>
       <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: dotColor }} />
-      <p className="text-[13px] text-[var(--color-ink)] flex-1">{message}</p>
+      <p className="text-xs text-[var(--color-ink)] flex-1">{message}</p>
       <AltArrowRight width="14" height="14" stroke="var(--color-ink-tertiary)" />
     </Link>
   )
@@ -354,7 +354,7 @@ const WeekBrief = ({ athleteStravaId }: { athleteStravaId: number }) => {
   if (!shortBrief && isLoading) {
     return (
       <Card>
-        <CardContent className="px-4 py-3 space-y-2">
+        <CardContent className=" space-y-2">
           <Skeleton className="h-3 w-3/4" />
           <Skeleton className="h-3 w-1/2" />
         </CardContent>
@@ -366,9 +366,9 @@ const WeekBrief = ({ athleteStravaId }: { athleteStravaId: number }) => {
 
   return (
     <Card>
-      <CardContent className="px-4 py-3">
-        <p className="text-[13px] leading-relaxed text-[var(--color-ink-secondary)]">{shortBrief}</p>
-        <Link to="/fitness" className="text-[12px] text-[var(--color-accent)] font-medium mt-2 inline-block">
+      <CardContent className="">
+        <p className="text-xs leading-relaxed text-[var(--color-ink-secondary)]">{shortBrief}</p>
+        <Link to="/fitness" className="text-xxs text-[var(--color-accent)] font-medium mt-2 inline-block">
           Full analysis →
         </Link>
       </CardContent>

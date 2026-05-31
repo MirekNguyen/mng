@@ -34,7 +34,7 @@ function CoachPage() {
   return (
     <div className="min-h-screen pb-16">
       <AppHeader title="AI Coach" athleteName={athleteName} athleteImage={athleteImage} />
-      <main className="mx-auto max-w-5xl px-6 py-8 space-y-8">
+      <main className="mx-auto max-w-5xl px-layout-x py-section space-y-[var(--section-spacing)]">
         <h2 className="text-2xl font-bold">AI Coach</h2>
         <p className="text-zinc-400">Personalized insights powered by AI analysis of your training data.</p>
 

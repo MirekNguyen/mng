@@ -61,7 +61,7 @@ function PredictionsPage() {
   return (
     <div className="min-h-screen pb-16">
       <AppHeader title="Predictions" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} />
-      <main className="mx-auto max-w-5xl px-6 py-8 space-y-8">
+      <main className="mx-auto max-w-5xl px-layout-x py-section space-y-[var(--section-spacing)]">
         <h2 className="text-2xl font-bold">Performance Predictions</h2>
 
         {/* Injury Risk */}

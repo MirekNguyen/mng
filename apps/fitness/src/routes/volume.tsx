@@ -110,7 +110,7 @@ function VolumePage() {
     <div className="min-h-screen pb-16">
       <AppHeader title="Volume" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} />
 
-      <main className="max-w-[var(--content-max-width)] mx-auto px-5 pt-6 space-y-6">
+      <main className="max-w-[var(--max-width)] mx-auto px-layout-x pt-section space-y-6">
         {/* Sport tabs */}
         <div className="flex gap-2 overflow-x-auto">
           {sportOptions.map((sport) => (
@@ -206,7 +206,7 @@ function VolumePage() {
 
 function SectionHeader({ label }: { label: string }) {
   return (
-    <div className="bg-[var(--color-surface-sunken)] -mx-5 px-5 py-2 mb-0">
+    <div className="bg-[var(--color-surface-sunken)] -mx-5 px-layout-x py-2 mb-0">
       <p className="text-xs font-medium uppercase tracking-wide text-[var(--color-ink-tertiary)]">{label}</p>
     </div>
   )

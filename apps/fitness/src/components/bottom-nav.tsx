@@ -40,7 +40,7 @@ export const BottomNav = () => {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-[var(--color-surface)]/95 backdrop-blur-sm border-t border-[var(--color-border)] pb-[env(safe-area-inset-bottom)]">
-      <div className="max-w-[var(--content-max-width)] mx-auto flex items-center justify-around h-12">
+      <div className="max-w-[var(--max-width)] mx-auto flex items-center justify-around h-12">
         {tabs.map((tab) => {
           const isActive = pathname === tab.to || pathname.startsWith(tab.to + '/')
           return (
@@ -54,7 +54,7 @@ export const BottomNav = () => {
               <span className={`transition-transform duration-200 ${isActive ? 'scale-110' : 'scale-100'}`} style={{ transitionTimingFunction: 'var(--ease-out-quart)' }}>
                 {tab.icon(isActive)}
               </span>
-              <span className="text-[10px] font-medium">{tab.label}</span>
+              <span className="text-xxxs font-medium">{tab.label}</span>
             </Link>
           )
         })}

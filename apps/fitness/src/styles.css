@@ -1,48 +1,40 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: -apple-system, BlinkMacSystemFont, "Apple Color Emoji", Inter, Roboto, Segoe UI, Helvetica Neue, Arial, Noto Sans, sans-serif;
-  --font-mono: "SF Mono", menlo, monaco, consolas, "Courier New", Courier, monospace;
+  --font-sans: var(--font);
+  --font-mono: var(--mono-font);
 
-  --font-weight-light: 300;
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;
-  --font-weight-bold: 600;
+  --font-weight-light: var(--font-weight-light);
+  --font-weight-regular: var(--font-weight-regular);
+  --font-weight-medium: var(--font-weight-medium);
+  --font-weight-bold: var(--font-weight-bold);
 
   /* Map Luma typography straight to Tailwind text sizes */
-  --text-xxxs: 0.625rem;
-  --text-xxxs--line-height: 1.3;
-  --text-xxs: 0.75rem;
-  --text-xxs--line-height: 1.3;
-  --text-xs: 0.8125rem;
-  --text-xs--line-height: 1.3;
-  --text-sm: 0.875rem;
-  --text-sm--line-height: 1.3;
-  --text-base: 1rem;
-  --text-base--line-height: 1.5;
-  --text-lg: 1.125rem;
-  --text-lg--line-height: 1.3;
-  --text-xl: 1.25rem;
-  --text-xl--line-height: 1.2;
-  --text-2xl: 1.375rem;
-  --text-2xl--line-height: 1.2;
-  --text-3xl: 1.5rem;
-  --text-3xl--line-height: 1.2;
+  --text-xxxs: var(--font-size-xxxs);
+  --text-xxs: var(--font-size-xxs);
+  --text-xs: var(--font-size-xs);
+  --text-sm: var(--font-size-sm);
+  --text-md: var(--font-size-md);
+  --text-base: var(--font-size-md);
+  --text-lg: var(--font-size-lg);
+  --text-xl: var(--font-size-xl);
+  --text-2xl: var(--font-size-xxl);
+  --text-3xl: var(--font-size-xxxl);
 
   /* Line heights */
-  --leading-default: 1.5;
-  --leading-reduced: 1.3;
-  --leading-title: 1.2;
-  --leading-tight: 1.15;
+  --leading-default: var(--default-line-height);
+  --leading-reduced: var(--reduced-line-height);
+  --leading-title: var(--title-line-height);
+  --leading-tight: var(--reduced-title-line-height);
 
   /* Border radius mapped to Tailwind scales */
-  --radius-sm: 0.25rem;     /* --small-border-radius */
-  --radius-md: 0.5rem;      /* --border-radius */
-  --radius: 0.5rem;
-  --radius-lg: 0.75rem;     /* --card-border-radius */
-  --radius-xl: 1rem;        /* --large-border-radius */
-  --radius-2xl: 1.5rem;     /* --card-squircle-border-radius */
-  --radius-3xl: 2rem;       /* --modal-squircle-border-radius */
+  --radius-sm: var(--small-border-radius);
+  --radius-md: var(--border-radius);
+  --radius: var(--border-radius);
+  --radius-lg: var(--card-border-radius);
+  --radius-xl: var(--large-border-radius);
+  --radius-2xl: var(--card-squircle-border-radius);
+  --radius-3xl: var(--modal-squircle-border-radius);
 
   /* Spacing aliases for Tailwind (p-card-x, etc) */
   --spacing-card-y: var(--content-card-vertical-padding);
@@ -54,7 +46,17 @@
   --spacing-input-y: var(--input-vertical-padding);
   --spacing-input-x: var(--input-horizontal-padding);
   --spacing-section: var(--section-spacing);
+  --spacing-layout-x: var(--horizontal-padding);
 
+  /* Shadows mapped to Tailwind scales */
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-modal: var(--shadow-modal);
+  
+  --backdrop-blur: blur(24px);
   /* Colors */
   --color-surface: #fafaf8;
   --color-surface-raised: #ffffff;
@@ -107,37 +109,108 @@
 }
 
 :root {
-  --max-width: 820px;
-  --max-width-wide: 960px;
-  --max-width-extra-wide: 1080px;
-  --content-max-width: 600px;
-  --horizontal-padding: 1rem;
+  /* Typography */
+  --font: -apple-system, BlinkMacSystemFont, "Apple Color Emoji", Inter, Roboto, Segoe UI, Helvetica Neue, Arial, Noto Sans, sans-serif;
+  --mono-font: "SF Mono", menlo, monaco, consolas, "Courier New", Courier, monospace;
+  --default-line-height: 1.5;
+  --reduced-line-height: 1.3;
+  --title-line-height: 1.2;
+  --reduced-title-line-height: 1.15;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 600;
+  --font-size-xxxl: 1.5rem;
+  --font-size-xxl: 1.375rem;
+  --font-size-xl: 1.25rem;
+  --font-size-lg: 1.125rem;
+  --font-size-md: 1rem;
+  --font-size-sm: .875rem;
+  --font-size-xs: .8125rem;
+  --font-size-xxs: .75rem;
+  --font-size-xxxs: .625rem;
+  --section-title-font-size: var(--font-size-xl);
+  --section-subtitle-font-size: var(--font-size-md);
+  --small-section-title-font-size: var(--font-size-lg);
+  --small-section-subtitle-font-size: var(--font-size-sm);
 
-  --content-card-vertical-padding: 1rem;
-  --content-card-horizontal-padding: 1.125rem;
-  
-  --base-list-row-vertical-padding: 0.75rem;
-  --base-list-row-horizontal-padding: 1rem;
-  
-  --modal-vertical-padding: 1rem;
-  --modal-horizontal-padding: 1.25rem;
-  --modal-header-footer-padding: 0.6875rem 1.25rem;
-  
+  /* Layout */
+  --max-width: 820px;
+  --max-width-wide-page: 960px;
+  --max-width-extra-wide-page: 1080px;
+  --horizontal-padding: 1rem;
   --section-spacing: 2rem;
 
-  --input-vertical-padding: 0.625rem;
-  --input-horizontal-padding: 0.875rem;
+  /* Border Radius */
+  --small-border-radius: .25rem;
+  --small-squircle-border-radius: .5rem;
+  --border-radius: .5rem;
+  --squircle-border-radius: 1rem;
+  --large-border-radius: 1rem;
+  --modal-border-radius: var(--large-border-radius);
+  --modal-squircle-border-radius: 2rem;
+  --card-border-radius: .75rem;
+  --card-squircle-border-radius: 1.5rem;
+
+  /* Spacing */
+  --content-card-vertical-padding: 1rem;
+  --content-card-horizontal-padding: 1.125rem;
+  --event-row-padding: .75rem 1rem;
+  --event-row-leading-padding: 1rem;
+  --base-list-row-vertical-padding: .75rem;
+  --base-list-row-horizontal-padding: 1rem;
+  --segment-gap: .25rem;
+  --segment-padding: .25rem .75rem;
+  --segment-icon-gap: .375rem;
+  --small-segment-gap: .125rem;
+  --small-segment-padding: .3125rem .5rem;
+
+  /* Inputs */
+  --input-horizontal-padding: .875rem;
+  --input-vertical-padding: .625rem;
   --input-font-size: 1rem;
   --input-height: calc(2.25rem + 2px);
-  
-  --small-input-padding: 0.4375rem 0.625rem;
-  --small-input-font-size: 0.875rem;
+  --small-input-padding: .4375rem .625rem;
+  --small-input-font-size: .875rem;
   --small-input-height: calc(1.75rem + 2px);
-  
   --large-input-horizontal-padding: 1.125rem;
-  --large-input-vertical-padding: 0.75rem;
+  --large-input-vertical-padding: .75rem;
   --large-input-font-size: 1.125rem;
   --large-input-height: calc(2.625rem + 2px);
+
+  /* Buttons */
+  --button-padding: 0.625rem 0.875rem;
+  --button-height: calc(2.25rem + 2px);
+  --button-font-size: 1rem;
+  --button-gap: 0.5rem;
+  --button-small-padding: 0.4375rem 0.625rem;
+  --button-small-height: calc(1.75rem + 2px);
+  --button-small-font-size: 0.875rem;
+  --button-small-gap: 0.375rem;
+  --button-large-padding: 0.75rem 1.125rem;
+  --button-large-height: calc(2.625rem + 2px);
+  --button-large-font-size: 1.125rem;
+  --button-large-gap: 0.625rem;
+  --button-icon-only-padding: 0.625rem;
+  --button-icon-only-compact-padding: 0.4375rem;
+
+  /* Modals */
+  --modal-vertical-padding: 1rem;
+  --modal-horizontal-padding: 1.25rem;
+  --modal-header-footer-padding: .6875rem 1.25rem;
+
+  /* Shadows */
+  --light-shadow-xs: 0 1px 4px rgba(0,0,0,.1);
+  --light-shadow-sm: 0 1px 3px rgba(0,0,0,.02), 0 2px 7px rgba(0,0,0,.03), 0 3px 14px rgba(0,0,0,.04), 0 7px 29px rgba(0,0,0,.05), 0 20px 80px rgba(0,0,0,.06);
+  --light-shadow: 0 1.6px 3px rgba(0,0,0,.02), 0 4.2px 7px rgba(0,0,0,.03), 0 8px 14px rgba(0,0,0,.04), 0 17.5px 29px rgba(0,0,0,.05), 0 48px 80px rgba(0,0,0,.06);
+  --light-shadow-lg: 0 3px 3px rgba(0,0,0,.03), 0 8px 7px rgba(0,0,0,.04), 0 17px 14px rgba(0,0,0,.05), 0 35px 29px rgba(0,0,0,.06), 0 96px 80px rgba(0,0,0,.07);
+  --light-shadow-xl: 0 4.5px 3px rgba(0,0,0,.04), 0 11.3px 7px rgba(0,0,0,.06), 0 23px 14px rgba(0,0,0,.08), 0 47.5px 29px rgba(0,0,0,.1), 0 130px 80px rgba(0,0,0,.14);
+  
+  --shadow-xs: var(--light-shadow-xs);
+  --shadow-sm: var(--light-shadow-sm);
+  --shadow: var(--light-shadow);
+  --shadow-lg: var(--light-shadow-lg);
+  --shadow-xl: var(--light-shadow-xl);
 
   --transition-duration: 0.3s;
   --fast-transition-duration: 0.2s;
@@ -146,11 +219,6 @@
   --bounce-transition-fn: cubic-bezier(0.54, 1.12, 0.38, 1.11);
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-
-  --section-title-font-size: var(--text-xl);
-  --section-subtitle-font-size: var(--text-base);
-  --small-section-title-font-size: var(--text-lg);
-  --small-section-subtitle-font-size: var(--text-sm);
 }
 
 @media (max-width: 450px) {
@@ -206,6 +274,11 @@
 
   --color-border: #2a2926;
   --color-border-strong: #3d3c39;
+
+  --opacity-8: rgba(255,255,255,.08);
+  --opacity-16: rgba(255,255,255,.16);
+  --opacity-32: rgba(255,255,255,.32);
+  --shadow-modal: 0 0 0 1px var(--opacity-8),0 3px 3px rgba(0,0,0,.15),0 8px 7px rgba(0,0,0,.2),0 17px 14px rgba(0,0,0,.25),0 35px 29px rgba(0,0,0,.3),0px -4px 4px 0px rgba(0,0,0,.15) inset;
 
   --color-accent: #ff6b2c;
   --color-accent-hover: #ff8a54;

@@ -90,7 +90,7 @@ function ActivityDetailPage() {
     <div className="min-h-screen pb-16">
       {/* Nav */}
       <nav className="sticky top-0 z-10 bg-[var(--color-surface)]/95 backdrop-blur-sm border-b border-[var(--color-border)]">
-        <div className="max-w-[var(--content-max-width)] mx-auto px-5 h-12 flex items-center justify-between">
+        <div className="max-w-[var(--max-width)] mx-auto px-layout-x h-12 flex items-center justify-between">
           <button onClick={() => router.history.back()} className="text-sm text-[var(--color-ink-secondary)] hover:text-[var(--color-ink)] transition-colors">
             ← Back
           </button>
@@ -98,10 +98,10 @@ function ActivityDetailPage() {
         </div>
       </nav>
 
-      <main className="max-w-[var(--content-max-width)] mx-auto">
+      <main className="max-w-[var(--max-width)] mx-auto">
         {/* Header */}
-        <header className="pt-6 pb-4 px-5">
-          <p className="text-[13px] text-[var(--color-ink-tertiary)]">
+        <header className="pt-6 pb-4 px-layout-x">
+          <p className="text-xs text-[var(--color-ink-tertiary)]">
             {formatDate(activity.startDateLocal)} · {formatTime(activity.startDateLocal)}
           </p>
           <h1 className="text-2xl font-bold tracking-tight mt-1 leading-tight">{activity.name}</h1>
@@ -111,7 +111,7 @@ function ActivityDetailPage() {
         </header>
 
         {/* Metrics */}
-        <section className="grid grid-cols-2 gap-y-4 py-4 mx-5 border-y border-[var(--color-border)]">
+        <section className="grid grid-cols-2 gap-y-4 py-[var(--content-card-vertical-padding)] mx-5 border-y border-[var(--color-border)]">
           <StatPair label="Distance" value={formatDistance(activity.distance)} />
           <StatPair label="Avg Pace" value={formatPace(activity.averageSpeed, activity.type)} />
           <StatPair label="Moving Time" value={formatDuration(activity.movingTime)} />
@@ -121,7 +121,7 @@ function ActivityDetailPage() {
         </section>
 
         {/* Kudos & Comments count - Strava style (under metrics) */}
-        <div className="px-5">
+        <div className="px-layout-x">
           <KudosBar kudos={kudos} kudosCount={activity.kudosCount} commentCount={comments?.length ?? 0} />
         </div>
 
@@ -144,7 +144,7 @@ function ActivityDetailPage() {
 
         {/* Photos & Videos */}
         {allPhotos.length > 0 && (
-          <div className="px-5">
+          <div className="px-layout-x">
             <MediaGallery items={allPhotos.map((photo) => {
               const url = photo.urls?.['600'] ?? photo.urls?.['100'] ?? Object.values(photo.urls ?? {})[0]
               const isVideo = url?.includes('.mp4') || url?.includes('video')
@@ -154,11 +154,11 @@ function ActivityDetailPage() {
         )}
 
         {/* AI Analysis - Strava "Relative Effort" / analysis position */}
-        <div className="px-5">
+        <div className="px-layout-x">
           <AiAnalysisSection athleteStravaId={athleteStravaId} activityStravaId={activity.stravaId} />
         </div>
 
-        <div className="px-5">
+        <div className="px-layout-x">
         {/* Splits - collapsible */}
         {splits && splits.length > 0 && (
           <CollapsibleSection title="Splits" count={splits.length}>
@@ -323,7 +323,7 @@ function ActivityDetailPage() {
 
         {/* Comments */}
         {comments && comments.length > 0 && (
-          <section className="py-5 border-t border-[var(--color-border)]">
+          <section className="py-[var(--content-card-vertical-padding)] border-t border-[var(--color-border)]">
             <h2 className="text-[length:var(--small-section-title-font-size)] font-semibold mb-[0.75rem]">Comments</h2>
             <div className="space-y-3">
               {comments.map((c, i) => (
@@ -404,7 +404,7 @@ function CollapsibleSection({ title, count, children }: { title: string; count: 
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <section className="py-5 border-t border-[var(--color-border)]">
+    <section className="py-[var(--content-card-vertical-padding)] border-t border-[var(--color-border)]">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between text-left"
@@ -428,7 +428,7 @@ function MetricSection({ title, defaultOpen = true, children }: {
   const [isOpen, setIsOpen] = useState(defaultOpen)
 
   return (
-    <section className="py-5 border-t border-[var(--color-border)]">
+    <section className="py-[var(--content-card-vertical-padding)] border-t border-[var(--color-border)]">
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex items-center justify-between text-left"
@@ -547,7 +547,7 @@ function AiAnalysisSection({ athleteStravaId, activityStravaId }: { athleteStrav
 
   if (status === 'loading') {
     return (
-      <section className="py-5 border-t border-[var(--color-border)]">
+      <section className="py-[var(--content-card-vertical-padding)] border-t border-[var(--color-border)]">
         <div className="flex items-center gap-2">
           <div className="h-3.5 w-3.5 rounded-full border-2 border-[var(--color-accent)] border-t-transparent animate-spin" />
           <span className="text-sm text-[var(--color-ink-tertiary)]">Analyzing workout...</span>
@@ -559,7 +559,7 @@ function AiAnalysisSection({ athleteStravaId, activityStravaId }: { athleteStrav
   if (status === 'error' || !analysis) return null
 
   return (
-    <section className="py-5 border-t border-[var(--color-border)]">
+    <section className="py-[var(--content-card-vertical-padding)] border-t border-[var(--color-border)]">
       <h2 className="text-[length:var(--small-section-title-font-size)] font-semibold mb-[0.75rem]">AI Analysis</h2>
       <p className="text-sm text-[var(--color-ink-secondary)] leading-relaxed">{analysis.summary as string}</p>
       {analysis.recoveryRecommendation && (

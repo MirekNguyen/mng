@@ -149,7 +149,7 @@ export const RouteMap = ({ encodedPolyline, splits, segments }: RouteMapProps) =
               <div className="flex flex-col gap-1.5">
                 {/* Header */}
                 <div className="flex items-baseline justify-between gap-3">
-                  <span className="font-bold text-[13px] tracking-tight">Km {km}</span>
+                  <span className="font-bold text-xs tracking-tight">Km {km}</span>
                   {split && (
                     <span className="text-[11px] font-semibold text-[#fc4c02]">{formatPaceFromSpeed(split.average_speed)} /km</span>
                   )}
@@ -175,7 +175,7 @@ export const RouteMap = ({ encodedPolyline, splits, segments }: RouteMapProps) =
                 {kmSegments.length > 0 && (
                   <div className="border-t border-neutral-200 dark:border-neutral-700 pt-1.5 mt-0.5">
                     {kmSegments.map((seg, i) => (
-                      <div key={i} className="flex items-center gap-1.5 text-[10px]">
+                      <div key={i} className="flex items-center gap-1.5 text-xxxs">
                         <span className="text-neutral-400 dark:text-neutral-500">&#9873;</span>
                         <span className="text-neutral-600 dark:text-neutral-300 truncate max-w-[140px]">{seg.name}</span>
                         {seg.pr_rank && <span className="text-amber-500 font-semibold">PR{seg.pr_rank}</span>}
