@@ -1,11 +1,11 @@
 import { streamText } from "ai";
-import { google } from "@ai-sdk/google";
+import { deepseek } from "@ai-sdk/deepseek";
 import type { StravaActivity, StravaPersonalRecord } from "@mng/database/schema/fitness.schema";
 import { formatDuration, formatPace } from "./format.utils";
 import type { FitnessData } from "./training-load.calculator";
 import type { InjuryRisk } from "./predictions.calculator";
 
-const model = google("gemini-3-flash-preview");
+const model = deepseek("deepseek-chat");
 
 export const generateWeeklyBrief = (
   activities: StravaActivity[],

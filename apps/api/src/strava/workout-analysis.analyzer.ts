@@ -1,10 +1,10 @@
 import { generateObject } from "ai";
-import { google } from "@ai-sdk/google";
+import { deepseek } from "@ai-sdk/deepseek";
 import { z } from "zod";
 import type { StravaActivity } from "@mng/database/schema/fitness.schema";
 import { formatDuration, formatPace } from "./format.utils";
 
-const model = google("gemini-3.1-pro-preview");
+const model = deepseek("deepseek-chat");
 
 const WorkoutAnalysisSchema = z.object({
   effortRating: z.number().min(1).max(10).describe("Effort intensity 1-10"),

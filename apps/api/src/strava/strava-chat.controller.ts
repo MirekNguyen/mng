@@ -1,13 +1,13 @@
 import Elysia, { t } from "elysia";
 import { streamText, convertToModelMessages, type UIMessage } from "ai";
-import { google } from "@ai-sdk/google";
+import { deepseek } from "@ai-sdk/deepseek";
 import { db } from "@mng/database/db";
 import { stravaActivities, stravaPersonalRecords } from "@mng/database/schema/fitness.schema";
 import { desc, eq, gte, and } from "drizzle-orm";
 import { calculateFitnessData } from "./training-load.calculator";
 import { formatDuration, formatPace } from "./format.utils";
 
-const model = google("gemini-3.5-flash");
+const model = deepseek("deepseek-chat");
 
 const buildAthleteContext = async (athleteStravaId: number): Promise<string> => {
   const since = new Date();
