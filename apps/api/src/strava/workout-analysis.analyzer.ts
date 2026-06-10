@@ -4,7 +4,7 @@ import { z } from "zod";
 import type { StravaActivity } from "@mng/database/schema/fitness.schema";
 import { formatDuration, formatPace } from "./format.utils";
 
-const model = deepseek("deepseek-chat");
+const model = deepseek("deepseek-v4-flash");
 
 const WorkoutAnalysisSchema = z.object({
   effortRating: z.number().min(1).max(10).describe("Effort intensity 1-10"),

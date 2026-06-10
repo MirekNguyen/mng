@@ -5,7 +5,7 @@ import { formatDuration, formatPace } from "./format.utils";
 import type { FitnessData } from "./training-load.calculator";
 import type { InjuryRisk } from "./predictions.calculator";
 
-const model = deepseek("deepseek-chat");
+const model = deepseek("deepseek-v4-flash");
 
 export const generateWeeklyBrief = (
   activities: StravaActivity[],

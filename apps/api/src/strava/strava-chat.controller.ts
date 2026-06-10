@@ -7,7 +7,7 @@ import { desc, eq, gte, and } from "drizzle-orm";
 import { calculateFitnessData } from "./training-load.calculator";
 import { formatDuration, formatPace } from "./format.utils";
 
-const model = deepseek("deepseek-chat");
+const model = deepseek("deepseek-v4-flash");
 
 const buildAthleteContext = async (athleteStravaId: number): Promise<string> => {
   const since = new Date();
