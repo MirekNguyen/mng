@@ -122,7 +122,7 @@ const app = new Elysia({ prefix: "strava/analytics" })
     "/weekly-brief/:athleteStravaId",
     async ({ params }) => {
       const athleteStravaId = Number(params.athleteStravaId);
-      const activities = await getActivitiesForDays(athleteStravaId, 30);
+      const activities = await getActivitiesForDays(athleteStravaId, 90);
 
       // Cache key: athlete + latest activity + current training week (Mon-Sun)
       const latestActivity = activities[activities.length - 1];
@@ -191,7 +191,7 @@ const app = new Elysia({ prefix: "strava/analytics" })
     async ({ params }) => {
       const athleteStravaId = Number(params.athleteStravaId);
       const records = await StravaRepository.getPersonalRecords(athleteStravaId);
-      const activities = await getActivitiesForDays(athleteStravaId, 30);
+      const activities = await getActivitiesForDays(athleteStravaId, 90);
       const fitnessData = calculateFitnessData(activities, 90);
 
       const result = generatePerformancePrediction(records, activities, fitnessData);

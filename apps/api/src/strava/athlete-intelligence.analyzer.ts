@@ -7,6 +7,64 @@ import type { InjuryRisk } from "./predictions.calculator";
 
 const model = deepseek("deepseek-v4-flash");
 
+// Monday 00:00:00 in local time of the activity data
+const getMondayOf = (date: Date): Date => {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  const dow = d.getDay(); // 0=Sun
+  d.setDate(d.getDate() - (dow === 0 ? 6 : dow - 1));
+  return d;
+};
+
+// Derive max HR from all activities with HR data
+const deriveMaxHr = (activities: StravaActivity[]): number => {
+  const maxes = activities
+    .map((a) => a.maxHeartrate ?? 0)
+    .filter((hr) => hr > 100 && hr < 230);
+  return maxes.length > 0 ? Math.max(...maxes) : 190;
+};
+
+// Format HR zones from a maxHr value
+const formatHrZones = (maxHr: number): string => {
+  const zones = [
+    { name: "Z1 Recovery", minPct: 0, maxPct: 0.6 },
+    { name: "Z2 Aerobic", minPct: 0.6, maxPct: 0.7 },
+    { name: "Z3 Tempo", minPct: 0.7, maxPct: 0.8 },
+    { name: "Z4 Threshold", minPct: 0.8, maxPct: 0.9 },
+    { name: "Z5 VO2max", minPct: 0.9, maxPct: 1.01 },
+  ];
+  return zones
+    .map((z) => `  ${z.name}: ${Math.round(z.minPct * maxHr)}–${Math.round(z.maxPct * maxHr)} bpm`)
+    .join("\n");
+};
+
+// Compact weekly summary for historical weeks
+const buildWeekSummary = (
+  weekStart: Date,
+  weekEnd: Date,
+  activities: StravaActivity[],
+  label: string,
+): string => {
+  const weekActs = activities.filter((a) => {
+    const d = new Date(a.startDateLocal);
+    return d >= weekStart && d < weekEnd;
+  });
+  const runs = weekActs.filter((a) => a.type === "Run");
+  const dist = runs.reduce((s, a) => s + a.distance, 0) / 1000;
+  const time = runs.reduce((s, a) => s + a.movingTime, 0);
+  const avgPace = dist > 0 ? (time / (dist * 1000)) * 1000 : 0;
+  const hrRuns = runs.filter((a) => (a.averageHeartrate ?? 0) > 0);
+  const avgHr = hrRuns.length > 0
+    ? Math.round(hrRuns.reduce((s, a) => s + (a.averageHeartrate ?? 0), 0) / hrRuns.length)
+    : null;
+  const paceStr = avgPace > 0
+    ? `${Math.floor(avgPace / 60)}:${Math.round(avgPace % 60).toString().padStart(2, "0")}/km`
+    : "—";
+  const hrStr = avgHr ? `, avg HR ${avgHr}` : "";
+  const dateLabel = weekStart.toLocaleDateString("en", { month: "short", day: "numeric" });
+  return `  ${label} (${dateLabel}): ${runs.length} runs, ${dist.toFixed(1)} km, ${formatDuration(time)}, ${paceStr}${hrStr}`;
+};
+
 export const generateWeeklyBrief = (
   activities: StravaActivity[],
   fitnessData: FitnessData,
@@ -22,7 +80,7 @@ export const generateWeeklyBrief = (
         role: "system",
         content: `You are an expert endurance coach reviewing a casual runner's CURRENT training week (Monday to today). This athlete is a health-conscious urban runner — they stop at traffic lights, run in the city, and train for general fitness with occasional race goals.
 
-IMPORTANT: "This week" means Monday through today ONLY. "Last week" is the previous Monday-Sunday. Do NOT mix them up. The data is pre-split for you — "This Week's Activities" is the current week, "Last Week" is comparison data.
+IMPORTANT: "This week" means Monday through today ONLY. "Last week" is the previous Monday-Sunday. Previous weeks are clearly labeled. Do NOT mix them up. The data is pre-split for you.
 
 Your analysis must be data-driven: reference actual numbers, paces, HR values, and trends from the provided data. Never give generic advice.
 
@@ -33,25 +91,25 @@ Structure your response EXACTLY as:
 
 ## Performance Signals
 3-4 bullet points on what the data reveals:
-- Pace trends (improving, maintaining, declining)
-- HR efficiency (pace at given HR — is it improving?)
-- Recovery quality (resting HR trends, easy run HR)
-- Volume progression (safe increase or spike?)
+- Pace trends vs prior weeks (improving, maintaining, declining)
+- HR efficiency (pace at given HR vs prior weeks — is aerobic fitness building?)
+- Recovery quality based on easy run HR and TSB
+- Volume trend: is the 4-week progression safe?
 
 ## Highlight
-Pick the best session this week and explain WHY it was good (pacing strategy, HR control, distance PR, etc.)
+Pick the best session this week and explain WHY it was good (pacing, HR control, distance, splits).
 
 ## Watch Out
-Only mention if genuinely relevant — fatigue indicators, HR drift on easy runs, volume spike, skipped rest days.
+Only mention if genuinely relevant — fatigue, HR drift, volume spike, injury risk. Cite specific numbers.
 
 ## Next Week
-2-3 specific prescriptions based on the data. E.g. "Add one tempo interval session at 4:50-5:00/km pace" or "Keep weekly volume at 35km, but replace one easy run with hills."
+2-3 specific prescriptions based on the full trend, not just this week. E.g. "Add one tempo at 4:50-5:00/km" or "Reduce volume 10% — ACWR is high."
 
 IMPORTANT:
-- Urban running context: stops at lights are NORMAL. Elapsed > moving time is not a concern.
-- Keep it under 250 words.
-- Be warm but direct. No fluff, no motivational clichés.
-- If data is limited, say what you CAN observe and what you'd need more of.`,
+- Urban running: stops at lights are NORMAL. Elapsed > moving time is fine.
+- HR zones are provided — use them to categorize effort levels.
+- Keep it under 280 words.
+- Be warm but direct. No fluff, no motivational clichés.`,
       },
       {
         role: "user",
@@ -110,37 +168,51 @@ const buildWeeklyContext = (
   records: StravaPersonalRecord[],
 ): string => {
   const now = new Date();
-
-  // Use Monday-Sunday training weeks (standard in running)
-  const dayOfWeek = now.getDay(); // 0=Sun, 1=Mon...
-  const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-  const thisMonday = new Date(now);
-  thisMonday.setDate(thisMonday.getDate() - daysSinceMonday);
-  thisMonday.setHours(0, 0, 0, 0);
-
+  const thisMonday = getMondayOf(now);
+  const nextMonday = new Date(thisMonday);
+  nextMonday.setDate(nextMonday.getDate() + 7);
   const lastMonday = new Date(thisMonday);
   lastMonday.setDate(lastMonday.getDate() - 7);
 
-  const thisWeek = activities.filter((a) => new Date(a.startDate) >= thisMonday);
+  // Use startDateLocal for accurate local-time week splits
+  const thisWeek = activities.filter((a) => {
+    const d = new Date(a.startDateLocal);
+    return d >= thisMonday && d < nextMonday;
+  });
   const lastWeek = activities.filter((a) => {
-    const d = new Date(a.startDate);
+    const d = new Date(a.startDateLocal);
     return d >= lastMonday && d < thisMonday;
   });
 
+  // Athlete profile: derive max HR from recorded maxima
+  const maxHr = deriveMaxHr(activities);
+
   const lines: string[] = [
-    `## This Week's Activities (${thisMonday.toLocaleDateString("en", { month: "short", day: "numeric" })} – ${now.toLocaleDateString("en", { month: "short", day: "numeric" })}):`,
+    "## Athlete Profile:",
+    `  Derived Max HR: ${maxHr} bpm (from best recorded effort)`,
+    "  Heart Rate Zones:",
+    formatHrZones(maxHr),
+    "",
+    `## This Week's Activities (${thisMonday.toLocaleDateString("en", { month: "short", day: "numeric" })} – today):`,
   ];
+
+  if (thisWeek.length === 0) {
+    lines.push("  No activities recorded yet this week.");
+  }
 
   for (const a of thisWeek) {
     const paceStr = a.distance > 0 ? formatPace(a.averageSpeed, a.type) : "N/A";
-    const hrStr = a.averageHeartrate > 0 ? `avg HR ${Math.round(a.averageHeartrate)}${a.maxHeartrate ? `, max HR ${Math.round(a.maxHeartrate)}` : ""}` : "no HR";
+    const hrStr = (a.averageHeartrate ?? 0) > 0
+      ? `avg HR ${Math.round(a.averageHeartrate!)}${a.maxHeartrate ? `, max HR ${Math.round(a.maxHeartrate)}` : ""}`
+      : "no HR";
     const elevStr = a.totalElevationGain > 0 ? `, +${Math.round(a.totalElevationGain)}m elev` : "";
-    const elapsed = a.elapsedTime > a.movingTime ? ` (elapsed ${formatDuration(a.elapsedTime)}, stops: ${formatDuration(a.elapsedTime - a.movingTime)})` : "";
+    const elapsed = a.elapsedTime > a.movingTime
+      ? ` (elapsed ${formatDuration(a.elapsedTime)}, urban stops: ${formatDuration(a.elapsedTime - a.movingTime)})`
+      : "";
 
-    lines.push(`  - ${a.type}: "${a.name}" — ${(a.distance / 1000).toFixed(2)}km, moving ${formatDuration(a.movingTime)}${elapsed}`);
+    lines.push(`  - ${a.type}: "${a.name}" — ${(a.distance / 1000).toFixed(2)} km, moving ${formatDuration(a.movingTime)}${elapsed}`);
     lines.push(`    Pace: ${paceStr}, ${hrStr}${elevStr}`);
 
-    // Include splits if available
     const splits = a.splitsMetric as Array<{ distance: number; moving_time: number; average_heartrate?: number }> | null;
     if (splits && splits.length > 0 && splits.length <= 25) {
       const splitPaces = splits.map((s, i) => {
@@ -154,90 +226,68 @@ const buildWeeklyContext = (
     }
   }
 
-  // Week totals
+  // This week totals
   const thisWeekRuns = thisWeek.filter((a) => a.type === "Run");
   const lastWeekRuns = lastWeek.filter((a) => a.type === "Run");
 
   lines.push("");
-  lines.push("## Week Totals:");
-  lines.push(`  All activities: ${thisWeek.length} (last week: ${lastWeek.length})`);
-  lines.push(`  Total distance: ${(thisWeek.reduce((s, a) => s + a.distance, 0) / 1000).toFixed(1)} km (last week: ${(lastWeek.reduce((s, a) => s + a.distance, 0) / 1000).toFixed(1)} km)`);
-  lines.push(`  Total time: ${formatDuration(thisWeek.reduce((s, a) => s + a.movingTime, 0))} (last week: ${formatDuration(lastWeek.reduce((s, a) => s + a.movingTime, 0))})`);
-  lines.push(`  Total elevation: +${Math.round(thisWeek.reduce((s, a) => s + a.totalElevationGain, 0))}m`);
+  lines.push("## This Week Totals:");
+  lines.push(`  Activities: ${thisWeek.length}, Runs: ${thisWeekRuns.length}`);
+  lines.push(`  Distance: ${(thisWeek.reduce((s, a) => s + a.distance, 0) / 1000).toFixed(1)} km`);
+  lines.push(`  Time: ${formatDuration(thisWeek.reduce((s, a) => s + a.movingTime, 0))}`);
+  lines.push(`  Elevation: +${Math.round(thisWeek.reduce((s, a) => s + a.totalElevationGain, 0))}m`);
 
   if (thisWeekRuns.length > 0) {
-    const avgPace = thisWeekRuns.reduce((s, a) => s + a.movingTime, 0) / thisWeekRuns.reduce((s, a) => s + a.distance, 0) * 1000;
-    const avgHr = thisWeekRuns.filter((a) => a.averageHeartrate > 0);
-    lines.push("");
-    lines.push("## Running Specifics:");
-    lines.push(`  Runs: ${thisWeekRuns.length}, Distance: ${(thisWeekRuns.reduce((s, a) => s + a.distance, 0) / 1000).toFixed(1)} km`);
-    lines.push(`  Avg pace: ${Math.floor(avgPace / 60)}:${Math.round(avgPace % 60).toString().padStart(2, "0")}/km`);
-    if (avgHr.length > 0) {
-      lines.push(`  Avg HR: ${Math.round(avgHr.reduce((s, a) => s + a.averageHeartrate, 0) / avgHr.length)} bpm`);
+    const totalDist = thisWeekRuns.reduce((s, a) => s + a.distance, 0);
+    const totalTime = thisWeekRuns.reduce((s, a) => s + a.movingTime, 0);
+    const avgPace = totalDist > 0 ? (totalTime / totalDist) * 1000 : 0;
+    const hrRuns = thisWeekRuns.filter((a) => (a.averageHeartrate ?? 0) > 0);
+    lines.push(`  Avg running pace: ${Math.floor(avgPace / 60)}:${Math.round(avgPace % 60).toString().padStart(2, "0")}/km`);
+    if (hrRuns.length > 0) {
+      lines.push(`  Avg HR: ${Math.round(hrRuns.reduce((s, a) => s + (a.averageHeartrate ?? 0), 0) / hrRuns.length)} bpm`);
     }
-
-    // Compare to last week
     if (lastWeekRuns.length > 0) {
-      const lastAvgPace = lastWeekRuns.reduce((s, a) => s + a.movingTime, 0) / lastWeekRuns.reduce((s, a) => s + a.distance, 0) * 1000;
+      const lastDist = lastWeekRuns.reduce((s, a) => s + a.distance, 0);
+      const lastTime = lastWeekRuns.reduce((s, a) => s + a.movingTime, 0);
+      const lastAvgPace = lastDist > 0 ? (lastTime / lastDist) * 1000 : 0;
       const paceDiff = avgPace - lastAvgPace;
       lines.push(`  Pace vs last week: ${paceDiff > 0 ? "+" : ""}${paceDiff.toFixed(0)}s/km (${paceDiff < 0 ? "faster" : "slower"})`);
     }
   }
 
-  // Fitness status
+  // Fitness + load
   lines.push("");
   lines.push("## Fitness Status:");
   lines.push(`  CTL (Fitness): ${fitnessData.currentCtl} — ${fitnessData.fitnessLevel}`);
   lines.push(`  ATL (Fatigue): ${fitnessData.currentAtl} — ${fitnessData.fatigueLevel}`);
   lines.push(`  TSB (Form): ${fitnessData.currentTsb} — ${fitnessData.formStatus}`);
-
-  // Injury risk
   lines.push("");
   lines.push("## Load Management:");
   lines.push(`  ACWR: ${injuryRisk.acwr} (${injuryRisk.riskLevel})`);
   lines.push(`  Weekly load change: ${injuryRisk.weeklyLoadChange}%`);
   lines.push(`  ${injuryRisk.recommendation}`);
 
-  // Recent PRs
+  // PRs this week / last week
   if (records.length > 0) {
-    const recentPrs = records
-      .filter((r) => new Date(r.achievedAt) >= thisMonday)
-      .slice(0, 5);
-    if (recentPrs.length > 0) {
+    const thisWeekPrs = records.filter((r) => new Date(r.achievedAt) >= thisMonday).slice(0, 5);
+    if (thisWeekPrs.length > 0) {
       lines.push("");
       lines.push("## New PRs This Week:");
-      for (const pr of recentPrs) {
-        lines.push(`  - ${pr.distanceName}: ${formatDuration(pr.elapsedTime)}`);
-      }
-    }
-
-    const lastWeekPrs = records
-      .filter((r) => { const d = new Date(r.achievedAt); return d >= lastMonday && d < thisMonday; })
-      .slice(0, 5);
-    if (lastWeekPrs.length > 0) {
-      lines.push("");
-      lines.push("## PRs Last Week:");
-      for (const pr of lastWeekPrs) {
-        lines.push(`  - ${pr.distanceName}: ${formatDuration(pr.elapsedTime)}`);
-      }
+      for (const pr of thisWeekPrs) lines.push(`  - ${pr.distanceName}: ${formatDuration(pr.elapsedTime)}`);
     }
   }
 
-  // 4-week volume trend (Monday-aligned weeks)
-  const weeklyVolumes: number[] = [];
-  for (let w = 0; w < 4; w++) {
+  // 8-week historical volume (compact — one line per week)
+  lines.push("");
+  lines.push("## Training History — Last 8 Weeks (Mon-Sun, local time):");
+  for (let w = 1; w <= 8; w++) {
     const wStart = new Date(thisMonday);
     wStart.setDate(wStart.getDate() - w * 7);
     const wEnd = new Date(wStart);
     wEnd.setDate(wEnd.getDate() + 7);
-    const weekDist = activities
-      .filter((a) => { const d = new Date(a.startDate); return d >= wStart && d < wEnd; })
-      .reduce((s, a) => s + a.distance, 0);
-    weeklyVolumes.push(Math.round(weekDist / 1000 * 10) / 10);
+    const label = w === 1 ? "Last week" : `${w} weeks ago`;
+    lines.push(buildWeekSummary(wStart, wEnd, activities, label));
   }
-  lines.push("");
-  lines.push("## 4-Week Volume Trend (km, Mon-Sun weeks):");
-  lines.push(`  This week (so far): ${weeklyVolumes[0]}, last week: ${weeklyVolumes[1]}, -2w: ${weeklyVolumes[2]}, -3w: ${weeklyVolumes[3]}`);
 
   return lines.join("\n");
 };
@@ -247,6 +297,9 @@ const buildPredictionContext = (
   recentActivities: StravaActivity[],
   fitnessData: FitnessData,
 ): string => {
+  const now = new Date();
+  const maxHr = deriveMaxHr(recentActivities);
+
   // Deduplicate PRs
   const bestByDist = new Map<number, StravaPersonalRecord>();
   for (const r of records) {
@@ -255,50 +308,44 @@ const buildPredictionContext = (
   }
 
   const lines: string[] = [
+    "## Athlete Profile:",
+    `  Derived Max HR: ${maxHr} bpm`,
+    "  Heart Rate Zones:",
+    formatHrZones(maxHr),
+    "",
     "## Personal Records:",
     ...[...bestByDist.values()]
       .sort((a, b) => a.distanceMeters - b.distanceMeters)
-      .map((r) => `  - ${r.distanceName} (${(r.distanceMeters / 1000).toFixed(2)}km): ${formatDuration(r.elapsedTime)} — achieved ${new Date(r.achievedAt).toLocaleDateString()}`),
+      .map((r) => `  - ${r.distanceName} (${(r.distanceMeters / 1000).toFixed(2)} km): ${formatDuration(r.elapsedTime)} — ${new Date(r.achievedAt).toLocaleDateString()}`),
     "",
     "## Current Fitness:",
     `  CTL: ${fitnessData.currentCtl} (${fitnessData.fitnessLevel})`,
     `  ATL: ${fitnessData.currentAtl} (${fitnessData.fatigueLevel})`,
     `  TSB: ${fitnessData.currentTsb} (${fitnessData.formStatus})`,
     "",
-    "## Last 6 Weeks of Training:",
+    "## Last 12 Weeks of Training (Mon-aligned):",
   ];
 
-  // Detailed weekly breakdown
-  const now = new Date();
-  const runs = recentActivities.filter((a) => a.type === "Run" && a.distance > 1000);
+  const thisMonday = getMondayOf(now);
 
-  for (let w = 0; w < 6; w++) {
-    const weekEnd = new Date(now.getTime() - w * 7 * 24 * 60 * 60 * 1000);
-    const weekStart = new Date(weekEnd.getTime() - 7 * 24 * 60 * 60 * 1000);
-
-    const weekRuns = runs.filter((a) => {
-      const d = new Date(a.startDate);
-      return d >= weekStart && d < weekEnd;
-    });
-
-    const dist = weekRuns.reduce((s, a) => s + a.distance, 0);
-    const time = weekRuns.reduce((s, a) => s + a.movingTime, 0);
-    const avgPace = dist > 0 ? (time / dist) * 1000 : 0;
-    const avgHr = weekRuns.filter((a) => a.averageHeartrate > 0);
-    const hrStr = avgHr.length > 0 ? `, avg HR ${Math.round(avgHr.reduce((s, a) => s + a.averageHeartrate, 0) / avgHr.length)}` : "";
-    const longest = weekRuns.length > 0 ? Math.max(...weekRuns.map((a) => a.distance)) : 0;
-
-    lines.push(`  Week -${w}: ${weekRuns.length} runs, ${(dist / 1000).toFixed(1)}km, ${formatDuration(time)}, pace ${Math.floor(avgPace / 60)}:${Math.round(avgPace % 60).toString().padStart(2, "0")}/km${hrStr}, longest ${(longest / 1000).toFixed(1)}km`);
+  for (let w = 0; w < 12; w++) {
+    const wStart = new Date(thisMonday);
+    wStart.setDate(wStart.getDate() - w * 7);
+    const wEnd = new Date(wStart);
+    wEnd.setDate(wEnd.getDate() + 7);
+    const label = w === 0 ? "This week (so far)" : w === 1 ? "Last week" : `${w} weeks ago`;
+    lines.push(buildWeekSummary(wStart, wEnd, recentActivities, label));
   }
 
   // Pace distribution
+  const runs = recentActivities.filter((a) => a.type === "Run" && a.distance > 1000);
   if (runs.length >= 5) {
     const paces = runs.map((a) => (a.movingTime / a.distance) * 1000).sort((a, b) => a - b);
     const fastest = paces[0];
     const slowest = paces[paces.length - 1];
     const median = paces[Math.floor(paces.length / 2)];
     lines.push("");
-    lines.push("## Pace Distribution (last 90 days):");
+    lines.push("## Pace Distribution (90 days):");
     lines.push(`  Fastest: ${Math.floor(fastest / 60)}:${Math.round(fastest % 60).toString().padStart(2, "0")}/km`);
     lines.push(`  Median: ${Math.floor(median / 60)}:${Math.round(median % 60).toString().padStart(2, "0")}/km`);
     lines.push(`  Slowest: ${Math.floor(slowest / 60)}:${Math.round(slowest % 60).toString().padStart(2, "0")}/km`);

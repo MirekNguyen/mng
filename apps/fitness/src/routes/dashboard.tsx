@@ -146,10 +146,9 @@ function DashboardPage() {
               onClick={() => setSelectedSport(sport)}
               className={`px-3.5 py-1.5 rounded-full text-sm font-medium press-scale transition-colors ${
                 selectedSport === sport
-                  ? 'text-white'
+                  ? 'bg-[var(--color-ink)] text-[var(--color-surface)]'
                   : 'bg-[var(--color-surface-sunken)] text-[var(--color-ink-secondary)] hover:bg-[var(--color-border)]'
               }`}
-              style={selectedSport === sport ? { backgroundColor: sportColors[sport] } : undefined}
             >
               {sportLabels[sport] ?? sport}
             </button>

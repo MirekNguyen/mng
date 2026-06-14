@@ -82,10 +82,9 @@ function ActivitiesPage() {
               search={{ page: 1, sport: s }}
               className={`rounded-full px-3.5 py-1.5 text-sm font-medium press-scale transition-colors whitespace-nowrap ${
                 sport === s
-                  ? 'text-white'
+                  ? 'bg-[var(--color-ink)] text-[var(--color-surface)]'
                   : 'bg-[var(--color-surface-sunken)] text-[var(--color-ink-secondary)] hover:bg-[var(--color-border)]'
               }`}
-              style={sport === s ? { backgroundColor: colors[s] ?? 'var(--color-ink)' } : undefined}
             >
               {labels[s] ?? s}
             </Link>
