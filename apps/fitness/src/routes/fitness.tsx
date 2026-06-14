@@ -202,21 +202,21 @@ const WeeklyAnalysis = ({ athleteStravaId }: { athleteStravaId: number }) => {
   const [content, setContent] = useState('')
   const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    const url = api.getWeeklyBriefUrl(athleteStravaId)
+  const fetchStream = (force = false) => {
+    const baseUrl = api.getWeeklyBriefUrl(athleteStravaId)
+    const url = force ? `${baseUrl}?force=true` : baseUrl
     const controller = new AbortController()
 
-    const fetchStream = async () => {
+    setIsLoading(true)
+    setContent('')
+
+    const run = async () => {
       try {
         const res = await fetch(url, { signal: controller.signal })
-        if (!res.ok || !res.body) {
-          setIsLoading(false)
-          return
-        }
+        if (!res.ok || !res.body) { setIsLoading(false); return }
         const reader = res.body.getReader()
         const decoder = new TextDecoder()
         let text = ''
-
         while (true) {
           const { done, value } = await reader.read()
           if (done) break
@@ -229,7 +229,12 @@ const WeeklyAnalysis = ({ athleteStravaId }: { athleteStravaId: number }) => {
       }
     }
 
-    fetchStream()
+    run()
+    return controller
+  }
+
+  useEffect(() => {
+    const controller = fetchStream(false)
     return () => controller.abort()
   }, [athleteStravaId])
 
@@ -237,7 +242,17 @@ const WeeklyAnalysis = ({ athleteStravaId }: { athleteStravaId: number }) => {
 
   return (
     <section className="py-[var(--content-card-vertical-padding)] border-t border-[var(--color-border)]">
-      <h2 className="text-[length:var(--small-section-title-font-size)] font-semibold mb-[0.75rem]">This Week</h2>
+      <div className="flex items-center justify-between mb-[0.75rem]">
+        <h2 className="text-[length:var(--small-section-title-font-size)] font-semibold">This Week</h2>
+        {!isLoading && content && (
+          <button
+            onClick={() => fetchStream(true)}
+            className="text-xs text-[var(--color-ink-tertiary)] hover:text-[var(--color-ink-secondary)] transition-colors"
+          >
+            Redo analysis
+          </button>
+        )}
+      </div>
       {isLoading && !content && (
         <div className="flex items-center gap-2 text-sm text-[var(--color-ink-tertiary)]">
           <span className="inline-block w-3 h-3 border-2 border-[var(--color-accent)] border-t-transparent rounded-full animate-spin" />

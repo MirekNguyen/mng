@@ -49,12 +49,19 @@ const getDashboardData = createServerFn({ method: 'POST' }).handler(async () => 
   const session = await getSession()
   if (!session) return null
 
-  const [activitiesResult, volumeResult, fitnessResult, athleteResult] = await Promise.all([
-    api.getActivities(session.athleteStravaId, 10, 0),
-    api.getVolume(session.athleteStravaId, 3),
-    api.getFitness(session.athleteStravaId, 30),
-    api.getAthlete(session.athleteStravaId),
+  const [activitiesResult, volumeResult, fitnessResult] = await Promise.all([
+    api.getActivities(session.athleteStravaId, 10, 0).catch(() => ({ activities: [] })),
+    api.getVolume(session.athleteStravaId, 3).catch(() => ({ weekly: [] })),
+    api.getFitness(session.athleteStravaId, 30).catch(() => null),
   ])
+
+  let maxHr: number | null = null
+  try {
+    const athleteResult = await api.getAthlete(session.athleteStravaId)
+    maxHr = athleteResult?.athlete?.maxHr ?? null
+  } catch {
+    // Non-critical — max HR will fall back to derived value in AI context
+  }
 
   return {
     activities: activitiesResult.activities as Activity[],
@@ -63,7 +70,7 @@ const getDashboardData = createServerFn({ method: 'POST' }).handler(async () => 
     athleteStravaId: session.athleteStravaId,
     athleteImage: session.athleteImage,
     fitness: fitnessResult,
-    maxHr: (athleteResult.athlete?.maxHr ?? null) as number | null,
+    maxHr,
   }
 })
 
