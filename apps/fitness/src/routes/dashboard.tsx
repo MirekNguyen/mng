@@ -83,9 +83,10 @@ function DashboardPage() {
 
   const handleRefresh = useCallback(async () => {
     setRefreshing(true)
+    await api.syncRecent(athleteStravaId)
     await router.invalidate()
     setRefreshing(false)
-  }, [router])
+  }, [router, athleteStravaId])
 
   const currentWeek = volume.weekly[volume.weekly.length - 1]
   const currentWeekSport = currentWeek?.sports[selectedSport]

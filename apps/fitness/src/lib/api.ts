@@ -15,6 +15,11 @@ export const api = {
     return res.json();
   },
 
+  async syncRecent(athleteStravaId: number) {
+    const res = await fetch(`${API_BASE}/strava/sync-recent/${athleteStravaId}`, { method: "POST" });
+    return res.json();
+  },
+
   async getActivities(athleteStravaId: number, limit = 50, offset = 0) {
     const res = await fetch(`${API_BASE}/strava/activities/${athleteStravaId}?limit=${limit}&offset=${offset}`);
     return res.json();

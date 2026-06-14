@@ -103,6 +103,49 @@ export const StravaSyncService = {
     return totalSynced;
   },
 
+  // Lightweight refresh: fetch only the most recent page of activities and
+  // sync detail for any that are new (no detailSyncedAt) or updated in the
+  // last 7 days. Much faster than syncAllActivities — suitable for the
+  // refresh button.
+  async syncRecent(athleteStravaId: number): Promise<number> {
+    logger.info(`Starting recent sync for athlete ${athleteStravaId}`);
+
+    const response = await fetchFromStrava(
+      athleteStravaId,
+      `/athlete/activities?page=1&per_page=20`,
+    );
+
+    if (!response.ok) {
+      logger.error(`Failed to fetch recent activities: ${response.statusText}`);
+      return 0;
+    }
+
+    const activities = await response.json();
+    let newCount = 0;
+
+    for (const activity of activities) {
+      await upsertActivitySummary(athleteStravaId, activity);
+    }
+
+    // Fetch detail only for activities missing it (newly added)
+    const recentInDb = await db.query.stravaActivities.findMany({
+      where: (a, { and: a2, eq: e, isNull: n }) =>
+        a2(e(a.athleteStravaId, athleteStravaId), n(a.detailSyncedAt)),
+      orderBy: (a, { desc }) => [desc(a.startDate)],
+      limit: 5,
+    });
+
+    for (const activity of recentInDb) {
+      await this.syncActivityDetail(athleteStravaId, activity.stravaId);
+      await delay(1500);
+      newCount++;
+    }
+
+    await StravaRepository.updateAthleteSyncedAt(athleteStravaId);
+    logger.info(`Recent sync complete: ${newCount} new activities detailed for athlete ${athleteStravaId}`);
+    return newCount;
+  },
+
   async syncSingleActivity(athleteStravaId: number, activityStravaId: number): Promise<void> {
     await this.syncActivityDetail(athleteStravaId, activityStravaId);
     logger.info(`Synced activity ${activityStravaId} for athlete ${athleteStravaId}`);

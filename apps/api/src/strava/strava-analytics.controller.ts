@@ -120,8 +120,9 @@ const app = new Elysia({ prefix: "strava/analytics" })
   // AI: Weekly Training Brief (streaming)
   .get(
     "/weekly-brief/:athleteStravaId",
-    async ({ params }) => {
+    async ({ params, query }) => {
       const athleteStravaId = Number(params.athleteStravaId);
+      const forceRegenerate = query.force === "true";
       const activities = await getActivitiesForDays(athleteStravaId, 90);
 
       // Cache key: athlete + latest activity + current training week (Mon-Sun)
@@ -133,7 +134,9 @@ const app = new Elysia({ prefix: "strava/analytics" })
       const weekKey = monday.toISOString().slice(0, 10);
       const cacheKey = `${athleteStravaId}:${weekKey}:${latestActivity?.startDate ?? "none"}`;
 
-      if (weeklyBriefCache.has(cacheKey)) {
+      if (forceRegenerate) {
+        weeklyBriefCache.delete(cacheKey);
+      } else if (weeklyBriefCache.has(cacheKey)) {
         return new Response(weeklyBriefCache.get(cacheKey)!, {
           headers: { "content-type": "text/plain; charset=utf-8" },
         });
@@ -182,7 +185,7 @@ const app = new Elysia({ prefix: "strava/analytics" })
         headers: { "content-type": "text/plain; charset=utf-8" },
       });
     },
-    { params: t.Object({ athleteStravaId: t.String() }) },
+    { params: t.Object({ athleteStravaId: t.String() }), query: t.Object({ force: t.Optional(t.String()) }) },
   )
 
   // AI: Performance Prediction (streaming)

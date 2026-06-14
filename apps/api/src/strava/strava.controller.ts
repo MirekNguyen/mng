@@ -56,6 +56,16 @@ const app = new Elysia({ prefix: "strava" })
     { params: t.Object({ athleteStravaId: t.String() }) },
   )
 
+  // Lightweight refresh: fetch last 20 activities and detail any new ones
+  .post(
+    "/sync-recent/:athleteStravaId",
+    async ({ params }) => {
+      const count = await StravaSyncService.syncRecent(Number(params.athleteStravaId));
+      return { synced: count };
+    },
+    { params: t.Object({ athleteStravaId: t.String() }) },
+  )
+
   // Get activities from local DB
   .get(
     "/activities/:athleteStravaId",
