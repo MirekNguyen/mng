@@ -8,6 +8,7 @@ export type SessionData = {
   athleteName: string;
   athleteImage: string | undefined;
   stravaConnected: boolean;
+  maxHr: number | null;
 };
 
 export type SessionResult =
@@ -51,6 +52,7 @@ export const getSessionResult = async (): Promise<SessionResult> => {
       athleteName: result.user.name,
       athleteImage: result.user.image ?? undefined,
       stravaConnected: true,
+      maxHr: result.stravaMaxHr ?? null,
     },
   };
 };

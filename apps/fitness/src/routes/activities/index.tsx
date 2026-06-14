@@ -28,7 +28,7 @@ const getActivities = createServerFn({ method: 'POST' })
     if (!session) return null
 
     const result = await api.getActivities(session.athleteStravaId, data.limit, data.offset)
-    return { activities: result.activities as Activity[], athleteName: session.athleteName, athleteImage: session.athleteImage }
+    return { activities: result.activities as Activity[], athleteName: session.athleteName, athleteImage: session.athleteImage, athleteStravaId: session.athleteStravaId, maxHr: session.maxHr }
   })
 
 export const Route = createFileRoute('/activities/')({
@@ -47,7 +47,7 @@ export const Route = createFileRoute('/activities/')({
 })
 
 function ActivitiesPage() {
-  const { activities, athleteName, athleteImage } = Route.useLoaderData()
+  const { activities, athleteName, athleteImage, athleteStravaId, maxHr } = Route.useLoaderData()
   const { sport } = Route.useSearch()
 
   const sports = [...new Set(activities.map((a: Activity) => a.type))]
@@ -55,7 +55,7 @@ function ActivitiesPage() {
 
   return (
     <div className="min-h-screen pb-16">
-      <AppHeader title="Activities" athleteName={athleteName} athleteImage={athleteImage} showBack />
+      <AppHeader title="Activities" athleteName={athleteName} athleteImage={athleteImage} showBack athleteStravaId={athleteStravaId} maxHr={maxHr} />
 
       <main className="max-w-[var(--max-width)] mx-auto px-layout-x pt-section">
 

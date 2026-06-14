@@ -18,6 +18,7 @@ import { seedAdmin } from "./auth/seed";
 import { auth } from "./auth";
 import { db, eq, and } from "@mng/database/db";
 import { account } from "@mng/database/schema/auth.schema";
+import { stravaAthletes } from "@mng/database/schema/fitness.schema";
 import { getBankingProvider } from "./banking/registry";
 
 const TRUSTED_ORIGINS = (process.env.TRUSTED_ORIGINS ?? process.env.APP_URL ?? "http://localhost:3001,http://localhost:3002")
@@ -43,6 +44,15 @@ const app = new Elysia()
 
     const stravaAthleteId = stravaAccount.length > 0 ? Number(stravaAccount[0].accountId) : null;
 
+    let maxHr: number | null = null;
+    if (stravaAthleteId) {
+      const athleteRow = await db.select({ maxHr: stravaAthletes.maxHr })
+        .from(stravaAthletes)
+        .where(eq(stravaAthletes.stravaId, stravaAthleteId))
+        .limit(1);
+      maxHr = athleteRow[0]?.maxHr ?? null;
+    }
+
     const bankingProvider = getBankingProvider();
     const bankingConnected = await bankingProvider.isConnected(session.user.id);
 
@@ -55,6 +65,7 @@ const app = new Elysia()
       },
       stravaConnected: stravaAthleteId !== null,
       stravaAthleteId,
+      stravaMaxHr: maxHr,
       bankingConnected,
       bankingProvider: bankingProvider.name,
     };

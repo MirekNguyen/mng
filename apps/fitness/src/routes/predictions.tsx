@@ -9,7 +9,7 @@ import { BottomNav } from '#/components/bottom-nav'
 const getPredictionsData = createServerFn({ method: 'GET' }).handler(async () => {
   const session = await getSession()
   if (!session) return null
-  return api.getPredictions(session.athleteStravaId).then((p) => ({ ...p, athleteName: session.athleteName, athleteImage: session.athleteImage }))
+  return api.getPredictions(session.athleteStravaId).then((p) => ({ ...p, athleteName: session.athleteName, athleteImage: session.athleteImage, athleteStravaId: session.athleteStravaId, maxHr: session.maxHr }))
 })
 
 export const Route = createFileRoute('/predictions')({
@@ -60,7 +60,7 @@ function PredictionsPage() {
 
   return (
     <div className="min-h-screen pb-16">
-      <AppHeader title="Predictions" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} />
+      <AppHeader title="Predictions" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} athleteStravaId={data.athleteStravaId} maxHr={data.maxHr} />
       <main className="mx-auto max-w-5xl px-layout-x py-section space-y-[var(--section-spacing)]">
         <h2 className="text-[length:var(--section-title-font-size)] font-semibold">Performance Predictions</h2>
 

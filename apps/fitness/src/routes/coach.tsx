@@ -13,6 +13,7 @@ const getCoachData = createServerFn({ method: 'GET' }).handler(async () => {
     athleteStravaId: session.athleteStravaId,
     athleteName: session.athleteName,
     athleteImage: session.athleteImage,
+    maxHr: session.maxHr,
     weeklyBriefUrl: api.getWeeklyBriefUrl(session.athleteStravaId),
     aiPredictionsUrl: api.getAiPredictionsUrl(session.athleteStravaId),
   }
@@ -29,11 +30,11 @@ export const Route = createFileRoute('/coach')({
 })
 
 function CoachPage() {
-  const { weeklyBriefUrl, aiPredictionsUrl, athleteName, athleteImage } = Route.useLoaderData()
+  const { weeklyBriefUrl, aiPredictionsUrl, athleteName, athleteImage, athleteStravaId, maxHr } = Route.useLoaderData()
 
   return (
     <div className="min-h-screen pb-16">
-      <AppHeader title="AI Coach" athleteName={athleteName} athleteImage={athleteImage} />
+      <AppHeader title="AI Coach" athleteName={athleteName} athleteImage={athleteImage} athleteStravaId={athleteStravaId} maxHr={maxHr} />
       <main className="mx-auto max-w-5xl px-layout-x py-section space-y-[var(--section-spacing)]">
         <h2 className="text-[length:var(--section-title-font-size)] font-semibold">AI Coach</h2>
         <p className="text-sm text-[var(--color-ink-secondary)]">Personalized insights powered by AI analysis of your training data.</p>

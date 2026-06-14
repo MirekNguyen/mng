@@ -16,7 +16,7 @@ const getVolumeData = createServerFn({ method: 'POST' }).handler(async () => {
   const now = new Date()
   const monthsSinceJan = now.getMonth() + 1
   const volume = await api.getVolume(session.athleteStravaId, monthsSinceJan)
-  return { ...volume, athleteName: session.athleteName, athleteImage: session.athleteImage }
+  return { ...volume, athleteName: session.athleteName, athleteImage: session.athleteImage, athleteStravaId: session.athleteStravaId, maxHr: session.maxHr }
 })
 
 export const Route = createFileRoute('/volume')({
@@ -108,7 +108,7 @@ function VolumePage() {
 
   return (
     <div className="min-h-screen pb-16">
-      <AppHeader title="Volume" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} />
+      <AppHeader title="Volume" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} athleteStravaId={data.athleteStravaId} maxHr={data.maxHr} />
 
       <main className="max-w-[var(--max-width)] mx-auto px-layout-x pt-section space-y-6">
         {/* Sport tabs */}

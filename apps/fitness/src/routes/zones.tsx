@@ -9,7 +9,7 @@ import { BottomNav } from '#/components/bottom-nav'
 const getZonesData = createServerFn({ method: 'GET' }).handler(async () => {
   const session = await getSession()
   if (!session) return null
-  return api.getZones(session.athleteStravaId, 3).then((zones) => ({ ...zones, athleteName: session.athleteName, athleteImage: session.athleteImage }))
+  return api.getZones(session.athleteStravaId, 3).then((zones) => ({ ...zones, athleteName: session.athleteName, athleteImage: session.athleteImage, athleteStravaId: session.athleteStravaId, maxHr: session.maxHr }))
 })
 
 export const Route = createFileRoute('/zones')({
@@ -51,7 +51,7 @@ function ZonesPage() {
 
   return (
     <div className="min-h-screen pb-16">
-      <AppHeader title="Zones" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} />
+      <AppHeader title="Zones" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} athleteStravaId={data.athleteStravaId} maxHr={data.maxHr} />
       <main className="mx-auto max-w-5xl px-layout-x py-section space-y-[var(--section-spacing)]">
         <h2 className="text-[length:var(--section-title-font-size)] font-semibold">Zone Analysis</h2>
         <p className="text-zinc-400 text-sm">Based on running activities from the last 3 months</p>

@@ -14,7 +14,7 @@ import { AppHeader } from '#/components/app-header'
 const getSessionData = createServerFn({ method: 'GET' }).handler(async () => {
   const session = await getSession()
   if (!session) return null
-  return { athleteStravaId: session.athleteStravaId, athleteName: session.athleteName, athleteImage: session.athleteImage }
+  return { athleteStravaId: session.athleteStravaId, athleteName: session.athleteName, athleteImage: session.athleteImage, maxHr: session.maxHr }
 })
 
 export const Route = createFileRoute('/chat')({
@@ -37,7 +37,7 @@ const SUGGESTIONS = [
 ]
 
 function ChatPage() {
-  const { athleteStravaId, athleteName, athleteImage } = Route.useLoaderData()
+  const { athleteStravaId, athleteName, athleteImage, maxHr } = Route.useLoaderData()
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
@@ -93,7 +93,7 @@ function ChatPage() {
   return (
     <div className="flex flex-col h-[100dvh] overflow-hidden">
       {/* Header */}
-      <AppHeader title="Coach" athleteName={athleteName} athleteImage={athleteImage} />
+      <AppHeader title="Coach" athleteName={athleteName} athleteImage={athleteImage} athleteStravaId={athleteStravaId} maxHr={maxHr} />
 
       {/* Messages area */}
       <div className="flex-1 overflow-y-auto overscroll-contain">

@@ -23,7 +23,15 @@ const getFitnessData = createServerFn({ method: 'POST' }).handler(async () => {
     api.getPredictions(session.athleteStravaId),
   ])
 
-  return { ...fitness, ...predictions, athleteStravaId: session.athleteStravaId, athleteName: session.athleteName, athleteImage: session.athleteImage }
+  let maxHr: number | null = null
+  try {
+    const athleteResult = await api.getAthlete(session.athleteStravaId)
+    maxHr = athleteResult?.athlete?.maxHr ?? null
+  } catch {
+    // Non-critical
+  }
+
+  return { ...fitness, ...predictions, athleteStravaId: session.athleteStravaId, athleteName: session.athleteName, athleteImage: session.athleteImage, maxHr }
 })
 
 export const Route = createFileRoute('/fitness')({
@@ -56,7 +64,7 @@ function FitnessPage() {
 
   return (
     <div className="min-h-screen pb-16">
-      <AppHeader title="Fitness" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} />
+      <AppHeader title="Fitness" athleteName={data.athleteName as string} athleteImage={data.athleteImage as string | undefined} athleteStravaId={data.athleteStravaId} maxHr={data.maxHr} />
 
       <main className="max-w-[var(--max-width)] mx-auto px-layout-x pt-section space-y-[var(--section-spacing)]">
         <h1 className="text-[length:var(--section-title-font-size)] font-semibold">Training Load</h1>
