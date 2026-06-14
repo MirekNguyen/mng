@@ -70,7 +70,7 @@ function FitnessPage() {
           </div>
           <div>
             <p className="text-xs text-[var(--color-ink-tertiary)]">Fatigue (ATL)</p>
-            <p className="text-[length:var(--font-size-xxl)] font-semibold tracking-tight text-[var(--color-accent)]">{data.currentAtl}</p>
+            <p className="text-[length:var(--font-size-xxl)] font-semibold tracking-tight text-[var(--color-ink)]">{data.currentAtl}</p>
             <p className="text-xs text-[var(--color-ink-tertiary)] mt-0.5">{data.fatigueLevel}</p>
           </div>
           <div>
@@ -100,8 +100,8 @@ function FitnessPage() {
                   axisLine={false}
                 />
                 <Tooltip content={<ChartTooltipContent config={fitnessChartConfig} formatter={(v) => Math.round(v).toString()} />} />
-                <Area type="monotone" dataKey="ctl" stroke="var(--color-elevation)" fill="var(--color-elevation)" fillOpacity={0.08} strokeWidth={2} dot={false} />
-                <Area type="monotone" dataKey="atl" stroke="var(--color-accent)" fill="var(--color-accent)" fillOpacity={0.04} strokeWidth={2} dot={false} />
+                <Area type="monotone" dataKey="ctl" stroke="var(--color-elevation)" fill="var(--color-elevation)" fillOpacity={0.1} strokeWidth={2} dot={false} />
+                <Area type="monotone" dataKey="atl" stroke="var(--color-accent)" fill="var(--color-accent)" fillOpacity={0} strokeWidth={1.5} dot={false} strokeDasharray="4 2" />
                 <Line type="monotone" dataKey="tsb" stroke="var(--color-success)" strokeWidth={1.5} dot={false} strokeDasharray="4 2" />
               </AreaChart>
             </ResponsiveContainer>
