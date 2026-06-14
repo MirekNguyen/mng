@@ -49,10 +49,11 @@ const getDashboardData = createServerFn({ method: 'POST' }).handler(async () => 
   const session = await getSession()
   if (!session) return null
 
-  const [activitiesResult, volumeResult, fitnessResult] = await Promise.all([
+  const [activitiesResult, volumeResult, fitnessResult, athleteResult] = await Promise.all([
     api.getActivities(session.athleteStravaId, 10, 0),
     api.getVolume(session.athleteStravaId, 3),
     api.getFitness(session.athleteStravaId, 30),
+    api.getAthlete(session.athleteStravaId),
   ])
 
   return {
@@ -62,6 +63,7 @@ const getDashboardData = createServerFn({ method: 'POST' }).handler(async () => 
     athleteStravaId: session.athleteStravaId,
     athleteImage: session.athleteImage,
     fitness: fitnessResult,
+    maxHr: (athleteResult.athlete?.maxHr ?? null) as number | null,
   }
 })
 
@@ -77,7 +79,7 @@ export const Route = createFileRoute('/dashboard')({
 
 function DashboardPage() {
   const router = useRouter()
-  const { activities, volume, athleteName, athleteStravaId, athleteImage, fitness } = Route.useLoaderData()
+  const { activities, volume, athleteName, athleteStravaId, athleteImage, fitness, maxHr } = Route.useLoaderData()
   const [refreshing, setRefreshing] = useState(false)
   const [selectedSport, setSelectedSport] = useState<string>('Run')
 
@@ -118,7 +120,7 @@ function DashboardPage() {
 
   return (
     <div className="min-h-screen pb-16">
-      <AppHeader title="Fitness" athleteName={athleteName} athleteImage={athleteImage} />
+      <AppHeader title="Fitness" athleteName={athleteName} athleteImage={athleteImage} athleteStravaId={athleteStravaId} maxHr={maxHr} />
 
       <main className="max-w-[var(--max-width)] mx-auto px-layout-x pt-section space-y-[var(--section-spacing)]">
         {/* Refresh */}

@@ -37,9 +37,9 @@ export const Route = createFileRoute('/fitness')({
 })
 
 const fitnessChartConfig: ChartConfig = {
-  ctl: { label: 'Fitness (CTL)', color: '#2563eb' },
-  atl: { label: 'Fatigue (ATL)', color: '#f97316' },
-  tsb: { label: 'Form (TSB)', color: '#16a34a' },
+  ctl: { label: 'Fitness (CTL)', color: 'var(--color-elevation)' },
+  atl: { label: 'Fatigue (ATL)', color: 'var(--color-accent)' },
+  tsb: { label: 'Form (TSB)', color: 'var(--color-success)' },
 }
 
 function FitnessPage() {
@@ -62,20 +62,20 @@ function FitnessPage() {
         <h1 className="text-[length:var(--section-title-font-size)] font-semibold">Training Load</h1>
 
         {/* CTL / ATL / TSB */}
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-3 gap-4">
           <div>
             <p className="text-xs text-[var(--color-ink-tertiary)]">Fitness (CTL)</p>
-            <p className="text-2xl font-semibold tracking-tight text-[var(--color-sport-ride)]">{data.currentCtl}</p>
+            <p className="text-[length:var(--font-size-xxl)] font-semibold tracking-tight text-[var(--color-elevation)]">{data.currentCtl}</p>
             <p className="text-xs text-[var(--color-ink-tertiary)] mt-0.5">{data.fitnessLevel}</p>
           </div>
           <div>
             <p className="text-xs text-[var(--color-ink-tertiary)]">Fatigue (ATL)</p>
-            <p className="text-2xl font-semibold tracking-tight text-[var(--color-accent)]">{data.currentAtl}</p>
+            <p className="text-[length:var(--font-size-xxl)] font-semibold tracking-tight text-[var(--color-accent)]">{data.currentAtl}</p>
             <p className="text-xs text-[var(--color-ink-tertiary)] mt-0.5">{data.fatigueLevel}</p>
           </div>
           <div>
             <p className="text-xs text-[var(--color-ink-tertiary)]">Form (TSB)</p>
-            <p className={`text-2xl font-semibold tracking-tight ${data.currentTsb >= 0 ? 'text-[var(--color-success)]' : 'text-[var(--color-heart)]'}`}>{data.currentTsb}</p>
+            <p className={`text-[length:var(--font-size-xxl)] font-semibold tracking-tight ${data.currentTsb >= 0 ? 'text-[var(--color-success)]' : 'text-[var(--color-heart)]'}`}>{data.currentTsb}</p>
             <p className="text-xs text-[var(--color-ink-tertiary)] mt-0.5">{data.formStatus}</p>
           </div>
         </div>
@@ -100,9 +100,9 @@ function FitnessPage() {
                   axisLine={false}
                 />
                 <Tooltip content={<ChartTooltipContent config={fitnessChartConfig} formatter={(v) => Math.round(v).toString()} />} />
-                <Area type="monotone" dataKey="ctl" stroke="#2563eb" fill="#2563eb" fillOpacity={0.08} strokeWidth={2} dot={false} />
-                <Area type="monotone" dataKey="atl" stroke="#f97316" fill="#f97316" fillOpacity={0.04} strokeWidth={2} dot={false} />
-                <Line type="monotone" dataKey="tsb" stroke="#16a34a" strokeWidth={1.5} dot={false} strokeDasharray="4 2" />
+                <Area type="monotone" dataKey="ctl" stroke="var(--color-elevation)" fill="var(--color-elevation)" fillOpacity={0.08} strokeWidth={2} dot={false} />
+                <Area type="monotone" dataKey="atl" stroke="var(--color-accent)" fill="var(--color-accent)" fillOpacity={0.04} strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey="tsb" stroke="var(--color-success)" strokeWidth={1.5} dot={false} strokeDasharray="4 2" />
               </AreaChart>
             </ResponsiveContainer>
           </ChartContainer>
@@ -118,7 +118,7 @@ function FitnessPage() {
             <div className="flex items-center gap-4">
               <div className="flex-1">
                 <div className="flex items-baseline gap-2">
-                  <span className="text-xl font-semibold tracking-tight">{injuryRisk.acwr.toFixed(2)}</span>
+                  <span className="text-[length:var(--font-size-xl)] font-semibold tracking-tight">{injuryRisk.acwr.toFixed(2)}</span>
                   <span className="text-xs text-[var(--color-ink-tertiary)]">ACWR</span>
                 </div>
                 <p className="text-sm text-[var(--color-ink-secondary)] mt-1">{injuryRisk.recommendation}</p>
@@ -140,7 +140,7 @@ function FitnessPage() {
                     <p className="text-xs text-[var(--color-ink-tertiary)]">Based on {pred.basedOn}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-base font-mono font-semibold text-[var(--color-accent)]">{formatDuration(pred.predictedTime)}</p>
+                    <p className="text-[length:var(--font-size-md)] font-mono font-semibold text-[var(--color-ink)]">{formatDuration(pred.predictedTime)}</p>
                     <p className="text-xs text-[var(--color-ink-tertiary)]">{formatPaceFromSec(pred.predictedPace)}/km</p>
                   </div>
                 </div>
@@ -180,10 +180,10 @@ const formatPaceFromSec = (secPerKm: number): string => {
 
 const RiskBadge = ({ level }: { level: string }) => {
   const colors: Record<string, string> = {
-    low: 'bg-green-100 text-green-700',
-    moderate: 'bg-yellow-100 text-yellow-700',
-    high: 'bg-orange-100 text-orange-700',
-    very_high: 'bg-red-100 text-red-700',
+    low: 'bg-[var(--color-success-subtle)] text-[var(--color-success)]',
+    moderate: 'bg-[var(--color-warning-subtle)] text-[var(--color-warning)]',
+    high: 'bg-[var(--color-accent-subtle)] text-[var(--color-accent)]',
+    very_high: 'bg-[var(--color-heart-subtle)] text-[var(--color-heart)]',
   }
   const labels: Record<string, string> = {
     low: 'Low',
@@ -192,7 +192,7 @@ const RiskBadge = ({ level }: { level: string }) => {
     very_high: 'Very High',
   }
   return (
-    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${colors[level] ?? 'bg-gray-100 text-gray-700'}`}>
+    <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${colors[level] ?? 'bg-[var(--color-surface-sunken)] text-[var(--color-ink-secondary)]'}`}>
       {labels[level] ?? level}
     </span>
   )

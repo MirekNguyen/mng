@@ -45,6 +45,15 @@ export const api = {
     return res.json();
   },
 
+  async updateAthlete(athleteStravaId: number, data: { maxHr: number | null }) {
+    const res = await fetch(`${API_BASE}/strava/athlete/${athleteStravaId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    return res.json();
+  },
+
   async getFitness(athleteStravaId: number, days = 90) {
     const res = await fetch(`${API_BASE}/strava/analytics/fitness/${athleteStravaId}?days=${days}`);
     return res.json();

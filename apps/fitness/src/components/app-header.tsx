@@ -11,9 +11,11 @@ type AppHeaderProps = {
   athleteName: string
   athleteImage: string | undefined
   showBack?: boolean
+  athleteStravaId?: number
+  maxHr?: number | null
 }
 
-export const AppHeader = ({ title, athleteName, athleteImage, showBack }: AppHeaderProps) => {
+export const AppHeader = ({ title, athleteName, athleteImage, showBack, athleteStravaId, maxHr }: AppHeaderProps) => {
   const router = useRouter()
 
   return (
@@ -34,7 +36,7 @@ export const AppHeader = ({ title, athleteName, athleteImage, showBack }: AppHea
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <ProfileMenu name={athleteName} image={athleteImage} />
+          <ProfileMenu name={athleteName} image={athleteImage} athleteStravaId={athleteStravaId} maxHr={maxHr} />
         </div>
       </div>
     </header>
