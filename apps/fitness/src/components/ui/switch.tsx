@@ -1,60 +1,32 @@
+"use client"
+
 import * as React from "react"
+import { Switch as SwitchPrimitive } from "radix-ui"
 
 import { cn } from "#/lib/utils.ts"
 
-const Switch = ({
+function Switch({
   className,
   size = "default",
-  variant = "default",
   ...props
-}: React.ComponentProps<"button"> & {
-  size?: "default" | "small" | "large"
-  variant?: "default" | "success" | "error"
-  checked?: boolean
-  onCheckedChange?: (checked: boolean) => void
-}) => {
-  const [checked, setChecked] = React.useState(props.checked ?? false)
-
-  React.useEffect(() => {
-    if (props.checked !== undefined) setChecked(props.checked)
-  }, [props.checked])
-
-  const handleClick = () => {
-    const next = !checked
-    if (props.checked === undefined) setChecked(next)
-    props.onCheckedChange?.(next)
-  }
-
-  const sizeClasses = {
-    default: "w-[3rem] h-[1.75rem] after:size-[calc(1.75rem-0.25rem)] after:left-[0.125rem]",
-    small: "w-[2.25rem] h-[1.25rem] after:size-[calc(1.25rem-0.25rem)] after:left-[0.125rem]",
-    large: "w-[3.75rem] h-[2.25rem] after:size-[calc(2.25rem-0.25rem)] after:left-[0.125rem]",
-  }
-
-  const variantBg = {
-    default: "bg-[var(--color-accent)]",
-    success: "bg-[var(--color-success)]",
-    error: "bg-[var(--color-heart)]",
-  }
-
+}: React.ComponentProps<typeof SwitchPrimitive.Root> & {
+  size?: "sm" | "default"
+}) {
   return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={checked}
-      data-state={checked ? "checked" : "unchecked"}
+    <SwitchPrimitive.Root
       data-slot="switch"
+      data-size={size}
       className={cn(
-        "peer relative inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-accent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)] disabled:cursor-not-allowed disabled:opacity-50",
-        sizeClasses[size],
-        checked ? variantBg[variant] : "bg-[var(--color-border)]",
-        "after:pointer-events-none after:absolute after:rounded-full after:bg-white after:shadow-xs after:transition-transform after:content-['']",
-        checked && "after:translate-x-[calc(100%+0px)]",
+        "peer group/switch relative inline-flex shrink-0 items-center rounded-full border-2 transition-all outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 data-[size=default]:h-5 data-[size=default]:w-11 data-[size=sm]:h-4 data-[size=sm]:w-7 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-unchecked:border-transparent data-unchecked:bg-input/90 data-disabled:cursor-not-allowed data-disabled:opacity-50",
         className
       )}
-      onClick={handleClick}
       {...props}
-    />
+    >
+      <SwitchPrimitive.Thumb
+        data-slot="switch-thumb"
+        className="pointer-events-none block rounded-full bg-background shadow-sm ring-0 transition-transform not-dark:bg-clip-padding group-data-[size=default]/switch:h-4 group-data-[size=default]/switch:w-6 group-data-[size=sm]/switch:h-3 group-data-[size=sm]/switch:w-4 data-checked:translate-x-[calc(100%-8px)] dark:data-checked:bg-primary-foreground data-unchecked:translate-x-0 dark:data-unchecked:bg-foreground"
+      />
+    </SwitchPrimitive.Root>
   )
 }
 
