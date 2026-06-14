@@ -136,6 +136,21 @@ const app = new Elysia({ prefix: "strava" })
     { params: t.Object({ athleteStravaId: t.String() }) },
   )
 
+  // Update athlete profile (e.g. maxHr)
+  .patch(
+    "/athlete/:athleteStravaId",
+    async ({ params, body }) => {
+      const athlete = await StravaRepository.updateAthleteProfile(Number(params.athleteStravaId), {
+        maxHr: body.maxHr,
+      });
+      return { athlete };
+    },
+    {
+      params: t.Object({ athleteStravaId: t.String() }),
+      body: t.Object({ maxHr: t.Nullable(t.Number()) }),
+    },
+  )
+
   // Webhook verification (Strava sends GET to verify)
   .get(
     "/webhook",

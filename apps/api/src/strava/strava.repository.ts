@@ -56,6 +56,15 @@ export const StravaRepository = {
       .where(eq(stravaAthletes.stravaId, stravaId));
   },
 
+  async updateAthleteProfile(stravaId: number, data: { maxHr?: number | null }): Promise<StravaAthlete> {
+    const [result] = await db
+      .update(stravaAthletes)
+      .set({ ...data, updatedAt: new Date() })
+      .where(eq(stravaAthletes.stravaId, stravaId))
+      .returning();
+    return result;
+  },
+
   async upsertActivity(data: Omit<StravaActivity, "id" | "createdAt" | "updatedAt">): Promise<void> {
     await db
       .insert(stravaActivities)

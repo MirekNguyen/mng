@@ -64,6 +64,13 @@
       "when": 1745685295107,
       "tag": "0008_banking_tables",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1749916800000,
+      "tag": "0009_athlete_max_hr",
+      "breakpoints": true
     }
   ]
 }

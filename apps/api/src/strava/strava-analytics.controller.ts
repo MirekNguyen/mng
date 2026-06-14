@@ -123,7 +123,10 @@ const app = new Elysia({ prefix: "strava/analytics" })
     async ({ params, query }) => {
       const athleteStravaId = Number(params.athleteStravaId);
       const forceRegenerate = query.force === "true";
-      const activities = await getActivitiesForDays(athleteStravaId, 90);
+      const [activities, athlete] = await Promise.all([
+        getActivitiesForDays(athleteStravaId, 90),
+        StravaRepository.getAthleteByStravaId(athleteStravaId),
+      ]);
 
       // Cache key: athlete + latest activity + current training week (Mon-Sun)
       const latestActivity = activities[activities.length - 1];
@@ -146,7 +149,7 @@ const app = new Elysia({ prefix: "strava/analytics" })
       const injuryRisk = calculateInjuryRisk(activities);
       const records = await StravaRepository.getPersonalRecords(athleteStravaId);
 
-      const result = generateWeeklyBrief(activities, fitnessData, injuryRisk, records);
+      const result = generateWeeklyBrief(activities, fitnessData, injuryRisk, records, athlete?.maxHr);
 
       // Collect the stream and cache the full text
       let fullText = "";

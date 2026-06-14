@@ -16,8 +16,9 @@ const getMondayOf = (date: Date): Date => {
   return d;
 };
 
-// Derive max HR from all activities with HR data
-const deriveMaxHr = (activities: StravaActivity[]): number => {
+// Derive max HR: prefer athlete's stored value, fall back to best recorded activity value
+const resolveMaxHr = (activities: StravaActivity[], storedMaxHr: number | null | undefined): number => {
+  if (storedMaxHr && storedMaxHr > 100 && storedMaxHr < 250) return storedMaxHr;
   const maxes = activities
     .map((a) => a.maxHeartrate ?? 0)
     .filter((hr) => hr > 100 && hr < 230);
@@ -70,8 +71,9 @@ export const generateWeeklyBrief = (
   fitnessData: FitnessData,
   injuryRisk: InjuryRisk,
   records: StravaPersonalRecord[],
+  athleteMaxHr?: number | null,
 ) => {
-  const context = buildWeeklyContext(activities, fitnessData, injuryRisk, records);
+  const context = buildWeeklyContext(activities, fitnessData, injuryRisk, records, athleteMaxHr);
 
   return streamText({
     model,
@@ -123,8 +125,9 @@ export const generatePerformancePrediction = (
   records: StravaPersonalRecord[],
   recentActivities: StravaActivity[],
   fitnessData: FitnessData,
+  athleteMaxHr?: number | null,
 ) => {
-  const context = buildPredictionContext(records, recentActivities, fitnessData);
+  const context = buildPredictionContext(records, recentActivities, fitnessData, athleteMaxHr);
 
   return streamText({
     model,
@@ -166,6 +169,7 @@ const buildWeeklyContext = (
   fitnessData: FitnessData,
   injuryRisk: InjuryRisk,
   records: StravaPersonalRecord[],
+  athleteMaxHr?: number | null,
 ): string => {
   const now = new Date();
   const thisMonday = getMondayOf(now);
@@ -184,12 +188,12 @@ const buildWeeklyContext = (
     return d >= lastMonday && d < thisMonday;
   });
 
-  // Athlete profile: derive max HR from recorded maxima
-  const maxHr = deriveMaxHr(activities);
+  // Athlete profile: prefer stored max HR, fall back to best recorded effort
+  const maxHr = resolveMaxHr(activities, athleteMaxHr);
 
   const lines: string[] = [
     "## Athlete Profile:",
-    `  Derived Max HR: ${maxHr} bpm (from best recorded effort)`,
+    `  Max HR: ${maxHr} bpm${athleteMaxHr ? " (user-set)" : " (derived from activities)"}`,
     "  Heart Rate Zones:",
     formatHrZones(maxHr),
     "",
@@ -296,9 +300,10 @@ const buildPredictionContext = (
   records: StravaPersonalRecord[],
   recentActivities: StravaActivity[],
   fitnessData: FitnessData,
+  athleteMaxHr?: number | null,
 ): string => {
   const now = new Date();
-  const maxHr = deriveMaxHr(recentActivities);
+  const maxHr = resolveMaxHr(recentActivities, athleteMaxHr);
 
   // Deduplicate PRs
   const bestByDist = new Map<number, StravaPersonalRecord>();

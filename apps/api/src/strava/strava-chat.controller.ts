@@ -2,7 +2,7 @@ import Elysia, { t } from "elysia";
 import { streamText, convertToModelMessages, type UIMessage } from "ai";
 import { deepseek } from "@ai-sdk/deepseek";
 import { db } from "@mng/database/db";
-import { stravaActivities, stravaPersonalRecords } from "@mng/database/schema/fitness.schema";
+import { stravaActivities, stravaPersonalRecords, stravaAthletes } from "@mng/database/schema/fitness.schema";
 import { desc, eq, gte, and } from "drizzle-orm";
 import { calculateFitnessData } from "./training-load.calculator";
 import { formatDuration, formatPace } from "./format.utils";
@@ -17,7 +17,8 @@ const getMondayOf = (date: Date): Date => {
   return d;
 };
 
-const deriveMaxHr = (activities: { maxHeartrate?: number | null }[]): number => {
+const deriveMaxHr = (activities: { maxHeartrate?: number | null }[], storedMaxHr?: number | null): number => {
+  if (storedMaxHr && storedMaxHr > 100 && storedMaxHr < 250) return storedMaxHr;
   const maxes = activities
     .map((a) => a.maxHeartrate ?? 0)
     .filter((hr) => hr > 100 && hr < 230);
@@ -41,7 +42,7 @@ const buildAthleteContext = async (athleteStravaId: number): Promise<string> => 
   const since = new Date();
   since.setDate(since.getDate() - 90);
 
-  const [activities, records] = await Promise.all([
+  const [activities, records, athleteProfile] = await Promise.all([
     db.query.stravaActivities.findMany({
       where: (a, { and: a2, eq: e, gte: g }) =>
         a2(e(a.athleteStravaId, athleteStravaId), g(a.startDate, since)),
@@ -50,10 +51,13 @@ const buildAthleteContext = async (athleteStravaId: number): Promise<string> => 
     db.query.stravaPersonalRecords.findMany({
       where: (r, { eq: e }) => e(r.athleteStravaId, athleteStravaId),
     }),
+    db.query.stravaAthletes.findFirst({
+      where: (a, { eq: e }) => e(a.stravaId, athleteStravaId),
+    }),
   ]);
 
   const fitnessData = calculateFitnessData(activities, 90);
-  const maxHr = deriveMaxHr(activities);
+  const maxHr = deriveMaxHr(activities, athleteProfile?.maxHr);
 
   const now = new Date();
   const thisMonday = getMondayOf(now);

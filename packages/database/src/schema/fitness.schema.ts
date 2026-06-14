@@ -28,6 +28,7 @@ export const stravaAthletes = fitnessSchema.table("strava_athletes", {
   refreshToken: text("refresh_token").notNull(),
   tokenExpiresAt: integer("token_expires_at").notNull(),
   syncedAt: timestamp("synced_at"),
+  maxHr: integer("max_hr"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
