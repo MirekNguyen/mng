@@ -1,6 +1,7 @@
 import { useRouter } from '@tanstack/react-router'
 
-import { AltArrowLeft } from '@solar-icons/react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { ChevronLeftIcon } from '@hugeicons/core-free-icons'
 
 import { ThemeToggle } from '#/components/theme-toggle'
 import { ProfileMenu } from '#/components/profile-menu'
@@ -26,7 +27,7 @@ export const AppHeader = ({ title, athleteName, athleteImage, showBack }: AppHea
               className="flex items-center justify-center size-8 -ml-2 rounded-lg text-[var(--color-ink-secondary)] hover:text-[var(--color-ink)] hover:bg-[var(--color-surface-sunken)] transition-colors"
               aria-label="Go back"
             >
-              <AltArrowLeft className="size-5" />
+              <HugeiconsIcon icon={ChevronLeftIcon} size={20} strokeWidth={2} />
             </button>
           )}
           <span className="text-lg font-semibold">{title}</span>

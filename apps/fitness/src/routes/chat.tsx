@@ -1,7 +1,8 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 
-import { ChatRoundDots, AddCircle, Plain } from '@solar-icons/react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { BubbleChatIcon, CirclePlusIcon, Navigation01Icon } from '@hugeicons/core-free-icons'
 
 import { getSession } from '#/lib/session.server'
 import { useChat } from '@ai-sdk/react'
@@ -100,7 +101,7 @@ function ChatPage() {
           {messages.length === 0 && (
             <div className="flex flex-col items-center justify-center pt-16 pb-8 text-center animate-in-scale">
               <div className="w-10 h-10 rounded-full bg-[var(--color-accent)]/10 flex items-center justify-center mb-section">
-                <ChatRoundDots width="20" height="20" stroke="var(--color-accent)" />
+                <HugeiconsIcon icon={BubbleChatIcon} size={20} strokeWidth={1.8} className="text-[var(--color-accent)]" />
               </div>
               <h1 className="text-[length:var(--section-title-font-size)] font-semibold mb-1.5">Ask your coach</h1>
               <p className="text-sm text-[var(--color-ink-secondary)] max-w-[280px] mb-8">
@@ -183,7 +184,7 @@ function ChatPage() {
               onClick={() => fileInputRef.current?.click()}
               className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full text-[var(--color-ink-secondary)] hover:text-[var(--color-ink)] transition-colors mb-0.5"
             >
-              <AddCircle width="20" height="20" />
+              <HugeiconsIcon icon={CirclePlusIcon} size={20} strokeWidth={1.8} />
             </button>
             <input
               value={input}
@@ -197,7 +198,7 @@ function ChatPage() {
               disabled={isLoading || (!input.trim() && !imageFile)}
               className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full bg-[var(--color-accent)] text-white disabled:opacity-25 transition-opacity mb-0.5"
             >
-              <Plain width="14" height="14" />
+              <HugeiconsIcon icon={Navigation01Icon} size={14} strokeWidth={2} />
             </button>
           </form>
         </div>

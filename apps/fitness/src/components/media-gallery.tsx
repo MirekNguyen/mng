@@ -1,4 +1,5 @@
-import { Play, CloseCircle, RoundAltArrowLeft, RoundAltArrowRight } from '@solar-icons/react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { PlayIcon, CancelIcon, ChevronLeftIcon, ChevronRightIcon } from '@hugeicons/core-free-icons'
 import { useState, useCallback, useEffect } from 'react'
 
 type MediaItem = {
@@ -61,7 +62,7 @@ export const MediaGallery = ({ items }: MediaGalleryProps) => {
                 <video src={item.url} className="h-full w-auto object-cover" muted preload="metadata" />
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
                   <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-md">
-                    <Play className="w-4 h-4 text-[var(--color-ink)] ml-0.5" fill="currentColor" />
+                    <HugeiconsIcon icon={PlayIcon} size={16} strokeWidth={2} className="text-[var(--color-ink)] ml-0.5" />
                   </div>
                 </div>
               </>
@@ -80,7 +81,7 @@ export const MediaGallery = ({ items }: MediaGalleryProps) => {
             onClick={closeLightbox}
             className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
           >
-            <CloseCircle className="w-5 h-5" />
+            <HugeiconsIcon icon={CancelIcon} size={20} strokeWidth={2} />
           </button>
 
           {/* Nav arrows */}
@@ -90,13 +91,13 @@ export const MediaGallery = ({ items }: MediaGalleryProps) => {
                 onClick={(e) => { e.stopPropagation(); goPrev() }}
                 className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
               >
-                <RoundAltArrowLeft className="w-5 h-5" />
+                <HugeiconsIcon icon={ChevronLeftIcon} size={20} strokeWidth={2} />
               </button>
               <button
                 onClick={(e) => { e.stopPropagation(); goNext() }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
               >
-                <RoundAltArrowRight className="w-5 h-5" />
+                <HugeiconsIcon icon={ChevronRightIcon} size={20} strokeWidth={2} />
               </button>
             </>
           )}

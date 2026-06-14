@@ -1,35 +1,35 @@
 import { Link, useLocation } from '@tanstack/react-router'
 
-import { HomeAngle, GraphUp, ChartSquare, ChatRound } from '@solar-icons/react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { HomeIcon, ActivityIcon, BarChartIcon, BubbleChatIcon } from '@hugeicons/core-free-icons'
 
 const tabs = [
   {
     to: '/dashboard' as const,
     label: 'Home',
     icon: (active: boolean) => (
-      <HomeAngle size={22} weight={active ? 'Bold' : 'Linear'} />
+      <HugeiconsIcon icon={HomeIcon} size={22} strokeWidth={active ? 2.2 : 1.5} />
     ),
   },
   {
     to: '/fitness' as const,
     label: 'Fitness',
     icon: (active: boolean) => (
-      <GraphUp size={22} weight={active ? 'Bold' : 'Linear'} />
+      <HugeiconsIcon icon={ActivityIcon} size={22} strokeWidth={active ? 2.2 : 1.5} />
     ),
   },
   {
     to: '/volume' as const,
     label: 'Volume',
     icon: (active: boolean) => (
-      <ChartSquare size={22} weight={active ? 'Bold' : 'Linear'} />
+      <HugeiconsIcon icon={BarChartIcon} size={22} strokeWidth={active ? 2.2 : 1.5} />
     ),
   },
-
   {
     to: '/chat' as const,
     label: 'Coach',
     icon: (active: boolean) => (
-      <ChatRound size={22} weight={active ? 'Bold' : 'Linear'} />
+      <HugeiconsIcon icon={BubbleChatIcon} size={22} strokeWidth={active ? 2.2 : 1.5} />
     ),
   },
 ]

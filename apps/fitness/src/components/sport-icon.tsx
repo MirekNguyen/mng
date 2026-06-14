@@ -1,19 +1,30 @@
-import { Running, Bicycling, Swimming, Walking, Hiking, Dumbbell, Meditation, Dumbbells } from "@solar-icons/react"
+import { HugeiconsIcon } from '@hugeicons/react'
+import {
+  RunningShoesIcon,
+  BikeIcon,
+  SwimmingIcon,
+  WalkingIcon,
+  MountainIcon,
+  DumbbellIcon,
+  ActivityIcon,
+} from '@hugeicons/core-free-icons'
 
-const icons: Record<string, typeof Running> = {
-  Run: Running,
-  Ride: Bicycling,
-  Swim: Swimming,
-  Walk: Walking,
-  Hike: Hiking,
-  WeightTraining: Dumbbell,
-  Yoga: Meditation,
-  Workout: Dumbbells,
+type IconType = typeof RunningShoesIcon
+
+const icons: Record<string, IconType> = {
+  Run: RunningShoesIcon,
+  Ride: BikeIcon,
+  Swim: SwimmingIcon,
+  Walk: WalkingIcon,
+  Hike: MountainIcon,
+  WeightTraining: DumbbellIcon,
+  Yoga: ActivityIcon,
+  Workout: DumbbellIcon,
 }
 
-const fallbackIcon = Running
+const fallbackIcon = RunningShoesIcon
 
 export const SportIcon = ({ type, size = 22, className }: { type: string; size?: number; className?: string }) => {
-  const Icon = icons[type] ?? fallbackIcon
-  return <Icon size={size} weight="Bold" className={className} />
+  const icon = icons[type] ?? fallbackIcon
+  return <HugeiconsIcon icon={icon} size={size} strokeWidth={1.8} className={className} />
 }

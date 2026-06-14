@@ -2,7 +2,8 @@
 import polyline from '@mapbox/polyline'
 import type { LngLatBoundsLike } from 'maplibre-gl'
 
-import { Heart, GraphUp } from '@solar-icons/react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { HeartIcon, ActivityIcon } from '@hugeicons/core-free-icons'
 
 import { Map, MapControls, MapMarker, MarkerContent, MarkerTooltip, MapRoute } from '#/components/ui/map.tsx'
 
@@ -160,12 +161,12 @@ export const RouteMap = ({ encodedPolyline, splits, segments }: RouteMapProps) =
                   <div className="flex items-center gap-3 text-[11px] text-neutral-500 dark:text-neutral-400">
                     {split.average_heartrate && (
                       <span className="flex items-center gap-0.5">
-                        <Heart width="10" height="10" className="text-red-400" />
+                        <HugeiconsIcon icon={HeartIcon} size={10} strokeWidth={1.5} className="text-red-400" />
                         {Math.round(split.average_heartrate)}
                       </span>
                     )}
                     <span className="flex items-center gap-0.5">
-                      <GraphUp width="10" height="10" className="text-neutral-400" />
+                      <HugeiconsIcon icon={ActivityIcon} size={10} strokeWidth={1.5} className="text-neutral-400" />
                       {split.elevation_difference > 0 ? '+' : ''}{Math.round(split.elevation_difference)}m
                     </span>
                   </div>

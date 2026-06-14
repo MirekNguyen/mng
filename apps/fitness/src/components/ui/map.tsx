@@ -16,7 +16,8 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
-import { CloseCircle, MinusCircle, AddCircle, Gps, FullScreen, RefreshCircle } from "@solar-icons/react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { CancelIcon, CircleMinusIcon, CirclePlusIcon, GpsIcon, MaximizeIcon, RefreshIcon } from "@hugeicons/core-free-icons";
 
 import { cn } from "#/lib/utils.ts";
 
@@ -526,7 +527,7 @@ function PopupCloseButton({ onClick }: { onClick: () => void }) {
       aria-label="Close popup"
       className="focus-visible:ring-ring hover:bg-muted text-foreground absolute top-0.5 right-0.5 z-10 inline-flex size-5 cursor-pointer items-center justify-center rounded-sm transition-colors focus:outline-none focus-visible:ring-2"
     >
-      <CloseCircle className="size-3.5" />
+      <HugeiconsIcon icon={CancelIcon} size={14} strokeWidth={2} />
     </button>
   );
 }
@@ -846,10 +847,10 @@ function MapControls({
       {showZoom && (
         <ControlGroup>
           <ControlButton onClick={handleZoomIn} label="Zoom in">
-            <AddCircle className="size-4" />
+            <HugeiconsIcon icon={CirclePlusIcon} size={16} strokeWidth={1.8} />
           </ControlButton>
           <ControlButton onClick={handleZoomOut} label="Zoom out">
-            <MinusCircle className="size-4" />
+            <HugeiconsIcon icon={CircleMinusIcon} size={16} strokeWidth={1.8} />
           </ControlButton>
         </ControlGroup>
       )}
@@ -866,9 +867,9 @@ function MapControls({
             disabled={waitingForLocation}
           >
             {waitingForLocation ? (
-              <RefreshCircle className="size-4 animate-spin" />
+              <HugeiconsIcon icon={RefreshIcon} size={16} strokeWidth={1.8} className="animate-spin" />
             ) : (
-              <Gps className="size-4" />
+              <HugeiconsIcon icon={GpsIcon} size={16} strokeWidth={1.8} />
             )}
           </ControlButton>
         </ControlGroup>
@@ -876,7 +877,7 @@ function MapControls({
       {showFullscreen && (
         <ControlGroup>
           <ControlButton onClick={handleFullscreen} label="Toggle fullscreen">
-            <FullScreen className="size-4" />
+            <HugeiconsIcon icon={MaximizeIcon} size={16} strokeWidth={1.8} />
           </ControlButton>
         </ControlGroup>
       )}

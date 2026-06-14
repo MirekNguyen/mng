@@ -2,7 +2,8 @@ import { createFileRoute, redirect, Link, useRouter } from '@tanstack/react-rout
 import { createServerFn } from '@tanstack/react-start'
 import { useState, useEffect, useCallback } from 'react'
 
-import { AltArrowRight } from '@solar-icons/react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { ChevronRightIcon } from '@hugeicons/core-free-icons'
 
 import { getSession } from '#/lib/session.server'
 import { api } from '#/lib/api'
@@ -313,7 +314,7 @@ const TrainingInsight = ({ fitness }: { fitness: FitnessStatus }) => {
     <Link to="/fitness" className="flex items-center gap-2.5 rounded-lg px-3.5 py-list-y transition-colors hover:opacity-90" style={{ backgroundColor: bgColor }}>
       <span className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: dotColor }} />
       <p className="text-xs text-[var(--color-ink)] flex-1">{message}</p>
-      <AltArrowRight width="14" height="14" stroke="var(--color-ink-tertiary)" />
+      <HugeiconsIcon icon={ChevronRightIcon} size={14} strokeWidth={2} className="text-[var(--color-ink-tertiary)]" />
     </Link>
   )
 }

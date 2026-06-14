@@ -2,7 +2,8 @@ import { createFileRoute, redirect, useRouter } from '@tanstack/react-router'
 import { createServerFn } from '@tanstack/react-start'
 import { lazy, Suspense, useState, useEffect, type ReactNode } from 'react'
 
-import { Like, ChatRoundDots } from '@solar-icons/react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { ThumbsUpIcon, BubbleChatIcon } from '@hugeicons/core-free-icons'
 
 import { getSession } from '#/lib/session.server'
 import { api } from '#/lib/api'
@@ -364,7 +365,7 @@ function KudosBar({ kudos, kudosCount, commentCount }: {
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
         >
-          <Like className="w-4 h-4 text-[var(--color-accent)]" />
+          <HugeiconsIcon icon={ThumbsUpIcon} size={16} strokeWidth={1.8} className="text-[var(--color-accent)]" />
           <span className="text-sm text-[var(--color-ink-secondary)]">{totalKudos}</span>
 
           {/* Hover tooltip showing who gave kudos */}
@@ -392,7 +393,7 @@ function KudosBar({ kudos, kudosCount, commentCount }: {
       )}
       {commentCount > 0 && (
         <div className="flex items-center gap-2">
-          <ChatRoundDots className="w-4 h-4 text-[var(--color-ink-tertiary)]" />
+          <HugeiconsIcon icon={BubbleChatIcon} size={16} strokeWidth={1.8} className="text-[var(--color-ink-tertiary)]" />
           <span className="text-sm text-[var(--color-ink-secondary)]">{commentCount}</span>
         </div>
       )}
