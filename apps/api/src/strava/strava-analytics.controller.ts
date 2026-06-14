@@ -135,7 +135,7 @@ const app = new Elysia({ prefix: "strava/analytics" })
       const monday = new Date(now);
       monday.setDate(monday.getDate() - (dow === 0 ? 6 : dow - 1));
       const weekKey = monday.toISOString().slice(0, 10);
-      const cacheKey = `${athleteStravaId}:${weekKey}:${latestActivity?.startDate ?? "none"}`;
+      const cacheKey = `${athleteStravaId}:${weekKey}:${latestActivity?.startDate ?? "none"}:${athlete?.maxHr ?? "derived"}`;
 
       if (forceRegenerate) {
         weeklyBriefCache.delete(cacheKey);
