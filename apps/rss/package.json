@@ -17,8 +17,7 @@
     "@mng/logger": "*",
     "commander": "^14.0.2",
     "elysia": "latest",
-    "feed": "^5.1.0",
-    "youtube-sr": "^4.3.12"
+    "feed": "^5.1.0"
   },
   "devDependencies": {
     "bun-types": "latest"

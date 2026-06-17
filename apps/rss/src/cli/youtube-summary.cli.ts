@@ -1,9 +1,9 @@
 import { program } from "commander";
 import { write } from "bun";
 import { logger } from "@mng/logger/logger";
-import { type Video, YouTube } from "youtube-sr";
 
 import { generateFeed } from "../youtube-summary/feed.generator";
+import { YoutubeRepository } from "../youtube-summary/youtube.repository";
 
 program
 	.requiredOption("-p, --playlistId <string>", "Query using Playlist ID")
@@ -16,42 +16,41 @@ const options = program.opts<{
 	output: string;
 }>();
 
-const playlist = await YouTube.getPlaylist(options.playlistId, { limit: 3 });
+const FETCH_LIMIT = 10;
+const SHORT_THRESHOLD_SECONDS = 60;
+const VOD_THRESHOLD_SECONDS = 3 * 60 * 60;
 
-if (!playlist?.videos) {
+const allVideos = await YoutubeRepository.getPlaylistVideos(options.playlistId, FETCH_LIMIT);
+
+if (allVideos.length === 0) {
 	logger.error(`Failed to fetch playlist: ${options.playlistId}`);
 	process.exit(1);
 }
 
-const getMinutes = (duration: number): number => duration / 1000 / 60;
-const isShort = (duration: number): boolean => getMinutes(duration) <= 1;
-const isVod = (duration: number): boolean => getMinutes(duration) >= 180;
-
-const videos = playlist.videos.filter((video: Video) => {
-	if (video.live) return false;
-	if (isShort(video.duration)) return false;
-	if (isVod(video.duration)) return false;
+const videos = allVideos.filter((video) => {
+	if (video.isLive) return false;
+	if (video.durationSeconds <= SHORT_THRESHOLD_SECONDS) return false;
+	if (video.durationSeconds >= VOD_THRESHOLD_SECONDS) return false;
 	return true;
 });
 
-logger.info(`Found ${playlist.videos.length} videos, ${videos.length} after filtering`);
+logger.info(`Found ${allVideos.length} videos, ${videos.length} after filtering`);
 
 if (videos.length === 0) {
 	logger.info("No videos found, skipping feed generation");
 	process.exit(0);
 }
 
-const channelName = videos[0].channel?.name ?? options.playlistId;
-const channelIcon = videos[0].channel?.iconURL() ?? undefined;
-const feedVideos = videos.map((video: Video) => ({
-	videoId: video.id ?? "",
-	title: video.title ?? "",
-	channelName: video.channel?.name ?? channelName,
-	videoUrl: video.url,
-	thumbnailUrl: `https://i.ytimg.com/vi/${video.id}/hqdefault.jpg`,
+const channelName = videos[0].channelName;
+const feedVideos = videos.map((video) => ({
+	videoId: video.videoId,
+	title: video.title,
+	channelName: video.channelName,
+	videoUrl: video.videoUrl,
+	thumbnailUrl: video.thumbnailUrl,
 }));
 
-const rssXml = await generateFeed(channelName, feedVideos, channelIcon);
+const rssXml = await generateFeed(channelName, feedVideos, undefined);
 await write(`out/${options.output}`, rssXml);
 
 logger.info(`Generated feed: out/${options.output}`);
