@@ -2,6 +2,7 @@ import { otherSchema } from "./schema/other.schema";
 import { properties } from "./schema/properties.schema";
 import { rssSchema } from "./schema/rss.schema";
 import { fitnessTables } from "./schema/fitness.schema";
+import { healthTables } from "./schema/health.schema";
 import { authSchema } from "./schema/auth.schema";
 import { bankingSchema } from "./schema/banking.schema";
 import { dbSchema } from "./env.zodschema";
@@ -12,6 +13,7 @@ const schema = {
   ...otherSchema,
   ...rssSchema,
   ...fitnessTables,
+  ...healthTables,
   ...authSchema,
   ...bankingSchema,
 };

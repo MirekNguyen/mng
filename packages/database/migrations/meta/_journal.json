@@ -71,6 +71,13 @@
       "when": 1749916800000,
       "tag": "0009_athlete_max_hr",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1753614000000,
+      "tag": "0010_health_schema",
+      "breakpoints": true
     }
   ]
 }
