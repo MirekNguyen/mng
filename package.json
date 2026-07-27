@@ -19,6 +19,7 @@
   "workspaces": [
     "apps/api",
     "apps/banking",
+    "apps/health-api",
     "apps/rss",
     "packages/*"
   ]

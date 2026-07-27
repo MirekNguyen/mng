@@ -1,0 +1,25 @@
+{
+  "name": "@mng/health-api",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "build": "echo 'No build step required for Bun'",
+    "start": "bun run src/index.ts",
+    "format": "oxfmt --check ./src",
+    "format:fix": "oxfmt ./src",
+    "lint": "oxlint --type-aware ./src",
+    "lint:fix": "oxlint --type-aware --fix-dangerously ./src"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.4.1",
+    "@mng/database": "*",
+    "@mng/http": "*",
+    "@mng/logger": "*",
+    "elysia": "latest",
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  }
+}
