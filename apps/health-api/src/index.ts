@@ -37,7 +37,19 @@ const app = new Elysia()
       return { error: "Invalid request payload" };
     }
 
-    logger.error(`Unhandled error: ${error instanceof Error ? error.message : "unknown"}`);
+    if (code === "NOT_FOUND") {
+      set.status = 404;
+      return { error: "Not found" };
+    }
+
+    if (code === "PARSE") {
+      set.status = 400;
+      return { error: "Malformed request body" };
+    }
+
+    logger.error(
+      `Unhandled error: code=${code} ${error instanceof Error ? error.message : "unknown"}`,
+    );
     set.status = 500;
     return { error: "Internal server error" };
   })
